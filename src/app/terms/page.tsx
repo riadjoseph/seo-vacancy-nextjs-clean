@@ -41,7 +41,7 @@ export default function TermsOfServicePage() {
           </CardHeader>
           <CardContent>
             <p className="text-gray-700 leading-relaxed">
-              By accessing or using WakeUpHappy (the "Service"), you agree to be bound by these Terms of Service
+              By accessing or using WakeUpHappy (the &quot;Service&quot;), you agree to be bound by these Terms of Service
               and our Privacy Policy. If you do not agree to these terms, do not use the Service.
             </p>
           </CardContent>
@@ -110,7 +110,7 @@ export default function TermsOfServicePage() {
           </CardHeader>
           <CardContent className="space-y-3 text-gray-700 leading-relaxed">
             <p>
-              The Service is provided on an "as is" and "as available" basis without warranties of any kind, whether express or
+              The Service is provided on an &quot;as is&quot; and &quot;as available&quot; basis without warranties of any kind, whether express or
               implied, including but not limited to merchantability, fitness for a particular purpose, and non-infringement.
             </p>
             <p>

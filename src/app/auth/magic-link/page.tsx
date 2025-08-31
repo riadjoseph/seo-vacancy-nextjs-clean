@@ -159,7 +159,7 @@ export default function SignInPage() {
               redirectTo={`${window.location.origin}/my-jobs`}
             />
             <p className="mt-4 text-sm text-gray-600 text-center">
-              Don't have an account? Just sign in - we'll create one for you.
+              Don&apos;t have an account? Just sign in - we&apos;ll create one for you.
             </p>
           </CardContent>
         </Card>

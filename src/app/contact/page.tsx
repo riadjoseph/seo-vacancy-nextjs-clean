@@ -31,7 +31,7 @@ export default function ContactPage() {
         </h1>
         <p className="text-gray-600">
           If you have any questions about this website or anything else SEO related for that matter, 
-          please reach out on my social account. I'd love to hear from you!
+          please reach out on my social account. I&apos;d love to hear from you!
         </p>
       </div>
 
@@ -99,7 +99,7 @@ export default function ContactPage() {
               <ul className="text-gray-600 text-sm space-y-1">
                 <li>• Privacy Policy questions</li>
                 <li>• How the platform works</li>
-                <li>• Technical SEO aspects we're testing</li>
+                <li>• Technical SEO aspects we&apos;re testing</li>
                 <li>• Feedback and suggestions</li>
               </ul>
             </div>
@@ -119,11 +119,11 @@ export default function ContactPage() {
       {/* Fun Note */}
       <div className="mt-8 text-center bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-200">
         <p className="text-gray-700 mb-4">
-          <strong>Fun fact:</strong> We're real people, not bots! 🤖 Another Fun Fact is that I first built this site with VITE JS, 100% client-side (yes, an SEO / GEO nightmare) and Claude of Anthropic helped me localize it to Next JS with SSR and caching.  How cool is that! Credits to Claude where due ;)
+          <strong>Fun fact:</strong> We&apos;re real people, not bots! 🤖 Another Fun Fact is that I first built this site with VITE JS, 100% client-side (yes, an SEO / GEO nightmare) and Claude of Anthropic helped me localize it to Next JS with SSR and caching.  How cool is that! Credits to Claude where due ;)
         </p>
         <p className="text-gray-600 text-sm">
           Built by SEO professionals who understand the struggle of finding quality job opportunities. 
-          We're always happy to chat about the industry, technical challenges, or just say hi!
+          We&apos;re always happy to chat about the industry, technical challenges, or just say hi!
         </p>
       </div>
     </div>

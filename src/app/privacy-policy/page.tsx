@@ -71,13 +71,13 @@ export default function PrivacyPolicyPage() {
 
             {/* Third-Party Authentication */}
             <div className="bg-green-50 p-4 rounded-lg border-l-4 border-green-400">
-              <h3 className="font-semibold text-gray-800 mb-2">Why We Don't Collect Your Emails or Passwords</h3>
+              <h3 className="font-semibold text-gray-800 mb-2">Why We Don&apos;t Collect Your Emails or Passwords</h3>
               <p className="text-gray-700 leading-relaxed mb-3">
                 We use <strong>third-party authentication</strong> through Google, LinkedIn, and GitHub logins. This means:
               </p>
               <ul className="list-disc list-inside text-gray-700 space-y-2 mb-3">
                 <li><strong>We never see your passwords</strong> - They remain securely with Google, LinkedIn, or GitHub</li>
-                <li><strong>We don't store your email directly</strong> - We only receive a secure token that identifies you</li>
+                <li><strong>We don&apos;t store your email directly</strong> - We only receive a secure token that identifies you</li>
                 <li><strong>You control your data</strong> - You can revoke access anytime from your Google/LinkedIn/GitHub settings</li>
                 <li><strong>Industry-standard security</strong> - These platforms have billion-dollar security infrastructures</li>
               </ul>

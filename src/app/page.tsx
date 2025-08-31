@@ -174,7 +174,7 @@ export default async function Home({ searchParams }: HomeProps) {
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">An SEO Job That You'll Like
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">An SEO Job That You&apos;ll Like
         </h1>
         <p className="text-xl text-gray-600 max-w-2xl mx-auto">
           Start each day with excitement! Discover the latest SEO, marketing, and tech job opportunities across Europe

@@ -40,7 +40,7 @@ export default function AboutPage() {
         <CardHeader>
           <h2 className="text-2xl font-bold flex items-center gap-2">
             <Target className="h-6 w-6 text-blue-600" />
-            What We're About: SEO Jobs, No Distractions
+            What We&apos;re About: SEO Jobs, No Distractions
           </h2>
         </CardHeader>
         <CardContent>
@@ -105,7 +105,7 @@ export default function AboutPage() {
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-gray-700 leading-relaxed">
-            Whether you're a Technical SEO Specialist, Content SEO Manager, Local SEO Expert, or Digital Marketing Professional, 
+            Whether you&apos;re a Technical SEO Specialist, Content SEO Manager, Local SEO Expert, or Digital Marketing Professional, 
             WakeUpHappy aggregates European companies seeking your expertise.
           </p>
           <div className="grid md:grid-cols-3 gap-4 mt-6">
@@ -159,7 +159,7 @@ export default function AboutPage() {
               Want Extra Visibility?
             </h3>
             <p className="text-gray-700 mb-4">
-              After posting your free job, you can make it "Featured" for premium placement. 
+              After posting your free job, you can make it &quot;Featured&quot; for premium placement. 
               Buy us a coffee to support this ad-free platform and get your role highlighted!
             </p>
             <div className="flex flex-col sm:flex-row gap-3">
@@ -209,8 +209,8 @@ export default function AboutPage() {
             <div>
               <h3 className="font-semibold text-gray-800 mb-2">Community</h3>
               <p className="text-gray-600 text-sm">
-                Built by SEO professionals, for SEO professionals. We understand what you're 
-                looking for because we've been there.
+                Built by SEO professionals, for SEO professionals. We understand what you&apos;re 
+                looking for because we&apos;ve been there.
               </p>
             </div>
           </div>
