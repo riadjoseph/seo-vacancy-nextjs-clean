@@ -54,34 +54,34 @@ export function ServerPagination({ data, className, basePath = '/', searchParams
 
   return (
     <nav
-      className={cn('flex items-center justify-center space-x-1', className)}
+      className={cn('flex items-center justify-center gap-1 flex-wrap', className)}
       aria-label="Pagination Navigation"
     >
       {/* Previous Button */}
       {data.hasPrevPage ? (
         <Link
           href={generatePageUrl(basePath, data.currentPage - 1, searchParams)}
-          className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
+          className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
           aria-label="Go to previous page"
         >
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Previous
+          <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+          <span className="hidden sm:inline">Previous</span>
         </Link>
       ) : (
-        <span className="flex items-center px-3 py-2 text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-l-md cursor-not-allowed">
-          <ChevronLeft className="w-4 h-4 mr-1" />
-          Previous
+        <span className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-md cursor-not-allowed">
+          <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
+          <span className="hidden sm:inline">Previous</span>
         </span>
       )}
 
       {/* Page Numbers */}
-      <div className="flex items-center space-x-1">
+      <div className="flex items-center gap-1">
         {data.ranges.map((range) => {
           if (range.type === 'ellipsis') {
             return (
               <span
                 key={range.key}
-                className="px-3 py-2 text-sm font-medium text-gray-500"
+                className="px-2 py-2 text-xs sm:text-sm font-medium text-gray-500"
                 aria-hidden="true"
               >
                 ...
@@ -96,7 +96,7 @@ export function ServerPagination({ data, className, basePath = '/', searchParams
               key={range.key}
               href={generatePageUrl(basePath, range.page!, searchParams)}
               className={cn(
-                'px-3 py-2 text-sm font-medium border transition-colors',
+                'px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium border rounded-md transition-colors min-w-[32px] sm:min-w-[36px] text-center',
                 isCurrentPage
                   ? 'bg-blue-600 text-white border-blue-600 cursor-default'
                   : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 hover:text-gray-900'
@@ -118,16 +118,16 @@ export function ServerPagination({ data, className, basePath = '/', searchParams
       {data.hasNextPage ? (
         <Link
           href={generatePageUrl(basePath, data.currentPage + 1, searchParams)}
-          className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
+          className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
           aria-label="Go to next page"
         >
-          Next
-          <ChevronRight className="w-4 h-4 ml-1" />
+          <span className="hidden sm:inline">Next</span>
+          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 sm:ml-1" />
         </Link>
       ) : (
-        <span className="flex items-center px-3 py-2 text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-r-md cursor-not-allowed">
-          Next
-          <ChevronRight className="w-4 h-4 ml-1" />
+        <span className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-300 bg-gray-100 border border-gray-300 rounded-md cursor-not-allowed">
+          <span className="hidden sm:inline">Next</span>
+          <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 sm:ml-1" />
         </span>
       )}
     </nav>

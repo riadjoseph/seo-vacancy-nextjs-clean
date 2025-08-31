@@ -20,22 +20,22 @@ export interface PaginationData {
 }
 
 /**
- * Generate Ghostblock pagination ranges
+ * Generate mobile-friendly pagination ranges
+ * Mobile pattern: Show first 2 and last 2 pages with ellipsis in between
  * Examples:
- * - Page 2: [1, 2, 3, ..., 8, 9]
- * - Page 4: [1, 2, 3, 4, 5, ..., 8, 9]
- * - Page 5: [1, 2, ..., 4, 5, 6, ..., 8, 9]
+ * - Total <= 5: [1, 2, 3, 4, 5]
+ * - Total > 5: [1, 2, ..., 8, 9]
+ * - Current in middle: [1, 2, ..., 8, 9] (current page indicated by styling)
  */
 export function generateGhostblockRanges(
-  currentPage: number,
+  _currentPage: number,
   totalPages: number
 ): PaginationRange[] {
   // Safety checks for invalid inputs
-  const safeCurrentPage = isNaN(currentPage) || currentPage < 1 ? 1 : Math.floor(currentPage)
   const safeTotalPages = isNaN(totalPages) || totalPages < 1 ? 1 : Math.floor(totalPages)
   
-  if (safeTotalPages <= 7) {
-    // Show all pages if 7 or fewer
+  if (safeTotalPages <= 5) {
+    // Show all pages if 5 or fewer (mobile-friendly)
     return Array.from({ length: safeTotalPages }, (_, i) => ({
       type: 'page' as const,
       page: i + 1,
@@ -45,42 +45,22 @@ export function generateGhostblockRanges(
 
   const ranges: PaginationRange[] = []
   
-  // Always show first page
+  // Always show first 2 pages
   ranges.push({ type: 'page', page: 1, key: 'page-1' })
+  if (safeTotalPages > 1) {
+    ranges.push({ type: 'page', page: 2, key: 'page-2' })
+  }
   
-  if (safeCurrentPage <= 4) {
-    // Show pages 2-5, then ellipsis, then last two pages
-    for (let i = 2; i <= Math.min(5, safeTotalPages - 2); i++) {
-      ranges.push({ type: 'page', page: i, key: `page-${i}` })
-    }
-    
-    if (safeTotalPages > 6) {
-      ranges.push({ type: 'ellipsis', key: 'ellipsis-1' })
-    }
-    
-    // Last two pages
-    if (safeTotalPages > 1) {
-      if (safeTotalPages > 6) {
-        ranges.push({ type: 'page', page: safeTotalPages - 1, key: `page-${safeTotalPages - 1}` })
-      }
-      ranges.push({ type: 'page', page: safeTotalPages, key: `page-${safeTotalPages}` })
-    }
-  } else if (safeCurrentPage >= safeTotalPages - 3) {
-    // Show first page, ellipsis, then last 5 pages
-    ranges.push({ type: 'ellipsis', key: 'ellipsis-1' })
-    
-    for (let i = Math.max(safeTotalPages - 4, 2); i <= safeTotalPages; i++) {
-      ranges.push({ type: 'page', page: i, key: `page-${i}` })
-    }
-  } else {
-    // Show first page, ellipsis, current ± 2, ellipsis, last page
-    ranges.push({ type: 'ellipsis', key: 'ellipsis-1' })
-    
-    for (let i = safeCurrentPage - 1; i <= safeCurrentPage + 1; i++) {
-      ranges.push({ type: 'page', page: i, key: `page-${i}` })
-    }
-    
-    ranges.push({ type: 'ellipsis', key: 'ellipsis-2' })
+  // Add ellipsis if needed
+  if (safeTotalPages > 4) {
+    ranges.push({ type: 'ellipsis', key: 'ellipsis-middle' })
+  }
+  
+  // Always show last 2 pages (if different from first 2)
+  if (safeTotalPages > 3) {
+    ranges.push({ type: 'page', page: safeTotalPages - 1, key: `page-${safeTotalPages - 1}` })
+  }
+  if (safeTotalPages > 2) {
     ranges.push({ type: 'page', page: safeTotalPages, key: `page-${safeTotalPages}` })
   }
   

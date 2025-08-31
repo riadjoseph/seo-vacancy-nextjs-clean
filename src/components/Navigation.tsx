@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Search, User, LogOut } from 'lucide-react'
 import { SunshineIcon } from '@/components/ui/sunshine-icon'
 import { useAuth } from '@/lib/auth-context'
+import { createTagSlug } from '@/utils/tagUtils'
 
 export function Navigation() {
   const { user, loading, signOut } = useAuth()
@@ -97,22 +98,35 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-white mb-4">Job Categories</h3>
+            <h3 className="font-semibold text-white mb-4">Specializations</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/jobs/tag/seo" className="hover:text-white">SEO Jobs</Link></li>
-              <li><Link href="/jobs/tag/marketing" className="hover:text-white">Marketing Jobs</Link></li>
-              <li><Link href="/jobs/tag/javascript" className="hover:text-white">JavaScript Jobs</Link></li>
-              <li><Link href="/jobs/tag/remote" className="hover:text-white">Remote Jobs</Link></li>
+              {[
+                'SEO Strategy & Management',
+                'Technical SEO',
+                'Enterprise SEO',
+                'Analytics & Data SEO',
+                'Local SEO',
+              ].map((label) => (
+                <li key={label}>
+                  <Link href={`/tag/${createTagSlug(label)}`} className="hover:text-white">
+                    {label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           
           <div>
             <h3 className="font-semibold text-white mb-4">Popular Cities</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/jobs/city/london" className="hover:text-white">London</Link></li>
-              <li><Link href="/jobs/city/berlin" className="hover:text-white">Berlin</Link></li>
-              <li><Link href="/jobs/city/amsterdam" className="hover:text-white">Amsterdam</Link></li>
-              <li><Link href="/jobs/city/paris" className="hover:text-white">Paris</Link></li>
+              <li><Link href="/jobs/city/london" className="hover:text-white">London SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/berlin" className="hover:text-white">Berlin SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/amsterdam" className="hover:text-white">Amsterdam SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/paris" className="hover:text-white">Paris SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/barcelona" className="hover:text-white">Barcelona SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/madrid" className="hover:text-white">Madrid SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/munich" className="hover:text-white">Munich SEO Jobs</Link></li>
+              <li><Link href="/jobs/city/leeds" className="hover:text-white">Leeds SEO Jobs</Link></li>
             </ul>
           </div>
           
