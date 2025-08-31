@@ -83,6 +83,7 @@ export function ServerAdvancedSearch({ initialValues }: ServerAdvancedSearchProp
 
           {(initialValues?.q || initialValues?.category || initialValues?.city) && (
             <div className="flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
               <a
                 href="/"
                 className="text-sm text-gray-500 hover:text-gray-700 underline"
