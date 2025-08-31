@@ -1,24 +1,45 @@
 'use client'
 
 import Link from 'next/link'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Search, User, LogOut } from 'lucide-react'
+import { Search, User, LogOut, Menu, X } from 'lucide-react'
 import { SunshineIcon } from '@/components/ui/sunshine-icon'
 import { useAuth } from '@/lib/auth-context'
 import { createTagSlug } from '@/utils/tagUtils'
 
 export function Navigation() {
   const { user, loading, signOut } = useAuth()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen)
+  const closeMobileMenu = () => setIsMobileMenuOpen(false)
+
+  // Close mobile menu on Escape key press
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        closeMobileMenu()
+      }
+    }
+
+    if (isMobileMenuOpen) {
+      document.addEventListener('keydown', handleEscape)
+      return () => document.removeEventListener('keydown', handleEscape)
+    }
+  }, [isMobileMenuOpen])
   
   return (
     <nav className="border-b bg-white">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <SunshineIcon className="h-6 w-6 text-yellow-500" />
             <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">Wake Up Happy</span>
           </Link>
           
+          {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             <Link 
               href="/" 
@@ -76,7 +97,68 @@ export function Navigation() {
               </div>
             )}
           </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={toggleMobileMenu}
+            className="md:hidden p-2 text-gray-600 hover:text-gray-900 transition-colors"
+            aria-label="Toggle mobile menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-gray-200 py-4">
+            <div className="flex flex-col space-y-4">
+              {!loading && (
+                <>
+                  {user ? (
+                    <>
+                      <Link href="/my-jobs" onClick={closeMobileMenu}>
+                        <Button variant="outline" className="w-full justify-start gap-2">
+                          <User className="h-4 w-4" />
+                          My Jobs
+                        </Button>
+                      </Link>
+                      <Link href="/post-job" onClick={closeMobileMenu}>
+                        <Button className="w-full">
+                          Post Job
+                        </Button>
+                      </Link>
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { signOut(); closeMobileMenu(); }}
+                        className="w-full justify-start gap-2"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/auth/magic-link" onClick={closeMobileMenu}>
+                        <Button variant="outline" className="w-full">
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link href="/auth/magic-link" onClick={closeMobileMenu}>
+                        <Button className="w-full">
+                          Post Job
+                        </Button>
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   )
@@ -131,8 +213,9 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-white mb-4">Company</h3>
+            <h3 className="font-semibold text-white mb-4">Service</h3>
             <ul className="space-y-2 text-sm">
+              <li><Link href="/auth/magic-link" className="hover:text-white">Post a Job</Link></li>
               <li><Link href="/about" className="hover:text-white">About</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
               <li><Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
