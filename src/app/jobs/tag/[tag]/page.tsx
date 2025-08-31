@@ -23,9 +23,6 @@ interface TagJobsPageProps {
   }>
 }
 
-function normalizeTag(tag: string): string {
-  return tag.toLowerCase().replace(/-/g, ' ')
-}
 
 async function getTagJobs(tag: string, page: number = 1) {
   const supabase = await createClient()

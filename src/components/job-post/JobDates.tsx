@@ -1,7 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format } from "date-fns";
 
 interface JobDatesProps {
   formData: {
@@ -24,7 +23,7 @@ const JobDates = ({ formData, handleChange, handleDurationChange, errors = {} }:
           name="start_date"
           value={formData.start_date}
           onChange={handleChange}
-          min={format(new Date(), 'yyyy-MM-dd')}
+          min={new Date().toISOString().split('T')[0]}
           className={errors.start_date ? "border-red-500" : ""}
         />
         {errors.start_date && (

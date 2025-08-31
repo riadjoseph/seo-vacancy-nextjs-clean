@@ -3,6 +3,7 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { JobFormData } from "@/utils/jobValidation";
 import JobBasicInfo from "./JobBasicInfo";
 import JobDescription from "./JobDescription";
 import JobSalary from "./JobSalary";
@@ -14,7 +15,7 @@ import type { SeoSpecializationOption } from "@/data/types";
 interface JobPostingFormProps {
   onClose?: () => void;
   onSuccess?: () => void;
-  initialData?: any; // Replace with proper type
+  initialData?: Partial<JobFormData>;
 }
 
 const JobPostingForm: React.FC<JobPostingFormProps> = ({ 

@@ -48,7 +48,7 @@ const JobBasicInfo = ({ formData, handleChange, handleCityChange, errors = {} }:
       city.toLowerCase().includes(searchTerm.toLowerCase())
     );
     if (matchedCities.length > 0) {
-      acc[country] = matchedCities;
+      (acc as Record<string, readonly string[]>)[country] = matchedCities;
     }
     return acc;
   }, {} as typeof CITIES_BY_COUNTRY);

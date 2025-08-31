@@ -102,7 +102,7 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
     if (city) {
       setCitySearch(city)
     }
-  }, [searchParams, initialValues])
+  }, [searchParams, initialValues, getCurrentCity])
 
   const handleFilterChange = (key: string, value: string) => {
     startTransition(() => {

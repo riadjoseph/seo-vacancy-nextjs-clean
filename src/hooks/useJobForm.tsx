@@ -3,7 +3,6 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { validateJobPost, JobFormData } from '@/utils/jobValidation';
 import { submitJob, deleteJob } from '@/utils/jobSubmission';
-import { SeoSpecializationOption } from '@/data/types';
 import { trackEvent } from '@/lib/analytics';
 
 const initialFormData: JobFormData = {
@@ -70,9 +69,10 @@ export const useJobForm = (jobId?: string, initialData?: Partial<JobFormData>) =
       );
       
       return true;
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
       trackEvent('job_post_error', {
-        error_message: error.message,
+        error_message: errorMessage,
       });
       console.error('Error in job submission:', error);
       toast.error(`Failed to ${jobId ? 'update' : 'post'} job. Please try again.`);

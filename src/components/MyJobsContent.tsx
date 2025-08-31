@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Plus, Eye, Edit, Trash2, MapPin, Calendar } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
@@ -17,10 +17,10 @@ interface Job {
   company_logo: string | null
   city: string | null
   category: string
-  created_at: string
+  created_at: string | null
   expires_at: string
-  featured: boolean
-  tags: string[]
+  featured: boolean | null
+  tags: string[] | null
 }
 
 interface MyJobsContentProps {
@@ -49,7 +49,7 @@ export function MyJobsContent({ jobs: initialJobs }: MyJobsContentProps) {
       } else {
         setJobs(jobs.filter(job => job.id !== jobId))
       }
-    } catch (error) {
+    } catch {
       alert('An error occurred while deleting the job')
     } finally {
       setLoading('')
@@ -127,21 +127,21 @@ export function MyJobsContent({ jobs: initialJobs }: MyJobsContentProps) {
                     )}
                     <span className="flex items-center gap-1" suppressHydrationWarning>
                       <Calendar className="w-3 h-3" />
-                      Posted {new Date(job.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                      Posted {job.created_at ? new Date(job.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }) : 'Unknown'}
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     {job.category && job.category !== 'FULL_TIME' && (
                       <Badge variant="outline">{job.category}</Badge>
                     )}
-                    {job.tags.slice(0, 3).map((tag) => (
+                    {job.tags?.slice(0, 3).map((tag) => (
                       <Link key={tag} href={`/jobs/tag/${createTagSlug(tag)}`}>
                         <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 hover:text-blue-800 cursor-pointer transition-colors">
                           {tag}
                         </Badge>
                       </Link>
                     ))}
-                    {job.tags.length > 3 && (
+                    {job.tags && job.tags.length > 3 && (
                       <Badge variant="outline" className="text-xs">
                         +{job.tags.length - 3} more
                       </Badge>

@@ -48,7 +48,7 @@ export default function SignInPage() {
         try {
           linkedInButton = document.querySelector(selector) as HTMLButtonElement
           if (linkedInButton) break
-        } catch (e) {
+        } catch {
           // Selector might not be supported, continue
         }
       }

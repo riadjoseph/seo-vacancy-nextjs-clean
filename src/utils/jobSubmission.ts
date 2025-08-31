@@ -10,7 +10,7 @@ export const submitJob = async (formData: JobFormData, jobId?: string): Promise<
   const expirationDate = new Date(startDate);
   expirationDate.setDate(startDate.getDate() + parseInt(formData.duration));
 
-  const { duration, ...jobDataWithoutDuration } = formData;
+  const { ...jobDataWithoutDuration } = formData;
 
   const jobData = {
     ...jobDataWithoutDuration,

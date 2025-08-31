@@ -73,7 +73,7 @@ async function JobsList({ searchParams }: JobsListProps) {
   }
 
   // Execute both queries
-  const [{ data: jobs, error }, { count }] = await Promise.all([
+  const [{ data: jobs }, { count }] = await Promise.all([
     dataQuery,
     countQuery
   ])
@@ -130,7 +130,18 @@ async function JobsList({ searchParams }: JobsListProps) {
 
       {/* Pagination */}
       <div className="flex justify-center">
-        <ServerPagination data={paginationData} basePath="/" searchParams={searchParams} />
+        <ServerPagination 
+          data={paginationData} 
+          basePath="/" 
+          searchParams={{
+            ...Object.fromEntries(
+              Object.entries(searchParams).map(([key, value]) => [
+                key, 
+                Array.isArray(value) ? value.join(',') : value
+              ])
+            )
+          } as Record<string, string>} 
+        />
       </div>
     </>
   )

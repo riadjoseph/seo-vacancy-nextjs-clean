@@ -10,7 +10,7 @@ interface JobFeaturedProps {
   onFeaturedChange: (featured: boolean) => void;
 }
 
-const JobFeatured = ({ formData, onFeaturedChange }: JobFeaturedProps) => {
+const JobFeatured = ({ onFeaturedChange }: JobFeaturedProps) => {
   return (
     <div className="space-y-4">
       <div>

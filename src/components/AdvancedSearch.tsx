@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -53,7 +53,7 @@ export interface SearchFilters {
   tags: string[]
 }
 
-export function AdvancedSearch({ onSearch, showAsModal = false }: AdvancedSearchProps) {
+export function AdvancedSearch({ onSearch }: AdvancedSearchProps) {
   const router = useRouter()
   const searchParams = useSearchParams()
   
