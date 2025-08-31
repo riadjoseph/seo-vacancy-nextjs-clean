@@ -6,6 +6,7 @@ import { Navigation, Footer } from '@/components/Navigation';
 import { Analytics } from '@/lib/analytics';
 import { Toaster } from 'sonner';
 import { BuyMeACoffeeWidget } from '@/components/BuyMeACoffee';
+import { Suspense } from 'react';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +41,9 @@ export default function RootLayout({
             </main>
             <Footer />
           </div>
-          <Analytics />
+          <Suspense>
+            <Analytics />
+          </Suspense>
           <Toaster />
           <BuyMeACoffeeWidget 
             description="Support WakeUpHappy - Keep it ad-free!" 

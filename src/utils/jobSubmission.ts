@@ -1,4 +1,5 @@
 import { createClient } from '@/lib/supabase/client';
+import type { Enums, TablesInsert, TablesUpdate } from '@/lib/supabase/types';
 import { createJobSlug } from '@/utils/jobUtils';
 import { JobFormData } from '@/utils/jobValidation';
 
@@ -14,7 +15,8 @@ export const submitJob = async (formData: JobFormData, jobId?: string): Promise<
 
   const jobData = {
     ...jobDataWithoutDuration,
-    tags: formData.tags.map(tag => tag.label), // Convert to string array
+    // Cast tag labels to the Supabase enum type
+    tags: formData.tags.map((tag) => tag.label as Enums<'seo_specialization'>),
     salary_min: formData.hide_salary || !formData.salary_min ? null : parseFloat(formData.salary_min) || null,
     salary_max: formData.hide_salary || !formData.salary_max ? null : parseFloat(formData.salary_max) || null,
     start_date: startDate.toISOString(),
@@ -24,14 +26,21 @@ export const submitJob = async (formData: JobFormData, jobId?: string): Promise<
 
   if (jobId) {
     // Update existing job
-    const { error } = await supabase.from('jobs').update(jobData).eq('id', jobId);
+    const { error } = await supabase
+      .from('jobs')
+      .update(jobData as TablesUpdate<'jobs'>)
+      .eq('id', jobId);
     if (error) throw error;
 
     const updatedJobSlug = createJobSlug(jobData.title, jobData.company_name, jobData.city || 'remote');
     return { jobId, slug: updatedJobSlug };
   } else {
     // Insert new job
-    const { data, error } = await supabase.from('jobs').insert(jobData).select('id').single();
+    const { data, error } = await supabase
+      .from('jobs')
+      .insert(jobData as TablesInsert<'jobs'>)
+      .select('id')
+      .single();
     if (error) throw error;
 
     const newJobSlug = createJobSlug(jobData.title, jobData.company_name, jobData.city || 'remote');
