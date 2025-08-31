@@ -2,6 +2,12 @@
   command = "npm run build"
   publish = ".next"
 
+# Netlify secrets scanning flags public client keys in the bundle.
+# Supabase anon key and URL are safe to expose (RLS enforced) and must be in the client bundle.
+# Instruct the scanner to ignore these specific public keys while keeping scanning enabled for others.
+[build.environment]
+  SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
+
 [[headers]]
   for = "/*"
   [headers.values]
