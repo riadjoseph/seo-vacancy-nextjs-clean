@@ -21,6 +21,27 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Wake Up Happy - Find Your Next SEO & Tech Career",
   description: "Wake up to new opportunities! Discover the latest SEO, marketing, and tech job opportunities across Europe",
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '16x16 32x32', type: 'image/x-icon' },
+      { url: '/icon.svg', type: 'image/svg+xml', sizes: 'any' },
+    ],
+    shortcut: ['/favicon.ico'],
+    apple: ['/icon.svg'],
+    other: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        sizes: '16x16 32x32',
+        url: '/favicon.ico',
+      },
+    ],
+  },
+  manifest: '/manifest.webmanifest',
+  other: {
+    'msapplication-TileColor': '#f59e0b',
+    'theme-color': '#f59e0b',
+  },
 };
 
 export default function RootLayout({
