@@ -66,13 +66,13 @@ export async function generateMetadata({ params, searchParams }: CityJobsPagePro
   
   if (totalCount === 0) {
     return {
-      title: `No Jobs in ${decodedCity} | Job Board`,
+      title: `No Jobs in ${decodedCity} | SEO Jobs`,
       description: `No job opportunities found in ${decodedCity}. Check back later for new positions.`
     }
   }
   
   return {
-    title: `${totalCount} Jobs in ${decodedCity}${pageTitle} | Job Board`,
+    title: `${totalCount} Jobs in ${decodedCity}${pageTitle} | SEO Jobs`,
     description: `Discover ${totalCount} SEO and tech job opportunities in ${decodedCity}. Find your perfect career match today.`,
     openGraph: {
       title: `Jobs in ${decodedCity}${pageTitle}`,

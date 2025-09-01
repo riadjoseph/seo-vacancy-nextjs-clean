@@ -90,13 +90,13 @@ export async function generateMetadata({ params, searchParams }: TagJobsPageProp
   
   if (totalCount === 0) {
     return {
-      title: `No ${tagName} Jobs | Job Board`,
+      title: `No ${tagName} Jobs | SEO Jobs`,
       description: `No job opportunities found for ${tagName}. Check back later for new positions.`
     }
   }
   
   return {
-    title: `${totalCount} ${tagName} Jobs${pageTitle} | Job Board`,
+    title: `${totalCount} ${tagName} Jobs${pageTitle} | SEO Jobs`,
     description: `Discover ${totalCount} ${tagName} job opportunities. Find your perfect career match in ${tagName}.`,
     openGraph: {
       title: `${tagName} Jobs${pageTitle}`,

@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   }
   
   return {
-    title: `${job.title} at ${job.company_name} | Job Board`,
+    title: `${job.title} at ${job.company_name} | SEO Jobs`,
     description: `${job.description?.replace(/<[^>]*>/g, '').substring(0, 155)}...`,
     openGraph: {
       title: `${job.title} at ${job.company_name}`,
