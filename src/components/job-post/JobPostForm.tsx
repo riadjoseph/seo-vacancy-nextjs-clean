@@ -10,7 +10,7 @@ import JobSalary from "./JobSalary";
 import JobDates from "./JobDates";
 import JobFeatured from "./JobFeatured";
 import { useJobForm } from "@/hooks/useJobForm";
-import type { SeoSpecializationOption } from "@/data/types";
+import type { SeoSpecialization } from "@/data/types";
 
 interface JobPostingFormProps {
   onClose?: () => void;
@@ -61,7 +61,7 @@ const JobPostingForm: React.FC<JobPostingFormProps> = ({
         <JobDescription 
           formData={formData} 
           handleChange={handleChange}
-          onTagsChange={(tags: SeoSpecializationOption[]) =>
+          onTagsChange={(tags: SeoSpecialization[]) =>
             setFormData((prev) => ({ ...prev, tags }))
           }
           onCategoryChange={(category) =>

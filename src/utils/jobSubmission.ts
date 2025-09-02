@@ -16,7 +16,7 @@ export const submitJob = async (formData: JobFormData, jobId?: string): Promise<
   const jobData = {
     ...jobDataWithoutDuration,
     // Cast tag labels to the Supabase enum type
-    tags: formData.tags.map((tag) => tag.label as Enums<'seo_specialization'>),
+    tags: formData.tags as Enums<'seo_specialization'>[],
     salary_min: formData.hide_salary || !formData.salary_min ? null : parseFloat(formData.salary_min) || null,
     salary_max: formData.hide_salary || !formData.salary_max ? null : parseFloat(formData.salary_max) || null,
     start_date: startDate.toISOString(),

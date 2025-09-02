@@ -1,11 +1,11 @@
-import { SeoSpecializationOption, SeoSpecialization } from "@/data/types";
+import { SeoSpecialization } from "@/data/types";
 
 export interface JobFormData {
   title: string;
   company_name: string;
   company_logo: string;
   description: string;
-  tags: SeoSpecializationOption[] | SeoSpecialization[];
+  tags: SeoSpecialization[];
   category: string;
   job_url: string;
   salary_min: string;
@@ -19,7 +19,7 @@ export interface JobFormData {
 }
 
 // Simple validation function for the post job form
-export const validateJobForm = (formData: any): Record<string, string> => {
+export const validateJobForm = (formData: JobFormData): Record<string, string> => {
   const errors: Record<string, string> = {};
 
   // Required fields

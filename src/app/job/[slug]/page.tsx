@@ -289,6 +289,20 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
           }),
         }}
       />
+      
+      {/* Bot Tracking Pixel - Invisible 1x1 GIF for tracking bot visits */}
+      <img 
+        src={`/.netlify/functions/track-bot-visit?job=${encodeURIComponent(slug)}&prerendered=true`}
+        alt=""
+        style={{ 
+          position: 'absolute', 
+          width: '1px', 
+          height: '1px', 
+          opacity: 0,
+          pointerEvents: 'none'
+        }}
+        aria-hidden="true"
+      />
     </div>
   )
 }
