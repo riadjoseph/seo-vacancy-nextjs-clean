@@ -89,3 +89,4 @@ const JobSalary = ({ formData, handleChange, handleCurrencyChange, onHideSalaryC
 };
 
 export default JobSalary;
+export { JobSalary };

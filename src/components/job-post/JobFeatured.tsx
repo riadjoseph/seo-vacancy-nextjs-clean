@@ -47,3 +47,4 @@ const JobFeatured = ({ onFeaturedChange }: JobFeaturedProps) => {
 };
 
 export default JobFeatured;
+export { JobFeatured };

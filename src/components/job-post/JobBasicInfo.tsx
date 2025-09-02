@@ -146,3 +146,4 @@ const JobBasicInfo = ({ formData, handleChange, handleCityChange, errors = {} }:
 };
 
 export default JobBasicInfo;
+export { JobBasicInfo };

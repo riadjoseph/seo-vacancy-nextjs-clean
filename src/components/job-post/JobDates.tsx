@@ -57,3 +57,4 @@ const JobDates = ({ formData, handleChange, handleDurationChange, errors = {} }:
 };
 
 export default JobDates;
+export { JobDates };

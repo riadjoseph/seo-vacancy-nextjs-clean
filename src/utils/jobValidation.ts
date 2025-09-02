@@ -1,11 +1,11 @@
-import { SeoSpecializationOption } from "@/data/types";
+import { SeoSpecializationOption, SeoSpecialization } from "@/data/types";
 
 export interface JobFormData {
   title: string;
   company_name: string;
   company_logo: string;
   description: string;
-  tags: SeoSpecializationOption[];
+  tags: SeoSpecializationOption[] | SeoSpecialization[];
   category: string;
   job_url: string;
   salary_min: string;
@@ -17,6 +17,73 @@ export interface JobFormData {
   hide_salary?: boolean;
   featured?: boolean;
 }
+
+// Simple validation function for the post job form
+export const validateJobForm = (formData: any): Record<string, string> => {
+  const errors: Record<string, string> = {};
+
+  // Required fields
+  if (!formData.title?.trim()) {
+    errors.title = "Job title is required";
+  }
+
+  if (!formData.company_name?.trim()) {
+    errors.company_name = "Company name is required";
+  }
+
+  if (!formData.city?.trim()) {
+    errors.city = "Location is required";
+  }
+
+  if (!formData.description?.trim()) {
+    errors.description = "Job description is required";
+  } else if (formData.description.trim().split(/\s+/).length < 50) {
+    errors.description = "Job description must be at least 50 words";
+  }
+
+  if (!formData.category?.trim()) {
+    errors.category = "Category is required";
+  }
+
+  if (!formData.tags || formData.tags.length === 0) {
+    errors.tags = "Please select at least one specialization";
+  } else if (formData.tags.length > 5) {
+    errors.tags = "Please select no more than 5 specializations";
+  }
+
+  if (!formData.job_url?.trim()) {
+    errors.job_url = "Application URL is required";
+  } else {
+    try {
+      new URL(formData.job_url);
+    } catch {
+      errors.job_url = "Please provide a valid URL";
+    }
+  }
+
+  if (!formData.hide_salary) {
+    if (!formData.salary_min?.trim()) {
+      errors.salary_min = "Minimum salary is required";
+    }
+    if (!formData.salary_max?.trim()) {
+      errors.salary_max = "Maximum salary is required";
+    }
+    if (formData.salary_min && formData.salary_max && 
+        parseInt(formData.salary_min) >= parseInt(formData.salary_max)) {
+      errors.salary_max = "Maximum salary must be greater than minimum salary";
+    }
+  }
+
+  if (!formData.start_date?.trim()) {
+    errors.start_date = "Start date is required";
+  }
+
+  if (!formData.duration?.trim()) {
+    errors.duration = "Duration is required";
+  }
+
+  return errors;
+};
 
 export interface ValidationResult {
   isValid: boolean;

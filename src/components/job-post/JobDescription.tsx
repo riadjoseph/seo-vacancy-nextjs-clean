@@ -6,19 +6,18 @@ import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { categories } from "@/data/categories";
-import { SEO_SPECIALIZATIONS } from "@/data/types";
+import { SeoSpecialization, SEO_SPECIALIZATIONS } from "@/data/types";
 import { Badge } from "@/components/ui/badge";
-import { SeoSpecializationOption } from "@/data/types";
 
 interface JobDescriptionProps {
   formData: {
     description: string;
-    tags: SeoSpecializationOption[];
+    tags: SeoSpecialization[];
     category: string;
     job_url: string;
   };
   handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  onTagsChange: (tags: SeoSpecializationOption[]) => void;
+  onTagsChange: (tags: SeoSpecialization[]) => void;
   onCategoryChange?: (value: string) => void;
   errors?: Record<string, string>;
 }
@@ -26,13 +25,10 @@ interface JobDescriptionProps {
 const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange, errors = {} }: JobDescriptionProps) => {
   const [isPreview, setIsPreview] = useState(false);
 
-  const handleTagSelect = (specialization: string) => {
-    const tagOption = { value: specialization.toLowerCase().replace(/\s+/g, '-'), label: specialization };
-    const isSelected = formData.tags.some(tag => tag.label === specialization);
-    
-    const newTags = isSelected
-      ? formData.tags.filter(tag => tag.label !== specialization)
-      : [...formData.tags, tagOption];
+  const handleTagSelect = (specialization: SeoSpecialization) => {
+    const newTags = formData.tags.includes(specialization)
+      ? formData.tags.filter(t => t !== specialization)
+      : [...formData.tags, specialization];
     onTagsChange(newTags);
   };
 
@@ -96,7 +92,7 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
           {SEO_SPECIALIZATIONS.map((specialization) => (
             <Badge
               key={specialization}
-              variant={formData.tags.some(tag => tag.label === specialization) ? "default" : "outline"}
+              variant={formData.tags.includes(specialization) ? "default" : "outline"}
               className="cursor-pointer"
               onClick={() => handleTagSelect(specialization)}
             >
@@ -161,3 +157,4 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
 };
 
 export default JobDescription;
+export { JobDescription };
