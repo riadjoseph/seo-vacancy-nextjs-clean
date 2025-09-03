@@ -8,36 +8,6 @@
 [build.environment]
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SUPABASE_URL"
 
-# Cache static assets for 1 year
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Cache homepage for 1 hour, allow stale content for 24h
-[[headers]]
-  for = "/"
-  [headers.values]
-    Cache-Control = "public, max-age=3600, stale-while-revalidate=86400"
-
-# Cache job pages for 1 day, allow stale content for 7 days
-[[headers]]
-  for = "/job/*"
-  [headers.values]
-    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
-
-# Cache city/tag pages for 6 hours, allow stale content for 24h
-[[headers]]
-  for = "/jobs/*"
-  [headers.values]
-    Cache-Control = "public, max-age=21600, stale-while-revalidate=86400"
-
-# Disable caching for API routes
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    Cache-Control = "no-cache, no-store, must-revalidate"
-
 # Security headers for all pages
 [[headers]]
   for = "/*"

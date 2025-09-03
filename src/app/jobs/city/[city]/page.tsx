@@ -8,8 +8,6 @@ import { ServerPagination, ServerPaginationSummary } from '@/components/ui/serve
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { calculatePagination } from '@/utils/pagination'
 
-// Route Segment Config - 24 hour revalidation
-export const revalidate = 86400 // 24 hours
 
 interface CityJobsPageProps {
   params: Promise<{

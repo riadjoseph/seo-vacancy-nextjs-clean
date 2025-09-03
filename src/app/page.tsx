@@ -4,8 +4,6 @@ import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
 import { ServerPagination, ServerPaginationSummary } from '@/components/ui/server-pagination'
 import { calculatePagination } from '@/utils/pagination'
 
-// Route Segment Config - 24 hour revalidation
-export const revalidate = 86400 // 24 hours
 
 interface JobsListProps {
   searchParams: {

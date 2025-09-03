@@ -17,8 +17,6 @@ import {
 import { createTagSlug } from '@/utils/tagUtils'
 import type { Tables } from '@/lib/supabase/types'
 
-// Route Segment Config - 30 day revalidation for job details
-export const revalidate = 2592000 // 30 days
 
 type Job = Tables<'jobs'>
 
