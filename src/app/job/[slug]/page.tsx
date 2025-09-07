@@ -6,12 +6,12 @@ import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 import { 
   MapPin, 
   Briefcase, 
   Calendar, 
   ExternalLink, 
-  ArrowLeft,
   Building2
 } from 'lucide-react'
 import { createTagSlug } from '@/utils/tagUtils'
@@ -63,17 +63,26 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   
   if (!job) {
     return {
-      title: 'Job Not Found',
-      description: 'The job you are looking for could not be found.'
+      title: 'This Job Listing Expired',
+      description: 'The job you are looking for expired, have a look at the other available jobs.'
     }
   }
   
+  // Title: {job title} in {city} at {company name}
+  const cityPart = job.city ? ` in ${job.city}` : ''
+  const seoTitle = `${job.title}${cityPart} at ${job.company_name}`
+  
+  // Meta Description: {tag specializations} skills required at {company name} for an SEO Job in {city} -> Apply now: {job title}.
+  const skillsText = job.tags && job.tags.length > 0 ? `${job.tags.join(', ')} skills` : 'SEO skills'
+  const cityText = job.city ? ` in ${job.city}` : ''
+  const metaDescription = `${skillsText} required at ${job.company_name} for an SEO Job${cityText} -> Apply now: ${job.title}.`
+  
   return {
-    title: `${job.title} at ${job.company_name} | SEO Jobs`,
-    description: `${job.description?.replace(/<[^>]*>/g, '').substring(0, 155)}...`,
+    title: seoTitle,
+    description: metaDescription,
     openGraph: {
-      title: `${job.title} at ${job.company_name}`,
-      description: `${job.description?.replace(/<[^>]*>/g, '').substring(0, 155)}...`,
+      title: seoTitle,
+      description: metaDescription,
       type: 'article',
       publishedTime: job.created_at || undefined,
     },
@@ -103,14 +112,29 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
   if (isExpired) {
     notFound()
   }
+
+  // Generate breadcrumbs
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'SEO Jobs', href: '/' }
+  ]
+  
+  if (job.city) {
+    breadcrumbItems.push({ 
+      label: job.city, 
+      href: `/jobs/city/${job.city.toLowerCase()}` 
+    })
+  }
+  
+  breadcrumbItems.push({ 
+    label: `${job.title} at ${job.company_name}` 
+  })
+
+  const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems, 'https://seo-vacancy.eu')
   
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="mb-6">
-        <Link href="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
-          <ArrowLeft className="h-4 w-4" />
-          Back to Jobs
-        </Link>
+        <Breadcrumbs items={breadcrumbItems} />
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -127,7 +151,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <h1 className="text-3xl font-bold mb-2">{job.title}</h1>
+                    <h1 className="text-3xl font-bold mb-2">{job.title}{job.city ? ` ${job.city}` : ''}</h1>
                     <div className="flex items-center gap-2 text-xl text-gray-600">
                       <Building2 className="h-5 w-5" />
                       <span>{job.company_name}</span>
@@ -285,6 +309,14 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
             } : undefined,
             industry: job.category,
           }),
+        }}
+      />
+      
+      {/* Breadcrumb JSON-LD Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbSchema),
         }}
       />
       
