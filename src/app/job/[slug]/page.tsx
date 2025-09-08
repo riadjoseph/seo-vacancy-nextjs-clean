@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
+import { RelatedJobs } from '@/components/RelatedJobs'
 import { 
   MapPin, 
   Briefcase, 
@@ -63,8 +64,8 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   
   if (!job) {
     return {
-      title: 'This Job Listing Expired',
-      description: 'The job you are looking for expired, have a look at the other available jobs.'
+      title: 'Job Not Found - Permanently Removed',
+      description: 'The job you are looking for has been permanently removed and is no longer available.'
     }
   }
   
@@ -106,12 +107,8 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
     notFound()
   }
   
-  // Check if job is expired - return 404 for expired jobs
+  // Check if job is expired - keep serving content but show as closed
   const isExpired = job.expires_at && new Date(job.expires_at) < new Date()
-  
-  if (isExpired) {
-    notFound()
-  }
 
   // Generate breadcrumbs
   const breadcrumbItems: BreadcrumbItem[] = [
@@ -136,6 +133,30 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
       <div className="mb-6">
         <Breadcrumbs items={breadcrumbItems} />
       </div>
+      
+      {/* Expired Job Banner */}
+      {isExpired && (
+        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="flex items-center justify-center">
+            <div className="text-center">
+              <h2 className="text-lg font-semibold text-red-800 mb-2">
+                No Longer Accepting Applications
+              </h2>
+              <p className="text-red-600">
+                This job listing expired on{' '}
+                <span className="font-medium" suppressHydrationWarning>
+                  {new Date(job.expires_at!).toLocaleDateString('en-GB', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric' 
+                  })}
+                </span>
+                {' '}and is no longer accepting new applications.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
@@ -226,20 +247,33 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
         <div className="space-y-6">
           <Card className="sticky top-6">
             <CardHeader>
-              <h3 className="text-lg font-semibold">Apply for this position</h3>
+              <h3 className="text-lg font-semibold">
+                {isExpired ? 'Application Closed' : 'Apply for this position'}
+              </h3>
             </CardHeader>
             <CardContent className="space-y-4">
-              <a
-                href={job.job_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full"
-              >
-                <Button size="lg" className="w-full gap-2">
-                  Apply Now
+              {isExpired ? (
+                <Button 
+                  size="lg" 
+                  className="w-full gap-2 bg-gray-400 text-gray-700 cursor-not-allowed" 
+                  disabled
+                >
+                  No Longer Available
                   <ExternalLink className="h-4 w-4" />
                 </Button>
-              </a>
+              ) : (
+                <a
+                  href={job.job_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full"
+                >
+                  <Button size="lg" className="w-full gap-2">
+                    Apply Now
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                </a>
+              )}
               
               {job.expires_at && (
                 <p className="text-sm text-gray-500 text-center">
@@ -278,6 +312,13 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
           </Card>
         </div>
       </div>
+      
+      {/* Related Jobs Section */}
+      {job.city && (
+        <div className="mt-12">
+          <RelatedJobs currentJobId={job.id} city={job.city} />
+        </div>
+      )}
       
       {/* JSON-LD Structured Data */}
       <script
