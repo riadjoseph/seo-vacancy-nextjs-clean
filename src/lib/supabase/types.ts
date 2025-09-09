@@ -53,6 +53,7 @@ export type Database = {
           salary_min: number | null
           start_date: string | null
           tags: Database["public"]["Enums"]["seo_specialization"][] | null
+          teaser: string | null
           title: string
           user_id: string | null
         }
@@ -78,6 +79,7 @@ export type Database = {
           salary_min?: number | null
           start_date?: string | null
           tags?: Database["public"]["Enums"]["seo_specialization"][] | null
+          teaser?: string | null
           title: string
           user_id?: string | null
         }
@@ -103,6 +105,7 @@ export type Database = {
           salary_min?: number | null
           start_date?: string | null
           tags?: Database["public"]["Enums"]["seo_specialization"][] | null
+          teaser?: string | null
           title?: string
           user_id?: string | null
         }

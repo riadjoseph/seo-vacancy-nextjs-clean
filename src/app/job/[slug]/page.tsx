@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 import { RelatedJobs } from '@/components/RelatedJobs'
+import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
 import { 
   MapPin, 
   Briefcase, 
@@ -211,16 +212,29 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
             </CardHeader>
           </Card>
           
+          {job.teaser && job.teaser.trim() && (
+            <Card className="bg-blue-50/50 border-blue-100">
+              <CardHeader>
+                <h2 className="text-xl font-semibold">What Makes This Opportunity Special</h2>
+              </CardHeader>
+              <CardContent>
+                <div className="prose prose-sm max-w-none whitespace-pre-line">
+                  <ReactMarkdown>
+                    {job.teaser}
+                  </ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           <Card>
             <CardHeader>
               <h2 className="text-xl font-semibold">Job Description</h2>
             </CardHeader>
             <CardContent>
-              <div className="prose prose-sm max-w-none whitespace-pre-line">
-                <ReactMarkdown>
-                  {job.description || 'No description available.'}
-                </ReactMarkdown>
-              </div>
+              <ExpandableJobDescription 
+                description={job.description || 'No description available.'} 
+              />
             </CardContent>
           </Card>
           
