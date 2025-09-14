@@ -306,6 +306,24 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               <h3 className="text-lg font-semibold">Job Details</h3>
             </CardHeader>
             <CardContent className="space-y-3">
+              {/* Salary (shown only when not hidden and values exist) */}
+              {job.hide_salary !== true && (job.salary_min !== null || job.salary_max !== null) && (
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Salary:</span>
+                  <span className="font-medium">
+                    {(() => {
+                      const currency = job.salary_currency || ''
+                      const fmt = (n: number) => new Intl.NumberFormat('en-US').format(n)
+                      const min = job.salary_min ?? undefined
+                      const max = job.salary_max ?? undefined
+                      if (min != null && max != null) return `${currency}${fmt(min)} - ${currency}${fmt(max)}`
+                      if (min != null) return `From ${currency}${fmt(min)}`
+                      if (max != null) return `Up to ${currency}${fmt(max)}`
+                      return null
+                    })()}
+                  </span>
+                </div>
+              )}
               {job.city && (
                 <div className="flex justify-between">
                   <span className="text-gray-600">Location:</span>
@@ -339,37 +357,61 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
       )}
       
       {/* JSON-LD Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org/",
-            "@type": "JobPosting",
-            title: job.title,
-            description: job.description?.replace(/<[^>]*>/g, '') || '',
-            identifier: {
-              "@type": "PropertyValue",
-              name: "Job ID",
-              value: job.id,
+      {(() => {
+        // Build JobPosting schema, optionally adding baseSalary if shown on page
+        const hasSalary = job.hide_salary !== true && (job.salary_min !== null || job.salary_max !== null)
+        const schema: Record<string, any> = {
+          "@context": "https://schema.org/",
+          "@type": "JobPosting",
+          title: job.title,
+          description: job.description?.replace(/<[^>]*>/g, '') || '',
+          identifier: {
+            "@type": "PropertyValue",
+            name: "Job ID",
+            value: job.id,
+          },
+          datePosted: job.created_at,
+          validThrough: job.expires_at,
+          employmentType: "FULL_TIME",
+          hiringOrganization: {
+            "@type": "Organization",
+            name: job.company_name,
+          },
+          jobLocation: job.city ? {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: job.city,
             },
-            datePosted: job.created_at,
-            validThrough: job.expires_at,
-            employmentType: "FULL_TIME",
-            hiringOrganization: {
-              "@type": "Organization",
-              name: job.company_name,
-            },
-            jobLocation: job.city ? {
-              "@type": "Place",
-              address: {
-                "@type": "PostalAddress",
-                addressLocality: job.city,
-              },
-            } : undefined,
-            industry: job.category,
-          }),
-        }}
-      />
+          } : undefined,
+          industry: job.category,
+        }
+
+        if (hasSalary) {
+          const value: Record<string, any> = {
+            "@type": "QuantitativeValue",
+          }
+          if (job.salary_min !== null) value.minValue = job.salary_min
+          if (job.salary_max !== null) value.maxValue = job.salary_max
+          // Default to YEAR when unspecified; mirrors page-level display semantics
+          value.unitText = 'YEAR'
+
+          const baseSalary: Record<string, any> = {
+            "@type": "MonetaryAmount",
+            value,
+          }
+          if (job.salary_currency) baseSalary.currency = job.salary_currency
+
+          schema.baseSalary = baseSalary
+        }
+
+        return (
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+          />
+        )
+      })()}
       
       {/* Breadcrumb JSON-LD Schema */}
       <script
