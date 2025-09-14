@@ -59,13 +59,7 @@ export function Navigation() {
             >
               Tools
             </Link>
-            <Link 
-              href="/" 
-              className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
-            >
-              <Search className="h-4 w-4" />
-              Search
-            </Link>
+            {/** Removed desktop Search link */}
             
             {!loading && (
               <div className="flex items-center gap-2">
@@ -94,11 +88,6 @@ export function Navigation() {
                   </>
                 ) : (
                   <>
-                    <Link href="/auth/magic-link">
-                      <Button variant="outline" size="sm">
-                        Sign In
-                      </Button>
-                    </Link>
                     <Link href="/auth/magic-link">
                       <Button size="sm">
                         Post Job
@@ -160,11 +149,6 @@ export function Navigation() {
                     </>
                   ) : (
                     <>
-                      <Link href="/auth/magic-link" onClick={closeMobileMenu}>
-                        <Button variant="outline" className="w-full">
-                          Sign In
-                        </Button>
-                      </Link>
                       <Link href="/auth/magic-link" onClick={closeMobileMenu}>
                         <Button className="w-full">
                           Post Job

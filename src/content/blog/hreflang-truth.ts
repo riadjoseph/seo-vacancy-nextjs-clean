@@ -3,185 +3,136 @@ import type { BlogPost } from '@/types/blog'
 export const post: BlogPost = {
   slug: 'hreflang-truth-5-countries-study',
   title: 'Hreflang Implementation: A 2-month Analysis Across 5 Countries',
-  summary: 'A controlled A/B test shows when hreflang helps or hurts, and how error pages can distort measurement.',
+  summary: 'A controlled A/B test shows when hreflang helps or slightly hurts, and how measurement can be.',
   date: '2025-09-14',
   authorName: 'Riad JOSEPH',
   content: `
-*A controlled A/B test found that hreflang tags can help or hurt international SEO, and that error pages can distort measurement*
+Hreflang in the Wild: What a Two-Month Test Really Showed Us  
+
+We run multiple websites across five English-speaking markets — the US, [UK](https://seo-vacancy.eu/jobs/city/london), India, Canada and the Philippines. On paper that sounds simple enough, right? Different domains, same brand, just targeted locally.  
+
+But in practice it drove us nuts. Google kept showing the wrong country pages. A US user would end up on the UK domain, Indian pages showed up in Canada, and so on. This “country cannibalization” isn’t just annoying for us, it’s confusing for the user and probably hurting conversions.  
+
+So we decided to test the textbook fix: [hreflang](https://seo-vacancy.eu/jobs/tag/international-seo).  
 
 ---
 
-## The Challenge: Country Cannibalization at Scale
+## How We Set Up the Experiment  
 
-Picture this: You're managing SEO for a global website spanning five English-speaking countries - USA, UK, India, Canada, and the Philippines. Despite having dedicated domains for each market, you're facing a frustrating problem: **Google keeps showing the wrong country's content to the wrong users**.
+Instead of rolling hreflang out everywhere, we wanted proof. Over two months, we set up a proper test:  
 
-Americans searching for your products see results from your Indian domain. British users land on Canadian pages. This "country cannibalization" isn't just confusing for users - it's killing conversion rates and destroying the local relevance you've worked so hard to build.
+- 5 markets (US, UK, India, Canada, Philippines)  
+- More than 100 million impressions in total (so enough data to matter)  
+- Two groups of URLs: 461 with hreflang tags (the “test” group), 1,733 without (the “control”)  
 
-The conventional wisdom? Implement hreflang tags. These HTML attributes promise to tell Google exactly which version of your content belongs to which country. Problem solved, right?
+We used a statistical approach called *[Difference-in-Differences](https://arxiv.org/pdf/2503.13323)*. In plain English: we didn’t just look at before vs after, we also compared against the control group. That way if seasonality or a Google update happened, we’d see whether it was hreflang that made the difference or just background noise.  
 
-However.
-
-## The Experiment: Statistical Approach
-
-Rather than blindly implementing hreflang across our entire site and hoping for the best, we decided to run a controlled experiment. Here's what we did:
-
-### The Setup
-
-- **Test Duration**: 2 months
-- **Markets**: 5 English-speaking countries (USA, UK, India, Canada, Philippines)
-- **Sample Size**: Over 100 million impressions
-- **Methodology**: Difference-in-Differences (DiD) analysis with test and control groups
-
-We divided our URLs into two groups:
-- **Test Group**: 461 URLs with hreflang tags implemented
-- **Control Group**: 1,733 URLs without hreflang tags
-
-This wasn't a simple before/after comparison. We used a sophisticated statistical technique called Difference-in-Differences, which controls for:
-- Seasonal trends affecting all URLs
-- Algorithm updates during the test period
-- Natural traffic fluctuations
-- Baseline differences between URL groups
-
-### What We Measured
-
-For each group, we tracked:
-- **Cannibalized Impressions**: Users from Country A seeing Country B's content
-- **Non-Cannibalized Impressions**: Users seeing the correct country's content
-- **Cannibalization Rate**: The percentage of impressions going to the wrong country
-
-## The Results: A Tale of Two Analyses
-
-### Initial Analysis
-
-Our initial results seemed promising:
-
-- **USA**
-  - Change: -1.62%
-  - Significance: Highly Significant
-- **UK**
-  - Change: -3.38%
-  - Significance: Highly Significant
-- **India**
-  - Change: -1.60%
-  - Significance: Significant
-- **Canada**
-  - Change: +0.13%
-  - Significance: Not Significant
-- **Philippines**
-  - Change: -0.02%
-  - Significance: Not Significant
-
-It looked like hreflang was working! Three out of five countries showed improvements. Time to roll it out everywhere, right?
-
-However, the picture changed after a closer look.
-
-### Effect of Error Pages
-
-When we dug deeper into the page-level data, we discovered something shocking: **error pages were showing astronomical improvements** that were completely skewing our results.
-
-- UK error pages: **-38.66% reduction** in cannibalization
-- India error pages: **-28.78% reduction**
-
-These weren't just outliers - they were statistical anomalies that made no logical sense. Error pages have fundamentally different user behavior and search intent. Users looking for error messages aren't shopping for products.
-
-### Results After Excluding Error Pages
-
-When we removed error pages from the analysis and focused on regular content, the story completely changed:
-
-- **USA**
-  - Change: -1.62%
-  - Significance: Improved (p<0.001)
-  - Z: -63.82
-- **UK**
-  - Change: -0.09%
-  - Significance: No Effect
-  - Z: -1.60
-- **India**
-  - Change: +2.74%
-  - Significance: Worsened (p<0.001)
-  - Z: 60.57
-- **Canada**
-  - Change: +2.88%
-  - Significance: Worsened (p<0.001)
-  - Z: 36.52
-- **Philippines**
-  - Change: +3.73%
-  - Significance: Worsened (p<0.001)
-  - Z: 23.26
-
-**Summary: Only 1 out of 5 countries benefited from hreflang implementation in this test.**
-
-## By Page Type: Differences by Content Category
-
-When we analyzed performance by page category, we found even more surprising patterns:
-
-### Winners (Reduced Cannibalization)
-- **Branding/Marketing Pages**: Up to -28.78% improvement
-- **USA Product Selectors**: -8.15% improvement
-- **UK Article Pages**: -12.92% improvement
-
-### Losers (Increased Cannibalization)
-- **Service/Support Pages**: Up to +21.16% deterioration
-- **Philippines Content**: +12.92% deterioration on articles
-- **Canada Articles**: +14.80% deterioration
-
-The pattern was clear: **hreflang helps some content types while actively harming others**.
-
-## Statistical Validation
-
-With over 100 million impressions analyzed and Z-statistics ranging from -63.82 to 60.57, we can say with 99.9% confidence that these effects are real. The statistical power of our analysis is exceptional:
-
-- **96% of page-category combinations** showed statistically significant effects
-- **80% of domains** showed significant changes
-- All significant effects had p-values < 0.001
-
-This isn't random variation - hreflang is having real, measurable impacts on search visibility.
-
-## Key Findings: Implications for International SEO
-
-### 1. One Size Doesn't Fit All
-Implementing hreflang across your entire site could actually hurt performance in some markets. Our data shows smaller, emerging markets (Canada, Philippines) consistently performed worse with hreflang.
-
-### 2. Content Type Trumps Geography
-Branding and marketing content benefited almost universally, while service and support pages suffered. This suggests Google may treat different content types differently when processing hreflang signals.
-
-### 3. Market Maturity Matters
-Established markets (USA, UK) responded better to hreflang than emerging ones. This could be due to:
-- Different search behavior patterns
-- Varying levels of Google's market understanding
-- Competition density differences
-
-### 4. Always Exclude Outliers
-Error pages nearly led us to the wrong conclusion. Always segment your analysis by page type and look for anomalies that might skew results.
-
-### 5. Test Before You Implement
-Without this controlled experiment, we would have implemented hreflang everywhere and actually hurt our performance in 3 out of 5 markets.
-
-## Methodology Note for the Data-Curious
-
-For those interested in replicating this analysis:
-
-- **Test Design**: Difference-in-Differences (DiD) with test/control groups
-- **Statistical Tests**: Z-tests with 95% confidence intervals
-- **Minimum Sample Size**: 100 impressions per group for statistical validity
-- **Significance Threshold**: p < 0.05 (most results were p < 0.001)
-- **Key Innovation**: Excluding outlier page types that don't represent normal user behavior
-
-## Takeaways
-
-These results illustrate why testing is preferable to relying only on general best practices. What works for one site, market, or content type may not work for another. 
-
-In the world of international SEO, the only universal truth is this: **test with real data, validate with statistics, and let the numbers guide your decisions**.
-
-In some cases, a change can reduce performance; data helps decide where and when to apply it.
+We tracked:  
+- Cannibalized impressions (wrong country)  
+- Non-cannibalized impressions (correct country)  
+- Overall cannibalization rate  
 
 ---
 
-*Have you tested hreflang implementation on your international sites? What surprising patterns have you discovered? Share your experiences in the comments below.*
+## First Results: By Country  
 
-**Statistical Note**: All results reported achieved p < 0.001 significance unless otherwise noted. Analysis based on 100+ million impressions across 5 domains and 14 page categories over a 2-month period.
+When we looked at the countries in aggregate, the picture was already messy:  
 
-— Published by Wake Up Happy
+| Country | Change in Cannibalization | Significance |
+
+| USA     | -1.62%                     | Yes          |
+
+| UK      | -0.02%                     | No           |
+
+| India   | +2.66%                     | Yes          |
+
+| Canada  | +2.88%                     | Yes          |
+
+| Philippines | +3.73%                 | Yes          |  
+
+So, only the US showed an improvement. The others either stayed flat (UK) or got worse. At first glance this made hreflang look like a failure everywhere but the US.  
+
+But we had a hunch. Aggregating everything together might be hiding what was really going on.  
+
+---
+
+## Looking Deeper: By Page Category  
+
+We split the data by page type. That meant 13 different page categories across 5 countries. In practice only 22 of those combos had enough impressions to be reliable, but it was still plenty to work with.  
+
+That’s when things got interesting.  
+
+### Where hreflang helped  
+
+- **Branding and marketing pages** were the clearest winners:  
+  - India: –28.78% cannibalization  
+  - UK: –21.38%  
+  - Philippines: –7.13%  
+
+- **Article/blog pages** improved in some places:  
+  - UK: –12.92%  
+  - US: moderate gains  
+
+- **Product selector pages** also got a boost in the US: –8.15%  
+
+### Where hreflang made things worse  
+
+- **Service and support pages** almost universally:  
+  - Philippines: +21.16%  
+  - Other markets also negative  
+
+- **Articles** in certain places:  
+  - Canada: +14.80%  
+  - Philippines: +12.92%  
+
+- **Product detail pages** varied by market:  
+  - UK: +11.81%  
+  - Philippines: +6.97%  
+
+And these weren’t flukes — every one of the 22 category-level results was [statistically significant (p<0.001)](https://www.youtube.com/watch?v=tDl7Wd81K3c).  
+
+---
+
+## What We Learned (So Far)  
+
+There are three things worth stressing here:  
+
+- **We’re looking at Impressions, not clicks.** That means this isn’t about what users choose, it’s about what Google decides to show in each country for each query. This is the algorithm’s view of “which page is most relevant.”  
+
+- **This isn’t finished.** Two months gave us a lot of signal, but it’s still a [proof of concept](https://seo-vacancy.eu/jobs/tag/enterprise-seo). We don’t yet have a final conclusion.  
+
+- **We don’t know for sure if Google even used our hreflang tags.** They were implemented correctly, but Google sometimes ignores them, or takes months to fully process. That uncertainty is part of the challenge.  
+
+And perhaps the most important:  
+
+- **Content might be the real fix.** Hreflang can only do so much. If the content itself isn’t localized, Google has fewer reasons to show the “right” page. Think of hair care: the needs in humid Asia are different from dry, cold Canada, or from the US. Weather, culture, hair types — all of that changes what’s relevant. No hreflang tag can compensate for content that doesn’t speak to those local realities.  
+
+---
+
+## Why the Method Matters  
+
+One reason we still trust these early results is the methodology. The [Difference-in-Differences](https://arxiv.org/pdf/2503.13323) setup let us separate hreflang’s effect from normal market drift. And with over 100 million impressions, we had the statistical power to see even small changes.  
+
+Two months might sound short, but it was enough to capture a couple of Google update cycles without the data going stale.  
+
+---
+
+## Takeaways for International SEO  
+
+A few lessons already stand out:  
+
+- **Don’t assume hreflang is a silver bullet.** It may help, or it may backfire.  
+- **Always use a control group.** Otherwise you risk mistaking background changes for a treatment effect.  
+- **Segment your analysis.** The big averages are misleading.  
+- **Remember content.** The closer your content matches local user needs, the less heavy lifting hreflang has to do.  
+
+---
+
+## Conclusion (for now)  
+
+This [proof of concept](https://seo-vacancy.eu/jobs/tag/enterprise-seo) showed us that hreflang can reduce cannibalization in some markets and page types, but not in others. We’re not done yet — the final verdict is still open.  
+
+What seems clear already is that the “fix” probably isn’t hreflang alone. Localized content that speaks to user realities (yes, even down to different hair needs by climate and culture) is likely the stronger, longer-term solution.  
   `.trim(),
 }
 
