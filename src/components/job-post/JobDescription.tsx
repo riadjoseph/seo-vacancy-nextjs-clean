@@ -51,9 +51,9 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
         </div>
         
         {isPreview ? (
-          <div className="prose prose-sm max-w-none border rounded-md p-4 min-h-[150px]">
-            <ReactMarkdown>{formData.description}</ReactMarkdown>
-          </div>
+        <div className="rich-article border rounded-md p-4 min-h-[150px]">
+          <ReactMarkdown>{formData.description}</ReactMarkdown>
+        </div>
         ) : (
           <Textarea
             required

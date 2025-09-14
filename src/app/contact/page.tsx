@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { author } from '@/content/site/author'
 import Link from 'next/link'
 import { ArrowLeft, MessageCircle, Linkedin, Twitter } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -23,6 +24,15 @@ export default function ContactPage() {
           Back to Jobs
         </Link>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            ...author,
+          }),
+        }}
+      />
 
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-4 flex items-center gap-3">

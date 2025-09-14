@@ -74,3 +74,76 @@
     @apply bg-background text-foreground font-sans;
   }
 }
+
+@layer components {
+  /* Enhanced typography for rich content areas (no typography plugin required) */
+  .rich-article {
+    @apply text-gray-800 leading-relaxed max-w-none;
+  }
+  .rich-article h2 {
+    @apply text-2xl md:text-3xl font-bold mt-8 mb-3;
+  }
+  .rich-article h3 {
+    @apply text-xl md:text-2xl font-semibold mt-6 mb-2;
+  }
+  .rich-article p {
+    @apply my-4;
+  }
+  .rich-article ul {
+    @apply my-4 list-disc pl-6 space-y-2;
+  }
+  .rich-article ol {
+    @apply my-4 list-decimal pl-6 space-y-2;
+  }
+  .rich-article a {
+    @apply text-blue-600 hover:text-blue-800 underline;
+  }
+  .rich-article hr {
+    @apply my-8 border-t;
+  }
+  .rich-article blockquote {
+    @apply my-4 border-l-4 border-blue-200 pl-4 text-gray-700 italic;
+  }
+  .rich-article code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm;
+  }
+  .rich-article pre {
+    @apply bg-gray-900 text-gray-100 rounded p-4 overflow-x-auto my-4;
+  }
+  .rich-article table {
+    @apply w-full border-collapse my-4 text-left text-sm border border-gray-200 rounded-md;
+    display: block;            /* allow horizontal scrolling on mobile */
+    overflow-x: auto;
+    white-space: nowrap;       /* prevent awkward wrapping */
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .rich-article thead th {
+    @apply bg-gray-50 text-gray-700 font-semibold;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  .rich-article th, .rich-article td {
+    @apply border border-gray-200 px-3 py-2 align-top;
+  }
+  /* Helpful alignment for common numeric columns */
+  .rich-article table th:nth-child(2),
+  .rich-article table td:nth-child(2) { text-align: right; }
+  .rich-article table th:nth-child(3),
+  .rich-article table td:nth-child(3) { text-align: center; font-weight: 600; }
+  .rich-article table th:nth-child(4),
+  .rich-article table td:nth-child(4) { text-align: right; }
+  .rich-article tbody tr:nth-child(odd) {
+    @apply bg-white;
+  }
+  .rich-article tbody tr:nth-child(even) {
+    @apply bg-gray-50;
+  }
+  /* Ensure code inside pre inherits dark theme and has no gray chip background */
+  .rich-article pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+  }
+}

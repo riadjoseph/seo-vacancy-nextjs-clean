@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { author } from '@/content/site/author'
 import Link from 'next/link'
 import { ArrowLeft, Target, Zap, Shield, Heart } from 'lucide-react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -23,6 +24,15 @@ export default function AboutPage() {
           Back to Jobs
         </Link>
       </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            ...author,
+          }),
+        }}
+      />
 
       {/* Hero Section */}
       <div className="mb-12 text-center">

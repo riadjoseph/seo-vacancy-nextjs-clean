@@ -48,6 +48,18 @@ export function Navigation() {
               All Jobs
             </Link>
             <Link 
+              href="/blog" 
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Blog
+            </Link>
+            <Link 
+              href="/tools" 
+              className="text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Tools
+            </Link>
+            <Link 
               href="/" 
               className="text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1"
             >
@@ -116,6 +128,12 @@ export function Navigation() {
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="flex flex-col space-y-4">
+              <Link href="/blog" onClick={closeMobileMenu}>
+                <Button variant="ghost" className="w-full justify-start">Blog</Button>
+              </Link>
+              <Link href="/tools" onClick={closeMobileMenu}>
+                <Button variant="ghost" className="w-full justify-start">Tools</Button>
+              </Link>
               {!loading && (
                 <>
                   {user ? (
@@ -215,6 +233,8 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-white mb-4">Service</h3>
             <ul className="space-y-2 text-sm">
+              <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
+              <li><Link href="/tools" className="hover:text-white">Tools</Link></li>
               <li><Link href="/auth/magic-link" className="hover:text-white">Post a Job</Link></li>
               <li><Link href="/about" className="hover:text-white">About</Link></li>
               <li><Link href="/contact" className="hover:text-white">Contact</Link></li>

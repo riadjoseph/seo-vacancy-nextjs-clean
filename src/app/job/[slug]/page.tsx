@@ -222,7 +222,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                 <h2 className="text-xl font-semibold">What Makes This Opportunity Special</h2>
               </CardHeader>
               <CardContent>
-                <div className="prose prose-sm max-w-none whitespace-pre-line">
+                <div className="rich-article whitespace-pre-line">
                   <ReactMarkdown>
                     {job.teaser}
                   </ReactMarkdown>
