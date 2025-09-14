@@ -1,4 +1,3 @@
-import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
 
 function createJobSlug(title: string, company: string, city: string | null): string {
@@ -9,7 +8,20 @@ function createJobSlug(title: string, company: string, city: string | null): str
   return slug
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+function escapeXml(unsafe: string): string {
+  return unsafe.replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case '<': return '&lt;'
+      case '>': return '&gt;'
+      case '&': return '&amp;'
+      case "'": return '&apos;'
+      case '"': return '&quot;'
+      default: return c
+    }
+  })
+}
+
+export async function GET() {
   const supabase = await createClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
 
@@ -18,22 +30,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: baseUrl,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 1,
     },
     {
       url: `${baseUrl}/auth/signin`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
       lastModified: new Date(),
-      changeFrequency: 'monthly' as const,
+      changeFrequency: 'monthly',
       priority: 0.3,
     },
   ]
+
+  let allPages = [...staticPages]
 
   try {
     // Get all jobs for individual job pages
@@ -46,7 +60,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const jobPages = jobs?.map(job => ({
       url: `${baseUrl}/job/${createJobSlug(job.title, job.company_name, job.city)}`,
       lastModified: new Date(job.created_at || new Date()),
-      changeFrequency: 'weekly' as const,
+      changeFrequency: 'weekly',
       priority: 0.8,
     })) || []
 
@@ -61,7 +75,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const cityPages = uniqueCities.map(city => ({
       url: `${baseUrl}/jobs/city/${encodeURIComponent(city.toLowerCase())}`,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 0.6,
     }))
 
@@ -77,13 +91,31 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const tagPages = uniqueTags.map(tag => ({
       url: `${baseUrl}/jobs/tag/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))}`,
       lastModified: new Date(),
-      changeFrequency: 'daily' as const,
+      changeFrequency: 'daily',
       priority: 0.5,
     }))
 
-    return [...staticPages, ...jobPages, ...cityPages, ...tagPages]
+    allPages = [...staticPages, ...jobPages, ...cityPages, ...tagPages]
   } catch (error) {
     console.error('Error generating sitemap:', error)
-    return staticPages
   }
+
+  // Generate XML
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allPages.map(page => `  <url>
+    <loc>${escapeXml(page.url)}</loc>
+    <lastmod>${page.lastModified.toISOString()}</lastmod>
+    <changefreq>${page.changeFrequency}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`
+
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml',
+      'Cache-Control': 'public, max-age=0, must-revalidate',
+      'Netlify-CDN-Cache-Control': 'public, durable, s-maxage=86400, stale-while-revalidate=604800'
+    }
+  })
 }
