@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
@@ -105,10 +106,13 @@ export function MyJobsContent({ jobs: initialJobs }: MyJobsContentProps) {
               <div className="flex justify-between items-start">
                 <div className="flex gap-3 flex-1">
                   {job.company_logo && job.company_logo.trim() && job.company_logo !== "'" && (
-                    <img 
-                      src={job.company_logo} 
+                    <Image
+                      src={job.company_logo}
                       alt={job.company_name}
+                      width={48}
+                      height={48}
                       className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                      unoptimized
                     />
                   )}
                   <div className="space-y-2 flex-1 min-w-0">

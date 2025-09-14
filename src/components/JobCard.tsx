@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -35,10 +36,13 @@ export function JobCard({ job, isFeatured = false }: JobCardProps) {
         <div className="flex justify-between items-start gap-4">
           <div className="flex gap-3 flex-1">
             {job.company_logo && job.company_logo.trim() && job.company_logo !== "'" && (
-              <img 
-                src={job.company_logo} 
+              <Image
+                src={job.company_logo}
                 alt={job.company_name}
+                width={48}
+                height={48}
                 className="w-12 h-12 rounded-lg object-cover flex-shrink-0"
+                unoptimized
               />
             )}
             <div className="flex-1 min-w-0">

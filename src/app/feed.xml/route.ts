@@ -44,7 +44,7 @@ export async function GET() {
       .limit(50)
 
     const buildDate = new Date().toUTCString()
-    const lastBuildDate = jobs && jobs.length > 0
+    const lastBuildDate = jobs && jobs.length > 0 && jobs[0].created_at
       ? new Date(jobs[0].created_at).toUTCString()
       : buildDate
 
@@ -66,12 +66,14 @@ export async function GET() {
         ? truncateDescription(job.description)
         : `${job.title} position at ${job.company_name} in ${location}`
 
+      const pubDate = job.created_at ? new Date(job.created_at).toUTCString() : buildDate
+
       return `    <item>
       <title>${escapeXml(`${job.title} at ${job.company_name}`)}</title>
       <description>${escapeXml(description)}</description>
       <link>${escapeXml(jobUrl)}</link>
       <guid>${escapeXml(jobUrl)}</guid>
-      <pubDate>${new Date(job.created_at).toUTCString()}</pubDate>
+      <pubDate>${pubDate}</pubDate>
       <category>Jobs</category>${salary ? `
       <category>${escapeXml(salary)}</category>` : ''}${location ? `
       <category>${escapeXml(location)}</category>` : ''}${tags ? `

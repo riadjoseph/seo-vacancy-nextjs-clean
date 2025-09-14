@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -166,10 +167,13 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               <div className="flex justify-between items-start gap-4">
                 <div className="flex gap-4 flex-1">
                   {job.company_logo && job.company_logo.trim() && job.company_logo !== "'" && (
-                    <img 
-                      src={job.company_logo} 
+                    <Image
+                      src={job.company_logo}
                       alt={job.company_name}
+                      width={64}
+                      height={64}
                       className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                      unoptimized
                     />
                   )}
                   <div className="flex-1 min-w-0">
@@ -376,9 +380,11 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
       />
       
       {/* Bot Tracking Pixel - Invisible 1x1 GIF for tracking bot visits */}
-      <img 
+      <Image
         src={`/.netlify/functions/track-bot-visit?job=${encodeURIComponent(slug)}&prerendered=true`}
         alt=""
+        width={1}
+        height={1}
         style={{ 
           position: 'absolute', 
           width: '1px', 
@@ -387,6 +393,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
           pointerEvents: 'none'
         }}
         aria-hidden="true"
+        unoptimized
       />
     </div>
   )
