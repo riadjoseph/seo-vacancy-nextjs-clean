@@ -43,3 +43,6 @@ next-env.d.ts
 migration.md
 analytics.md
 job-posting.md
+
+# local docs not needed in deploy artifacts
+docs/cdn-caching-plan.md
