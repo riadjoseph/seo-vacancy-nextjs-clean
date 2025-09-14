@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
   try {
     const ctrl = new AbortController()
     const timer = setTimeout(() => ctrl.abort(), 10000)
-    const keyRes = await fetch(payload.keyLocation, { method: 'GET', headers: BROWSER_HEADERS as any, redirect: 'follow', signal: ctrl.signal })
+    const keyRes = await fetch(payload.keyLocation, { method: 'GET', headers: BROWSER_HEADERS, redirect: 'follow', signal: ctrl.signal })
     clearTimeout(timer)
     if (!keyRes.ok) {
       return NextResponse.json({ ok: false, message: `Key file not reachable at ${payload.keyLocation} (status ${keyRes.status})`, detail: { status: keyRes.status } }, { status: 400 })
@@ -77,9 +77,10 @@ export async function POST(req: NextRequest) {
     if (body !== key.trim()) {
       return NextResponse.json({ ok: false, message: 'Key file content mismatch. The file must contain only the key.', detail: { expected: key.trim(), receivedSample: body.slice(0, 64) } }, { status: 400 })
     }
-  } catch (err: any) {
-    const isAbort = err?.name === 'AbortError'
-    return NextResponse.json({ ok: false, message: `Failed to fetch key file: ${isAbort ? 'request timed out' : (err?.message || 'network error')}` }, { status: 400 })
+  } catch (err: unknown) {
+    const e = err as { name?: string; message?: string }
+    const isAbort = e?.name === 'AbortError'
+    return NextResponse.json({ ok: false, message: `Failed to fetch key file: ${isAbort ? 'request timed out' : (e?.message || 'network error')}` }, { status: 400 })
   }
 
   try {
@@ -99,8 +100,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, message: 'IndexNow request failed', endpoint, detail }, { status: res.status })
     }
     return NextResponse.json({ ok: true, message: `Submitted ${urls.length} URL(s)`, submitted: urls.length, endpoint, detail })
-  } catch (err: any) {
-    const isAbort = err?.name === 'AbortError'
-    return NextResponse.json({ ok: false, message: isAbort ? 'IndexNow request timed out' : (err?.message || 'Network error') }, { status: 500 })
+  } catch (err: unknown) {
+    const e = err as { name?: string; message?: string }
+    const isAbort = e?.name === 'AbortError'
+    return NextResponse.json({ ok: false, message: isAbort ? 'IndexNow request timed out' : (e?.message || 'Network error') }, { status: 500 })
   }
 }

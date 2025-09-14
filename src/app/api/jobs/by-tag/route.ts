@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   let query = supabase.from('jobs').select('*').order('created_at', { ascending: false }).limit(limit)
 
   if (tag) {
-    query = query.contains('tags', [tag]) as any
+    query = query.contains('tags', [tag]) as unknown as typeof query
   }
   if (city) {
     query = query.eq('city', city)
@@ -24,4 +24,3 @@ export async function GET(req: NextRequest) {
   }
   return NextResponse.json({ ok: true, items: data || [] })
 }
-

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -13,7 +13,7 @@ type ApiResponse = {
   message: string
   submitted?: number
   endpoint?: string
-  detail?: any
+  detail?: unknown
 }
 
 export default function IndexNowToolPage() {
@@ -34,7 +34,7 @@ export default function IndexNowToolPage() {
     schemeOk: boolean
   }
 
-  const parseInput = (text: string): Parsed => {
+  const parseInput = useCallback((text: string): Parsed => {
     const raw = text.split(/\r?\n/)
     const seen = new Set<string>()
     const valid: string[] = []
@@ -70,9 +70,9 @@ export default function IndexNowToolPage() {
       host,
       schemeOk,
     }
-  }
+  }, [])
 
-  const parsed = useMemo(() => parseInput(urls), [urls])
+  const parsed = useMemo(() => parseInput(urls), [urls, parseInput])
   const keyLocation = parsed.host ? `https://${parsed.host}/${key || '<key>'}.txt` : null
 
   const canSubmit = !loading
@@ -118,8 +118,9 @@ export default function IndexNowToolPage() {
       })
       const data = await res.json()
       setResult(data)
-    } catch (err: any) {
-      setResult({ ok: false, message: err?.message || 'Unexpected error' })
+    } catch (err: unknown) {
+      const e = err as { message?: string }
+      setResult({ ok: false, message: e?.message || 'Unexpected error' })
     } finally {
       setLoading(false)
     }

@@ -360,7 +360,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
       {(() => {
         // Build JobPosting schema, optionally adding baseSalary if shown on page
         const hasSalary = job.hide_salary !== true && (job.salary_min !== null || job.salary_max !== null)
-        const schema: Record<string, any> = {
+        const schema: Record<string, unknown> = {
           "@context": "https://schema.org/",
           "@type": "JobPosting",
           title: job.title,
@@ -388,7 +388,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
         }
 
         if (hasSalary) {
-          const value: Record<string, any> = {
+          const value: Record<string, unknown> = {
             "@type": "QuantitativeValue",
           }
           if (job.salary_min !== null) value.minValue = job.salary_min
@@ -396,7 +396,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
           // Default to YEAR when unspecified; mirrors page-level display semantics
           value.unitText = 'YEAR'
 
-          const baseSalary: Record<string, any> = {
+          const baseSalary: Record<string, unknown> = {
             "@type": "MonetaryAmount",
             value,
           }

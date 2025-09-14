@@ -1,8 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { JobCard } from '@/components/JobCard'
-import type { BlogPost, BlogModule, JobListModule } from '@/types/blog'
+import type { BlogPost, JobListModule } from '@/types/blog'
+import type { Tables } from '@/lib/supabase/types'
 
-interface JobListModuleProps extends Omit<JobListModule, 'type'> {}
+type JobListModuleProps = Omit<JobListModule, 'type'>
 
 export async function JobListModule({ title, tag, city, limit = 6 }: JobListModuleProps) {
   const supabase = await createClient()
@@ -11,7 +12,7 @@ export async function JobListModule({ title, tag, city, limit = 6 }: JobListModu
 
   if (tag) {
     // Filter by tag: Supabase array contains
-    query = query.contains('tags', [tag]) as any
+    query = query.contains('tags', [tag]) as unknown as typeof query
   }
   if (city) {
     query = query.eq('city', city)
@@ -26,8 +27,8 @@ export async function JobListModule({ title, tag, city, limit = 6 }: JobListModu
     <section className="space-y-4">
       {title && <h3 className="text-xl font-semibold">{title}</h3>}
       <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
-        {jobs.map(job => (
-          <JobCard key={job.id} job={job as any} />
+        {(jobs as Tables<'jobs'>[]).map(job => (
+          <JobCard key={job.id} job={job} />
         ))}
       </div>
     </section>
@@ -47,4 +48,3 @@ export async function RenderModules({ modules }: { modules?: BlogPost['modules']
     </div>
   )
 }
-
