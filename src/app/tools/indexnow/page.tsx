@@ -209,8 +209,12 @@ export default function IndexNowToolPage() {
             <p className="text-xs text-gray-500 mt-2">
               We don’t store your key or URLs. They are used only to validate the key file and submit your request to IndexNow.
             </p>
-            {result?.detail && (
-              <pre className="mt-2 text-xs bg-gray-50 p-2 rounded border overflow-auto max-h-64">{JSON.stringify(result.detail, null, 2)}</pre>
+            {typeof result?.detail !== 'undefined' && (
+              <pre className="mt-2 text-xs bg-gray-50 p-2 rounded border overflow-auto max-h-64">
+                {typeof result?.detail === 'string' 
+                  ? (result.detail as string) 
+                  : JSON.stringify(result?.detail as unknown, null, 2)}
+              </pre>
             )}
           </form>
         </CardContent>
