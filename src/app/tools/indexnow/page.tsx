@@ -132,6 +132,7 @@ export default function IndexNowToolPage() {
       {/* Breadcrumbs */}
       {(() => {
         const items: BreadcrumbItem[] = [
+          { label: 'SEO Jobs', href: '/' },
           { label: 'Tools', href: '/tools' },
           { label: 'IndexNow Submitter' },
         ]

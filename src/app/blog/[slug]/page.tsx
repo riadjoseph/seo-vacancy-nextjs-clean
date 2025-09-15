@@ -27,6 +27,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const author = authorProfile
   const breadcrumbItems: BreadcrumbItem[] = [
+    { label: 'SEO Jobs', href: '/' },
     { label: 'Blog', href: '/blog' },
     { label: post.title },
   ]

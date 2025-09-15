@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { allPosts } from '@/content/blog'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 
 export const metadata = {
   title: 'Blog',
@@ -12,6 +13,21 @@ export default function BlogIndexPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+      {(() => {
+        const items: BreadcrumbItem[] = [
+          { label: 'SEO Jobs', href: '/' },
+          { label: 'Blog' },
+        ]
+        const schema = generateBreadcrumbSchema(items, 'https://seo-vacancy.eu')
+        return (
+          <>
+            <div className="mb-4">
+              <Breadcrumbs items={items} />
+            </div>
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+          </>
+        )
+      })()}
       <h1 className="text-3xl font-bold mb-6">Blog</h1>
       <div className="space-y-4">
         {posts.map(post => (
@@ -35,4 +51,3 @@ export default function BlogIndexPage() {
     </div>
   )
 }
-
