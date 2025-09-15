@@ -6,6 +6,14 @@ export const post: BlogPost = {
   summary: 'A controlled A/B test shows when hreflang helps or slightly hurts, and how measurement can be.',
   date: '2025-09-14',
   authorName: 'Riad JOSEPH',
+  modules: [
+    {
+      type: 'jobList',
+      title: 'International SEO jobs recently posted',
+      tag: 'International SEO',
+      limit: 6,
+    },
+  ],
   content: `
 Hreflang in the Wild: What a Two-Month Test Really Showed Us  
 

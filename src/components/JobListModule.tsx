@@ -10,6 +10,10 @@ export async function JobListModule({ title, tag, city, limit = 6 }: JobListModu
 
   let query = supabase.from('jobs').select('*').order('created_at', { ascending: false }).limit(limit)
 
+  // Exclude expired jobs (keep null expiry or future dates)
+  const currentDate = new Date().toISOString()
+  query = query.or(`expires_at.is.null,expires_at.gte.${currentDate}`)
+
   if (tag) {
     // Filter by tag: Supabase array contains
     query = query.contains('tags', [tag]) as unknown as typeof query

@@ -11,6 +11,10 @@ export async function GET(req: NextRequest) {
 
   let query = supabase.from('jobs').select('*').order('created_at', { ascending: false }).limit(limit)
 
+  // Exclude expired jobs (null expiry or in the future)
+  const currentDate = new Date().toISOString()
+  query = query.or(`expires_at.is.null,expires_at.gte.${currentDate}`)
+
   if (tag) {
     query = query.contains('tags', [tag]) as unknown as typeof query
   }

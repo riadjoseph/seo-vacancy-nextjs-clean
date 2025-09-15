@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
+import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -128,6 +129,25 @@ export default function IndexNowToolPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
+      {/* Breadcrumbs */}
+      {(() => {
+        const items: BreadcrumbItem[] = [
+          { label: 'Tools', href: '/tools' },
+          { label: 'IndexNow Submitter' },
+        ]
+        const schema = generateBreadcrumbSchema(items, 'https://seo-vacancy.eu')
+        return (
+          <>
+            <div className="mb-4">
+              <Breadcrumbs items={items} />
+            </div>
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+            />
+          </>
+        )
+      })()}
       <h1 className="text-3xl font-bold mb-6">IndexNow Submitter</h1>
       <Card>
         <CardHeader>
@@ -346,7 +366,7 @@ export async function GET() {
         <ol>
           <li>In Shopify admin, go to <em>Content → Files</em>.</li>
           <li>Upload your <code>&lt;key&gt;.txt</code> file.</li>
-          <li>Copy the public URL Shopify generates (e.g., <code>https://cdn.shopify.com/s/files/.../key.txt</code>).</li>
+          <li>Copy the public URL Shopify generates (e.g., <code>cdn.shopify.com/s/files/.../key.txt</code>).</li>
           <li>In your IndexNow submission payload, set <code>keyLocation</code> to this full URL.</li>
         </ol>
         <p>
