@@ -32,32 +32,21 @@ interface JobPageProps {
   }>
 }
 
-function createJobSlug(title: string, company: string, city: string | null): string {
-  const slug = `${title}-${company}-${city || 'remote'}`
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '')
-  return slug
-}
 
 async function getJobBySlug(slug: string): Promise<Job | null> {
   const supabase = await createClient()
-  
-  const { data: jobs, error } = await supabase
+
+  const { data: job, error } = await supabase
     .from('jobs')
     .select('*')
-  
-  if (error || !jobs) {
+    .eq('slug', slug)
+    .single()
+
+  if (error || !job) {
     return null
   }
-  
-  // Find job by matching slug
-  const job = jobs.find(job => {
-    const jobSlug = createJobSlug(job.title, job.company_name, job.city)
-    return jobSlug === slug
-  })
-  
-  return job || null
+
+  return job
 }
 
 export async function generateMetadata({ params }: JobPageProps): Promise<Metadata> {
