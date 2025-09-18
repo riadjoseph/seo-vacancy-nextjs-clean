@@ -30,7 +30,7 @@ async function JobsList({ searchParams }: JobsListProps) {
   // Base query for counting total items
   let countQuery = supabase
     .from('jobs')
-    .select('*', { count: 'exact', head: true })
+    .select('id', { count: 'exact', head: true })
 
   // Base query for fetching jobs
   let dataQuery = supabase
