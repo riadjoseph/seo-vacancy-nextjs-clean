@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { JobCard } from '@/components/JobCard'
+import Image from 'next/image'
 import type { Tables } from '@/lib/supabase/types'
 
 type ApiResponse = {
@@ -153,19 +154,37 @@ export default function IndexNowToolPage() {
       <Card>
         <CardHeader>
           <div className="text-gray-700 text-sm space-y-2">
-            <p className="font-medium">How to use IndexNow</p>
-            <ol className="list-decimal pl-5 space-y-1">
+            <h2 className="font-medium">How to use IndexNow</h2>
+            <ol className="list-decimal pl-5 space-y-4">
               <li>
-                Step 1: Visit
-                {' '}<a href="https://www.bing.com/indexnow/getstarted#implementation" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">IndexNow Get Started</a>,
-                {' '}click <span className="font-medium">Generate</span>, then <span className="font-medium">Download</span> the key file. You’ll recieve a file — keep the filename exactly as generated.
+                <span className="font-bold">Step 1:</span> Visit
+                {' '}<a href="https://www.bing.com/indexnow/getstarted#implementation" target="_blank" className="text-blue-600 hover:text-blue-800 underline">IndexNow Get Started</a>,
+                {' '}click <span className="font-medium">Generate</span>, then <span className="font-medium">Download</span> the key file. You'll recieve a file — keep the filename exactly as generated.
+                <div className="mt-2">
+                  <Image
+                    src="/img/generate-API-Key-Bing-IndexNow.png"
+                    alt="Screenshot showing how to generate an API key on Bing IndexNow Get Started page"
+                    width={800}
+                    height={600}
+                    className="rounded-lg border"
+                  />
+                </div>
               </li>
               <li>
-                Step 2: Upload that file to the <span className="font-medium">root of your website</span> (so it’s accessible at <code>https://&lt;your-domain&gt;/&lt;key&gt;.txt</code>).
-                {' '}Need help? <a href="/contact" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Contact me</a>.
+                <span className="font-bold">Step 2:</span> Upload that file to the <span className="font-medium">root of your website</span> (so it's accessible at <code>https://&lt;your-domain&gt;/&lt;key&gt;.txt</code>).
+                {' '}Need help? <a href="/contact" target="_blank" className="text-blue-600 hover:text-blue-800 underline">Contact me</a>.
+                <div className="mt-2">
+                  <Image
+                    src="/img/save-key-on-txt-file-public-folder.png"
+                    alt="Screenshot showing how to save the key file in the public folder"
+                    width={800}
+                    height={600}
+                    className="rounded-lg border"
+                  />
+                </div>
               </li>
               <li>
-                Step 3: Use the form below to submit up to <span className="font-medium">50 URLs</span> to IndexNow.
+                <span className="font-bold">Step 3:</span> Use the form below to submit up to <span className="font-medium">50 URLs</span> to IndexNow.
               </li>
             </ol>
           </div>
@@ -173,7 +192,7 @@ export default function IndexNowToolPage() {
         <CardContent>
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium mb-1">IndexNow Key</label>
+              <label className="block text-sm font-medium mb-1">IndexNow Key: Paste the key you have generated in step 1</label>
               <Input value={key} onChange={e => { setKey(e.target.value); setTouched(true) }} placeholder="e.g. 1234567890abcdef..." required />
               {touched && !key.trim() && (
                 <p className="text-xs text-red-600 mt-1">Enter your IndexNow key.</p>
