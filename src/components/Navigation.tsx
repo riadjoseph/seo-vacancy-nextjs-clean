@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Search, User, LogOut, Menu, X } from 'lucide-react'
+import { User, LogOut, Menu, X } from 'lucide-react'
 import { SunshineIcon } from '@/components/ui/sunshine-icon'
 import { useAuth } from '@/lib/auth-context'
 import { createTagSlug } from '@/utils/tagUtils'

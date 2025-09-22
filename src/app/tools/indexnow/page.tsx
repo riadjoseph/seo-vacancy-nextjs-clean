@@ -159,7 +159,7 @@ export default function IndexNowToolPage() {
               <li>
                 <span className="font-bold">Step 1:</span> Visit
                 {' '}<a href="https://www.bing.com/indexnow/getstarted#implementation" target="_blank" className="text-blue-600 hover:text-blue-800 underline">IndexNow Get Started</a>,
-                {' '}click <span className="font-medium">Generate</span>, then <span className="font-medium">Download</span> the key file. You'll recieve a file — keep the filename exactly as generated.
+                {' '}click <span className="font-medium">Generate</span>, then <span className="font-medium">Download</span> the key file. You&apos;ll recieve a file — keep the filename exactly as generated.
                 <div className="mt-2">
                   <Image
                     src="/img/generate-API-Key-Bing-IndexNow.png"
@@ -171,7 +171,7 @@ export default function IndexNowToolPage() {
                 </div>
               </li>
               <li>
-                <span className="font-bold">Step 2:</span> Upload that file to the <span className="font-medium">root of your website</span> (so it's accessible at <code>https://&lt;your-domain&gt;/&lt;key&gt;.txt</code>).
+                <span className="font-bold">Step 2:</span> Upload that file to the <span className="font-medium">root of your website</span> (so it&apos;s accessible at <code>https://&lt;your-domain&gt;/&lt;key&gt;.txt</code>).
                 {' '}Need help? <a href="/contact" target="_blank" className="text-blue-600 hover:text-blue-800 underline">Contact me</a>.
                 <div className="mt-2">
                   <Image

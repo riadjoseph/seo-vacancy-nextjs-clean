@@ -98,11 +98,17 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
 
   // Set initial city search value
   useEffect(() => {
-    const city = getCurrentCity()
+    const getCurrentCityValue = () => {
+      const cityParam = searchParams.get('city')
+      if (cityParam) return cityParam
+      return initialValues?.city || ''
+    }
+
+    const city = getCurrentCityValue()
     if (city) {
       setCitySearch(city)
     }
-  }, [searchParams, initialValues, getCurrentCity])
+  }, [searchParams, initialValues])
 
   const handleFilterChange = (key: string, value: string) => {
     startTransition(() => {
