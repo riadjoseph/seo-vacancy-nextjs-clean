@@ -39,7 +39,7 @@ export default function AboutPage() {
         <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
           WakeUpHappy: A no-BS Job Board for SEO Professionals in Europe
         </h1>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
           Free job vacancy posting without the clutter: no ads, no newsletters, no spam, no endless loops, just results. 
           Support our platform by posting your SEO job here. <a href="https://buymeacoffee.com/riadjoseph" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Buy us a coffee</a> to get your vacancy featured!
         </p>
