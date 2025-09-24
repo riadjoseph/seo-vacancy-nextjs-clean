@@ -35,11 +35,13 @@ export type Database = {
           bookmarks: number | null
           category: string
           city: string | null
+          company_info: string | null
           company_logo: string | null
           company_name: string
           created_at: string | null
           description: string
           expires_at: string
+          faq: string | null
           featured: boolean | null
           hide_salary: boolean | null
           id: string
@@ -61,11 +63,13 @@ export type Database = {
           bookmarks?: number | null
           category: string
           city?: string | null
+          company_info?: string | null
           company_logo?: string | null
           company_name: string
           created_at?: string | null
           description: string
           expires_at: string
+          faq?: string | null
           featured?: boolean | null
           hide_salary?: boolean | null
           id?: string
@@ -87,11 +91,13 @@ export type Database = {
           bookmarks?: number | null
           category?: string
           city?: string | null
+          company_info?: string | null
           company_logo?: string | null
           company_name?: string
           created_at?: string | null
           description?: string
           expires_at?: string
+          faq?: string | null
           featured?: boolean | null
           hide_salary?: boolean | null
           id?: string

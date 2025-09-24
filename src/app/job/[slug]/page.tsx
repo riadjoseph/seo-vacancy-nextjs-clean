@@ -225,11 +225,41 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               <h2 className="text-xl font-semibold">Job Description</h2>
             </CardHeader>
             <CardContent>
-              <ExpandableJobDescription 
-                description={job.description || 'No description available.'} 
+              <ExpandableJobDescription
+                description={job.description || 'No description available.'}
               />
             </CardContent>
           </Card>
+
+          {job.company_info && job.company_info.trim() && job.city && job.city !== 'Remote' && (
+            <Card>
+              <CardHeader>
+                <h2 className="text-xl font-semibold">About {job.company_name}</h2>
+              </CardHeader>
+              <CardContent>
+                <div className="rich-article whitespace-pre-line">
+                  <ReactMarkdown>
+                    {job.company_info}
+                  </ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {job.faq && job.faq.trim() && (
+            <Card>
+              <CardHeader>
+                <h2 className="text-xl font-semibold">Frequently Asked Questions</h2>
+              </CardHeader>
+              <CardContent>
+                <div className="rich-article whitespace-pre-line">
+                  <ReactMarkdown>
+                    {job.faq}
+                  </ReactMarkdown>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           
           {job.tags && job.tags.length > 0 && (
             <Card>
@@ -400,6 +430,51 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
             dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
           />
         )
+      })()}
+
+      {/* FAQ JSON-LD Schema */}
+      {job.faq && job.faq.trim() && (() => {
+        // Parse FAQ markdown to extract Q&A pairs
+        const faqContent = job.faq.trim()
+        const faqItems: Array<{question: string, answer: string}> = []
+
+        // Split by markdown headers (## or #)
+        const sections = faqContent.split(/^#+\s+/gm).filter(section => section.trim())
+
+        sections.forEach(section => {
+          const lines = section.trim().split('\n')
+          if (lines.length >= 2) {
+            const question = lines[0].trim()
+            const answer = lines.slice(1).join('\n').trim()
+            if (question && answer) {
+              faqItems.push({ question, answer })
+            }
+          }
+        })
+
+        if (faqItems.length > 0) {
+          const faqSchema = {
+            "@context": "https://schema.org/",
+            "@type": "FAQPage",
+            mainEntity: faqItems.map(item => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: item.answer.replace(/<[^>]*>/g, '')
+              }
+            }))
+          }
+
+          return (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+            />
+          )
+        }
+
+        return null
       })()}
       
       {/* Breadcrumb JSON-LD Schema */}

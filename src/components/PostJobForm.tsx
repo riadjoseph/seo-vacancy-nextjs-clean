@@ -21,6 +21,8 @@ interface FormData {
   company_logo: string
   city: string
   description: string
+  faq: string
+  company_info: string
   tags: SeoSpecialization[]
   category: string
   job_url: string
@@ -39,6 +41,8 @@ const initialFormData: FormData = {
   company_logo: '',
   city: '',
   description: '',
+  faq: '',
+  company_info: '',
   tags: [],
   category: '',
   job_url: '',
@@ -152,6 +156,8 @@ export function PostJobForm() {
         company_logo: formData.company_logo.trim() || null,
         city: formData.city,
         description: formData.description.trim(),
+        faq: formData.faq.trim() || null,
+        company_info: formData.company_info.trim() || null,
         tags: formData.tags, // This should work with seo_specialization[] type
         category: formData.category,
         job_url: formData.job_url.trim(),
@@ -163,7 +169,7 @@ export function PostJobForm() {
         user_id: user.id,
         // Remove unused fields that have defaults:
         // rating: null, (has default)
-        // reviews: null, (has default 0) 
+        // reviews: null, (has default 0)
         // bookmarks: null, (has default 0)
         // posted_date: null, (has default now())
         // created_at: null, (has default now())

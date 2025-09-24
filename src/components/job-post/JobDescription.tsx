@@ -12,6 +12,9 @@ import { Badge } from "@/components/ui/badge";
 interface JobDescriptionProps {
   formData: {
     description: string;
+    faq: string;
+    company_info: string;
+    city: string;
     tags: SeoSpecialization[];
     category: string;
     job_url: string;
@@ -24,6 +27,8 @@ interface JobDescriptionProps {
 
 const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange, errors = {} }: JobDescriptionProps) => {
   const [isPreview, setIsPreview] = useState(false);
+  const [faqPreview, setFaqPreview] = useState(false);
+  const [companyInfoPreview, setCompanyInfoPreview] = useState(false);
 
   const handleTagSelect = (specialization: SeoSpecialization) => {
     const newTags = formData.tags.includes(specialization)
@@ -150,6 +155,91 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
         />
         {errors.job_url && (
           <p className="text-sm text-red-500 mt-1">{errors.job_url}</p>
+        )}
+      </div>
+
+      {formData.city && formData.city !== 'Remote' && (
+        <div>
+          <div className="flex justify-between items-center mb-2">
+            <Label className="text-sm font-medium">About Company (Optional)</Label>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setCompanyInfoPreview(!companyInfoPreview)}
+            >
+              {companyInfoPreview ? 'Edit' : 'Preview'}
+            </Button>
+          </div>
+
+          {companyInfoPreview ? (
+            <div className="rich-article border rounded-md p-4 min-h-[100px]">
+              <ReactMarkdown>{formData.company_info || 'No company information provided.'}</ReactMarkdown>
+            </div>
+          ) : (
+            <Textarea
+              name="company_info"
+              value={formData.company_info}
+              onChange={handleChange}
+              rows={4}
+              className={errors.company_info ? "border-red-500" : ""}
+              placeholder="Describe your company, culture, and what makes it a great place to work... (Markdown supported)"
+            />
+          )}
+
+          <p className="text-sm text-muted-foreground mt-1.5">
+            This section will only appear for non-remote positions and helps candidates learn about your company.
+          </p>
+          {errors.company_info && (
+            <p className="text-sm text-red-500 mt-1">{errors.company_info}</p>
+          )}
+        </div>
+      )}
+
+      <div>
+        <div className="flex justify-between items-center mb-2">
+          <Label className="text-sm font-medium">FAQ (Optional)</Label>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => setFaqPreview(!faqPreview)}
+          >
+            {faqPreview ? 'Edit' : 'Preview'}
+          </Button>
+        </div>
+
+        {faqPreview ? (
+          <div className="rich-article border rounded-md p-4 min-h-[100px]">
+            <ReactMarkdown>{formData.faq || 'No FAQ provided.'}</ReactMarkdown>
+          </div>
+        ) : (
+          <Textarea
+            name="faq"
+            value={formData.faq}
+            onChange={handleChange}
+            rows={6}
+            className={errors.faq ? "border-red-500" : ""}
+            placeholder={`Add frequently asked questions about this position (Markdown supported):
+
+## What are the working hours?
+Flexible hours, core hours 10am-4pm
+
+## Is remote work available?
+Hybrid model with 2-3 days in office
+
+## What benefits are included?
+- Health insurance
+- 401k matching
+- Unlimited PTO`}
+          />
+        )}
+
+        <p className="text-sm text-muted-foreground mt-1.5">
+          Use markdown headers (## Question) to structure your FAQ. This helps with SEO and user experience.
+        </p>
+        {errors.faq && (
+          <p className="text-sm text-red-500 mt-1">{errors.faq}</p>
         )}
       </div>
     </>
