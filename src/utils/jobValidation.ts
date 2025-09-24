@@ -5,6 +5,8 @@ export interface JobFormData {
   company_name: string;
   company_logo: string;
   description: string;
+  faq: string;
+  company_info: string;
   tags: SeoSpecialization[];
   category: string;
   job_url: string;

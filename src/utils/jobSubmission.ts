@@ -19,6 +19,8 @@ export const submitJob = async (formData: JobFormData, jobId?: string): Promise<
     tags: formData.tags as Enums<'seo_specialization'>[],
     salary_min: formData.hide_salary || !formData.salary_min ? null : parseFloat(formData.salary_min) || null,
     salary_max: formData.hide_salary || !formData.salary_max ? null : parseFloat(formData.salary_max) || null,
+    faq: formData.faq?.trim() || null,
+    company_info: formData.company_info?.trim() || null,
     start_date: startDate.toISOString(),
     expires_at: expirationDate.toISOString(),
     user_id: (await supabase.auth.getUser()).data.user?.id,

@@ -10,6 +10,8 @@ const initialFormData: JobFormData = {
   company_name: '',
   company_logo: '',
   description: '',
+  faq: '',
+  company_info: '',
   tags: [],
   category: '',
   job_url: '',
