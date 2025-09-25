@@ -93,14 +93,14 @@ export default function SignInPage() {
       <div className="max-w-md mx-auto">
         <Card className="p-8">
           <CardHeader>
-            <h1 className="text-2xl font-bold mb-6">Login with Google or LinkedIn</h1>
+            <h1 className="text-2xl font-bold mb-6">Login with Google, LinkedIn, or GitHub</h1>
           </CardHeader>
           <CardContent>
             <p className="text-l mb-3">Login to add or remove Job Listings</p>
             <Auth
               supabaseClient={supabase}
               appearance={{ theme: ThemeSupa }}
-              providers={["google", "linkedin_oidc"]}
+              providers={["google", "linkedin_oidc", "github"]}
               view="magic_link"
               redirectTo={`${window.location.origin}/my-jobs`}
             />
