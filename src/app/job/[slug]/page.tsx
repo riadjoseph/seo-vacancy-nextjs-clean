@@ -252,8 +252,12 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                 <h2 className="text-xl font-semibold">Frequently Asked Questions</h2>
               </CardHeader>
               <CardContent>
-                <div className="rich-article whitespace-pre-line">
-                  <ReactMarkdown>
+                <div className="rich-article">
+                  <ReactMarkdown
+                    components={{
+                      h2: ({children}) => <h2 className="text-base font-bold my-2">{children}</h2>
+                    }}
+                  >
                     {job.faq}
                   </ReactMarkdown>
                 </div>
