@@ -4,7 +4,12 @@ import { createClient } from '@/lib/supabase/server'
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/my-jobs'
+  // If "next" is in param, use it as the redirect URL
+  let next = searchParams.get('next') ?? '/my-jobs'
+  if (!next.startsWith('/')) {
+    // If "next" is not a relative URL, use the default
+    next = '/my-jobs'
+  }
 
   if (code) {
     const supabase = await createClient()

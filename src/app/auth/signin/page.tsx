@@ -102,7 +102,7 @@ export default function SignInPage() {
               appearance={{ theme: ThemeSupa }}
               providers={["google", "linkedin_oidc", "github"]}
               view="magic_link"
-              redirectTo={`${window.location.origin}/my-jobs`}
+              redirectTo={`${window.location.origin}/auth/callback?next=/my-jobs`}
             />
             <p className="mt-4 text-sm text-gray-600">
               Prefer email? <Link href="/auth/magic-link" className="text-blue-600 hover:underline">
