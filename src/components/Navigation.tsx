@@ -224,6 +224,7 @@ export function Footer() {
               <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
               <li><Link href="/privacy-policy" className="hover:text-white">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-white">Terms of Service</Link></li>
+              <li><a href="https://buymeacoffee.com/riadjoseph" target="_blank" rel="noopener noreferrer" className="hover:text-white">☕ Buy Me a Coffee</a></li>
             </ul>
           </div>
         </div>

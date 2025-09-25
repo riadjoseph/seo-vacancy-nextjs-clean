@@ -16,7 +16,7 @@ const JobFeatured = ({ onFeaturedChange }: JobFeaturedProps) => {
       <div>
         <Label className="block text-sm font-medium mb-2">Make this job posting &quot;Featured&quot;</Label>
         <p className="text-sm text-gray-500 mb-4">
-          Support this platform whilst maximizing your job&apos;s visibility. &apos;Buy a Coffee&apos; after posting and make your ad featured.
+          Support this platform whilst maximizing your job&apos;s visibility. <a href="https://buymeacoffee.com/riadjoseph" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">Buy a Coffee</a> after posting and make your ad featured.
         </p>
         <div className="flex items-center justify-center">
           <Script
