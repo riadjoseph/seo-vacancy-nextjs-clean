@@ -237,7 +237,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                 <h2 className="text-xl font-semibold">About {job.company_name}</h2>
               </CardHeader>
               <CardContent>
-                <div className="rich-article whitespace-pre-line">
+                <div className="rich-article">
                   <ReactMarkdown>
                     {job.company_info}
                   </ReactMarkdown>

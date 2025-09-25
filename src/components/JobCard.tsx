@@ -91,7 +91,7 @@ export function JobCard({ job, isFeatured = false }: JobCardProps) {
           )}
         </div>
 
-        <div className="text-gray-700 line-clamp-3 text-sm prose prose-sm max-w-none whitespace-pre-line">
+        <div className="text-gray-700 line-clamp-3 text-sm prose prose-sm max-w-none">
           <ReactMarkdown>
             {job.description?.substring(0, 150) + '...' || ''}
           </ReactMarkdown>

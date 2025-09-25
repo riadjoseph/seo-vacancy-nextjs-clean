@@ -21,7 +21,7 @@ export function ExpandableJobDescription({
   
   if (!isLongContent) {
     return (
-      <div className="rich-article whitespace-pre-line">
+      <div className="rich-article ">
         <ReactMarkdown>
           {description}
         </ReactMarkdown>
@@ -32,7 +32,7 @@ export function ExpandableJobDescription({
   return (
     <div className="space-y-4">
       <div 
-        className={`rich-article whitespace-pre-line relative ${
+        className={`rich-article  relative ${
           !isExpanded ? 'overflow-hidden' : ''
         }`}
         style={{
