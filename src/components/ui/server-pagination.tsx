@@ -150,14 +150,14 @@ export function ServerPaginationSummary({ data, className }: ServerPaginationSum
 
   if (totalItems === 0) {
     return (
-      <div className={cn('text-sm text-gray-600', className)}>
+      <div className={cn('text-sm text-muted-foreground', className)}>
         No jobs found
       </div>
     )
   }
 
   return (
-    <div className={cn('text-sm text-gray-600', className)}>
+    <div className={cn('text-sm text-muted-foreground', className)}>
       Showing <span className="font-medium">{startItem}</span> to{' '}
       <span className="font-medium">{endItem}</span> of{' '}
       <span className="font-medium">{totalItems}</span> jobs

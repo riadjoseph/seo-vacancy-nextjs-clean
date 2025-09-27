@@ -42,7 +42,7 @@ export default function BlogIndexPage() {
             </CardHeader>
             {post.summary && (
               <CardContent>
-                <p className="text-gray-700">{post.summary}</p>
+                <p className="text-gray-700 dark:text-gray-300">{post.summary}</p>
               </CardContent>
             )}
           </Card>

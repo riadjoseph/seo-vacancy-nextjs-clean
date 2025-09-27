@@ -158,7 +158,7 @@ export default function SignInPage() {
               view="magic_link"
               redirectTo={`${window.location.origin}/auth/callback?next=/my-jobs`}
             />
-            <p className="mt-4 text-sm text-gray-600 text-center">
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400 text-center">
               Don&apos;t have an account? Just sign in - we&apos;ll create one for you.
             </p>
           </CardContent>

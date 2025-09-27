@@ -46,7 +46,7 @@ export function ExpandableJobDescription({
         {/* Gradient fade overlay when collapsed */}
         {!isExpanded && (
           <div 
-            className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-white to-transparent pointer-events-none"
+            className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-background to-transparent pointer-events-none"
           />
         )}
       </div>

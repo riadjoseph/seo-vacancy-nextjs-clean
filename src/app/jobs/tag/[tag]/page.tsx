@@ -119,15 +119,15 @@ async function TagJobsList({ tag, page }: { tag: string; page: number }) {
   if (totalCount === 0) {
     return (
       <div className="text-center py-12">
-        <Tag className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+        <Tag className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+        <h2 className="text-xl font-semibold text-foreground mb-2">
           No {tagName} jobs found
         </h2>
-        <p className="text-gray-600 mb-6">
+        <p className="text-muted-foreground mb-6">
           We don&apos;t have any job listings tagged with &quot;{tagName}&quot; right now.
         </p>
         <Link href="/">
-          <button className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition-colors">
+          <button className="bg-primary text-primary-foreground px-6 py-2 rounded hover:bg-primary/90 transition-colors">
             Browse All Jobs
           </button>
         </Link>
@@ -211,13 +211,13 @@ export default async function TagJobsPage({ params, searchParams }: TagJobsPageP
       
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-4">
-          <Tag className="h-6 w-6 text-gray-600" />
+          <Tag className="h-6 w-6 text-muted-foreground" />
           <h1 className="text-3xl font-bold">{tagName} Jobs</h1>
           <Badge variant="secondary" className="text-sm">
             {tagName}
           </Badge>
         </div>
-        <p className="text-gray-600">
+        <p className="text-muted-foreground">
           Browse all job opportunities related to {tagName}
         </p>
       </div>

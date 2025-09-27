@@ -17,17 +17,17 @@ export function Breadcrumbs({ items, className = '' }: BreadcrumbsProps) {
       {items.map((item, index) => (
         <div key={index} className="flex items-center">
           {index > 0 && (
-            <ChevronRight className="h-4 w-4 text-gray-400 mx-1" />
+            <ChevronRight className="h-4 w-4 text-muted-foreground mx-1" />
           )}
           {item.href ? (
             <Link 
               href={item.href} 
-              className="text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+              className="text-primary hover:text-primary/80 hover:underline transition-colors"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="text-gray-600 font-medium">{item.label}</span>
+            <span className="text-muted-foreground font-medium">{item.label}</span>
           )}
         </div>
       ))}

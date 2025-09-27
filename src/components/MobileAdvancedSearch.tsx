@@ -157,7 +157,7 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
           <div className="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
             {/* SEO Specialization Filter */}
             <div>
-              <label htmlFor="tags" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="tags" className="block text-sm font-medium text-foreground mb-2">
                 SEO Specialization
               </label>
               <select
@@ -166,7 +166,7 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
                 value={currentTag}
                 onChange={(e) => handleFilterChange('tags', e.target.value)}
                 disabled={isPending}
-                className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm bg-white disabled:opacity-50"
+                className="w-full px-3 py-3 sm:py-2 border border-input rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-input text-base sm:text-sm bg-background disabled:opacity-50"
               >
                 <option value="">All Specializations</option>
                 {SEO_SPECIALIZATIONS.map((spec) => (
@@ -179,7 +179,7 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
 
             {/* City Filter */}
             <div className="relative">
-              <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="city" className="block text-sm font-medium text-foreground mb-2">
                 Location
               </label>
               <Input
@@ -195,14 +195,14 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
                   setTimeout(() => setShowCityDropdown(false), 150)
                 }}
                 disabled={isPending || loadingCities}
-                className="w-full px-3 py-3 sm:py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base sm:text-sm bg-white disabled:opacity-50"
+                className="w-full px-3 py-3 sm:py-2 border border-input rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:border-input text-base sm:text-sm bg-background disabled:opacity-50"
               />
               
               {/* Dropdown */}
               {showCityDropdown && !loadingCities && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute z-10 w-full mt-1 bg-background border border-border rounded-lg shadow-lg max-h-48 overflow-y-auto">
                   {filteredCities.length === 0 ? (
-                    <div className="px-3 py-2 text-gray-500 text-sm">
+                    <div className="px-3 py-2 text-muted-foreground text-sm">
                       {citySearch.trim() ? 'No cities found' : 'Start typing to search cities'}
                     </div>
                   ) : (
@@ -211,7 +211,7 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
                         key={city}
                         type="button"
                         onClick={() => handleCitySelect(city)}
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-blue-50 focus:bg-blue-50 focus:outline-none"
+                        className="w-full text-left px-3 py-2 text-sm hover:bg-accent focus:bg-accent focus:outline-none"
                       >
                         {city}
                       </button>
@@ -229,7 +229,7 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
                 type="button"
                 onClick={clearFilters}
                 disabled={isPending}
-                className="text-sm text-gray-500 hover:text-gray-700 underline disabled:opacity-50 disabled:no-underline"
+                className="text-sm text-muted-foreground hover:text-foreground underline disabled:opacity-50 disabled:no-underline"
               >
                 Clear all filters
               </button>
@@ -239,8 +239,8 @@ export function MobileAdvancedSearch({ initialValues }: MobileAdvancedSearchProp
           {/* Loading indicator */}
           {isPending && (
             <div className="flex items-center justify-center py-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
-              <span className="ml-2 text-sm text-gray-500">Updating results...</span>
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary"></div>
+              <span className="ml-2 text-sm text-muted-foreground">Updating results...</span>
             </div>
           )}
         </div>

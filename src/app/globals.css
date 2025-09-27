@@ -52,7 +52,7 @@
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 0 0% 63%;
 
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
@@ -60,8 +60,8 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 0 0% 35%;
+    --input: 0 0% 63%;
     --ring: 212.7 26.8% 83.9%;
   }
 }
@@ -78,7 +78,7 @@
 @layer components {
   /* Enhanced typography for rich content areas (no typography plugin required) */
   .rich-article {
-    @apply text-gray-800 leading-relaxed max-w-none;
+    @apply text-foreground leading-relaxed max-w-none;
   }
   .rich-article h2 {
     @apply text-xl md:text-2xl font-bold mt-2 mb-2;
@@ -96,7 +96,7 @@
     @apply my-4 list-decimal pl-6 space-y-2;
   }
   .rich-article a {
-    @apply text-blue-600 hover:text-blue-800 underline;
+    @apply text-primary hover:text-primary/80 underline;
   }
   .rich-article hr {
     @apply my-8 border-t;
@@ -105,13 +105,13 @@
     @apply my-4 border-l-4 border-blue-200 pl-4 text-gray-700 italic;
   }
   .rich-article code {
-    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm;
+    @apply bg-gray-100 dark:bg-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm;
   }
   .rich-article pre {
     @apply bg-gray-900 text-gray-100 rounded p-4 overflow-x-auto my-4;
   }
   .rich-article table {
-    @apply w-full border-collapse my-4 text-left text-sm border border-gray-200 rounded-md;
+    @apply w-full border-collapse my-4 text-left text-sm border border-border rounded-md;
     display: block;            /* allow horizontal scrolling on mobile */
     overflow-x: auto;
     white-space: nowrap;       /* prevent awkward wrapping */
@@ -124,7 +124,7 @@
     z-index: 1;
   }
   .rich-article th, .rich-article td {
-    @apply border border-gray-200 px-3 py-2 align-top;
+    @apply border border-border px-3 py-2 align-top;
   }
   /* Helpful alignment for common numeric columns */
   .rich-article table th:nth-child(2),

@@ -167,7 +167,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                   )}
                   <div className="flex-1 min-w-0">
                     <h1 className="text-3xl font-bold mb-2">{job.title}{job.city ? ` ${job.city}` : ''}</h1>
-                    <div className="flex items-center gap-2 text-xl text-gray-600">
+                    <div className="flex items-center gap-2 text-xl text-muted-foreground">
                       <Building2 className="h-5 w-5" />
                       <span>{job.company_name}</span>
                     </div>
@@ -180,11 +180,11 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                 )}
               </div>
               
-              <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600 pt-4">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground pt-4">
                 {job.city && (
                   <div className="flex items-center gap-1">
                     <MapPin className="h-4 w-4" />
-                    <Link href={`/jobs/city/${job.city.toLowerCase()}`} className="text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                    <Link href={`/jobs/city/${job.city.toLowerCase()}`} className="text-primary hover:text-primary/80 hover:underline transition-colors">
                       {job.city}
                     </Link>
                   </div>
@@ -206,7 +206,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
           </Card>
           
           {job.teaser && job.teaser.trim() && (
-            <Card className="bg-blue-50/50 border-blue-100">
+            <Card className="bg-primary/5 border-primary/20">
               <CardHeader>
                 <h2 className="text-xl font-semibold">What Makes This Opportunity Special</h2>
               </CardHeader>
@@ -274,7 +274,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                 <div className="flex flex-wrap gap-2">
                   {job.tags.map((tag, index) => (
                     <Link key={index} href={`/jobs/tag/${createTagSlug(tag)}`}>
-                      <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200 hover:text-blue-900 cursor-pointer transition-colors border-0">
+                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary cursor-pointer transition-colors border-0">
                         {tag}
                       </Badge>
                     </Link>
@@ -296,7 +296,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               {isExpired ? (
                 <Button 
                   size="lg" 
-                  className="w-full gap-2 bg-gray-400 text-gray-700 cursor-not-allowed" 
+                  className="w-full gap-2 bg-muted text-muted-foreground cursor-not-allowed" 
                   disabled
                 >
                   No Longer Available
@@ -317,7 +317,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               )}
               
               {job.expires_at && (
-                <p className="text-sm text-gray-500 text-center">
+                <p className="text-sm text-muted-foreground text-center">
                   <span suppressHydrationWarning>Application deadline: {new Date(job.expires_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
                 </p>
               )}
@@ -332,7 +332,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               {/* Salary (shown only when not hidden and values exist) */}
               {job.hide_salary !== true && (job.salary_min !== null || job.salary_max !== null) && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Salary:</span>
+                  <span className="text-muted-foreground">Salary:</span>
                   <span className="font-medium">
                     {(() => {
                       const currency = job.salary_currency || ''
@@ -349,21 +349,21 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               )}
               {job.city && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Location:</span>
-                  <Link href={`/jobs/city/${job.city.toLowerCase()}`} className="font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                  <span className="text-muted-foreground">Location:</span>
+                  <Link href={`/jobs/city/${job.city.toLowerCase()}`} className="font-medium text-primary hover:text-primary/80 hover:underline transition-colors">
                     {job.city}
                   </Link>
                 </div>
               )}
               {job.category && job.category !== 'FULL_TIME' && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Category:</span>
+                  <span className="text-muted-foreground">Category:</span>
                   <span className="font-medium">{job.category}</span>
                 </div>
               )}
               {job.created_at && (
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Posted:</span>
+                  <span className="text-muted-foreground">Posted:</span>
                   <span className="font-medium" suppressHydrationWarning>{new Date(job.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
                 </div>
               )}

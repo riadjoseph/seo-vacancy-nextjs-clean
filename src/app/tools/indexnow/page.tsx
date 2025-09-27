@@ -153,7 +153,7 @@ export default function IndexNowToolPage() {
       <h1 className="text-3xl font-bold mb-6">IndexNow Submitter</h1>
       <Card>
         <CardHeader>
-          <div className="text-gray-700 text-sm space-y-2">
+          <div className="text-gray-700 dark:text-gray-300 text-sm space-y-2">
             <h2 className="font-medium">How to use IndexNow</h2>
             <ol className="list-decimal pl-5 space-y-4">
               <li>
@@ -201,7 +201,7 @@ export default function IndexNowToolPage() {
             <div>
               <label className="block text-sm font-medium mb-1">URLs (one per line, max 50)</label>
               <Textarea value={urls} onChange={e => { setUrls(e.target.value); setTouched(true) }} placeholder="https://www.example.com/page-1\nhttps://www.example.com/page-2" rows={8} />
-              <div className="text-xs text-gray-600 mt-1">
+              <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
                 Lines: {parsed.lines} • Valid URLs: {parsed.valid.length} • Invalid: {parsed.invalid.length} • Duplicates removed: {parsed.duplicatesRemoved} • Host: {parsed.host ?? '—'}
               </div>
               {touched && parsed.invalid.length > 0 && (
@@ -218,7 +218,7 @@ export default function IndexNowToolPage() {
               )}
             </div>
             {/* Preflight checklist */}
-            <div className="rounded border bg-gray-50 p-3 text-sm">
+            <div className="rounded border bg-gray-50 dark:bg-gray-800 p-3 text-sm">
               <div className="font-medium mb-2">Preflight checks</div>
               <ul className="space-y-1">
                 <li className={parsed.host ? 'text-green-700' : 'text-red-700'}>
@@ -230,7 +230,7 @@ export default function IndexNowToolPage() {
                 <li className={parsed.valid.length > 0 && parsed.valid.length <= 50 ? 'text-green-700' : 'text-red-700'}>
                   URL count: {parsed.valid.length} valid (max 50)
                 </li>
-                <li className="text-gray-700">
+                <li className="text-gray-700 dark:text-gray-300">
                   Key file: {keyLocation ? keyLocation : '—'} (checked on submit)
                 </li>
               </ul>
@@ -246,7 +246,7 @@ export default function IndexNowToolPage() {
                 </span>
               )}
             </div>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
               We don’t store your key or URLs. They are used only to validate the key file and submit your request to IndexNow.
             </p>
             {typeof result?.detail !== 'undefined' && (
@@ -269,7 +269,7 @@ export default function IndexNowToolPage() {
               <h3 className="text-lg font-semibold">Built-in safeguards</h3>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+              <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300 text-sm">
                 <li>Hostname consistency: blocks mixed www/non‑www or cross-domain lists</li>
                 <li>URL validation: accepts only http/https absolute URLs</li>
                 <li>De-duplication: removes duplicate lines automatically</li>
@@ -282,7 +282,7 @@ export default function IndexNowToolPage() {
               <h3 className="text-lg font-semibold">Smart submission</h3>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+              <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300 text-sm">
                 <li>Key pre-check: verifies <code>&lt;key&gt;.txt</code> is reachable and matches</li>
                 <li>Clear errors: explains 404 vs mismatch vs network issues</li>
                 <li>Timeout handling: avoids hanging requests with 10s timeouts</li>
@@ -297,7 +297,7 @@ export default function IndexNowToolPage() {
             <h3 className="text-lg font-semibold">Why use this tool over other methods?</h3>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc pl-5 space-y-1 text-gray-700 text-sm">
+            <ul className="list-disc pl-5 space-y-1 text-gray-700 dark:text-gray-300 text-sm">
               <li>Foolproof checks before sending: hostname consistency, scheme validation, and de-duplication. We double-check and triple-check the basics so you don’t have to.</li>
               <li>Key verification: confirms your <code>&lt;key&gt;.txt</code> is live and matches before any submission.</li>
               <li>Actionable guidance: clear messages and a preflight checklist to prevent common mistakes.</li>

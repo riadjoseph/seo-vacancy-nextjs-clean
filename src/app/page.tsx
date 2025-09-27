@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { JobCard } from '@/components/JobCard'
 import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
+import { GeneralSearchBox } from '@/components/GeneralSearchBox'
 import { ServerPagination, ServerPaginationSummary } from '@/components/ui/server-pagination'
 import { calculatePagination } from '@/utils/pagination'
 
@@ -86,7 +87,7 @@ async function JobsList({ searchParams }: JobsListProps) {
           <ServerPaginationSummary data={paginationData} />
         </div>
         <div className="text-center py-12">
-          <p className="text-gray-500 text-lg">No jobs found.</p>
+          <p className="text-muted-foreground text-lg">No jobs found.</p>
         </div>
       </div>
     )
@@ -180,22 +181,49 @@ export default async function Home({ searchParams }: HomeProps) {
     redirect(`/api/cache-purge?redirect=${encodeURIComponent(redirectUrl)}`)
   }
 
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
+
+  const searchActionSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Europe SEO and GEO Jobs",
+    "url": "https://seo-vacancy.eu/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://seo-vacancy.eu/search?q={query}"
+      },
+      "query-input": "required name=query"
+    }
+  }
+
   return (
-    <div className="container mx-auto py-8 px-4">
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-          Europe’s SEO, GEO & Martech Job Hub
-        </h1>
-        <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+    <>
+      {/* SearchAction JSON-LD */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(searchActionSchema) }}
+      />
+
+      <div className="container mx-auto py-8 px-4">
+        <div className="mb-8 text-center">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+            Europe's SEO, GEO & Martech Job Hub
+          </h1>
+          <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
 A handpicked selection of the latest SEO, Analytics, and Martech roles.        </p>
+        </div>
+
+        <GeneralSearchBox />
+
+        <MobileAdvancedSearch initialValues={params} />
+
+        <JobsList searchParams={{
+          ...params,
+          tags: params.tags ? (Array.isArray(params.tags) ? params.tags : [params.tags]) : undefined
+        }} />
       </div>
-
-      <MobileAdvancedSearch initialValues={params} />
-
-      <JobsList searchParams={{
-        ...params,
-        tags: params.tags ? (Array.isArray(params.tags) ? params.tags : [params.tags]) : undefined
-      }} />
-    </div>
+    </>
   )
 }
