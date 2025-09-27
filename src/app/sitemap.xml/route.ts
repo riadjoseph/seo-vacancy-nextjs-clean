@@ -111,9 +111,15 @@ ${allPages.map(page => `  <url>
   </url>`).join('\n')}
 </urlset>`
 
-  return new Response(xml, {
+  const response = new Response(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8'
     }
   })
+
+  // Remove Next.js App Router headers that are unnecessary for XML sitemaps
+  response.headers.delete('Vary')
+  response.headers.delete('Netlify-Vary')
+
+  return response
 }
