@@ -1,3 +1,4 @@
+import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
 
 function createJobSlug(title: string, company: string, city: string | null): string {
@@ -8,25 +9,12 @@ function createJobSlug(title: string, company: string, city: string | null): str
   return slug
 }
 
-function escapeXml(unsafe: string): string {
-  return unsafe.replace(/[<>&'"]/g, (c) => {
-    switch (c) {
-      case '<': return '&lt;'
-      case '>': return '&gt;'
-      case '&': return '&amp;'
-      case "'": return '&apos;'
-      case '"': return '&quot;'
-      default: return c
-    }
-  })
-}
-
-export async function GET() {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
 
   // Static pages
-  const staticPages = [
+  const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -57,10 +45,10 @@ export async function GET() {
       .gt('expires_at', new Date().toISOString()) // Only non-expired jobs
       .order('created_at', { ascending: false })
 
-    const jobPages = jobs?.map(job => ({
+    const jobPages: MetadataRoute.Sitemap = jobs?.map(job => ({
       url: `${baseUrl}/job/${createJobSlug(job.title, job.company_name, job.city)}`,
       lastModified: new Date(job.created_at || new Date()),
-      changeFrequency: 'weekly',
+      changeFrequency: 'weekly' as const,
       priority: 0.8,
     })) || []
 
@@ -72,10 +60,10 @@ export async function GET() {
       .gt('expires_at', new Date().toISOString())
 
     const uniqueCities = [...new Set(cityJobs?.map(job => job.city).filter(Boolean))] as string[]
-    const cityPages = uniqueCities.map(city => ({
+    const cityPages: MetadataRoute.Sitemap = uniqueCities.map(city => ({
       url: `${baseUrl}/jobs/city/${encodeURIComponent(city.toLowerCase())}`,
       lastModified: new Date(),
-      changeFrequency: 'daily',
+      changeFrequency: 'daily' as const,
       priority: 0.6,
     }))
 
@@ -88,10 +76,10 @@ export async function GET() {
 
     const allTags = tagJobs?.flatMap(job => job.tags || []) || []
     const uniqueTags = [...new Set(allTags)]
-    const tagPages = uniqueTags.map(tag => ({
+    const tagPages: MetadataRoute.Sitemap = uniqueTags.map(tag => ({
       url: `${baseUrl}/jobs/tag/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))}`,
       lastModified: new Date(),
-      changeFrequency: 'daily',
+      changeFrequency: 'daily' as const,
       priority: 0.5,
     }))
 
@@ -100,26 +88,5 @@ export async function GET() {
     console.error('Error generating sitemap:', error)
   }
 
-  // Generate XML
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${allPages.map(page => `  <url>
-    <loc>${escapeXml(page.url)}</loc>
-    <lastmod>${page.lastModified.toISOString()}</lastmod>
-    <changefreq>${page.changeFrequency}</changefreq>
-    <priority>${page.priority}</priority>
-  </url>`).join('\n')}
-</urlset>`
-
-  const response = new Response(xml, {
-    headers: {
-      'Content-Type': 'application/xml; charset=utf-8'
-    }
-  })
-
-  // Remove Next.js App Router headers that are unnecessary for XML sitemaps
-  response.headers.delete('Vary')
-  response.headers.delete('Netlify-Vary')
-
-  return response
+  return allPages
 }
