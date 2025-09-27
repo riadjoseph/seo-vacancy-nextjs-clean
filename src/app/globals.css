@@ -134,10 +134,10 @@
   .rich-article table th:nth-child(4),
   .rich-article table td:nth-child(4) { text-align: right; }
   .rich-article tbody tr:nth-child(odd) {
-    @apply bg-white;
+    @apply bg-background;
   }
   .rich-article tbody tr:nth-child(even) {
-    @apply bg-gray-50;
+    @apply bg-gray-50 dark:bg-gray-800;
   }
   /* Ensure code inside pre inherits dark theme and has no gray chip background */
   .rich-article pre code {

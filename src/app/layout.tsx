@@ -6,7 +6,7 @@ import { Navigation, Footer } from '@/components/Navigation';
 import { Analytics } from '@/lib/analytics';
 import { Toaster } from 'sonner';
 import { BuyMeACoffeeWidget } from '@/components/BuyMeACoffee';
-import BotTracker from '@/components/BotTracker';
+import ServerBotTracker from '@/components/ServerBotTracker';
 import { Suspense } from 'react';
 
 const geistSans = Geist({
@@ -55,6 +55,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ServerBotTracker />
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Navigation />
@@ -66,7 +67,6 @@ export default function RootLayout({
           <Suspense>
             <Analytics />
           </Suspense>
-          <BotTracker />
           <Toaster />
           <BuyMeACoffeeWidget
             description="Support WakeUpHappy - Keep it ad-free!"

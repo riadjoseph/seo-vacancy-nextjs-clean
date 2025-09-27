@@ -29,7 +29,7 @@ export function Pagination({ data, className }: PaginationProps) {
       {data.hasPrevPage ? (
         <Link
           href={generatePageUrl(baseUrl, data.currentPage - 1, searchParams)}
-          className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
+          className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 bg-background border border-gray-300 dark:border-gray-600 rounded-l-md hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           aria-label="Go to previous page"
         >
           <ChevronLeft className="w-4 h-4 mr-1" />
@@ -67,7 +67,7 @@ export function Pagination({ data, className }: PaginationProps) {
                 'px-3 py-2 text-sm font-medium border transition-colors',
                 isCurrentPage
                   ? 'bg-blue-600 text-white border-blue-600 cursor-default'
-                  : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                  : 'text-gray-700 dark:text-gray-300 bg-background border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
               )}
               aria-label={
                 isCurrentPage
@@ -86,7 +86,7 @@ export function Pagination({ data, className }: PaginationProps) {
       {data.hasNextPage ? (
         <Link
           href={generatePageUrl(baseUrl, data.currentPage + 1, searchParams)}
-          className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
+          className="flex items-center px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400 bg-background border border-gray-300 dark:border-gray-600 rounded-r-md hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           aria-label="Go to next page"
         >
           Next

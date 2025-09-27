@@ -61,7 +61,7 @@ export function ServerPagination({ data, className, basePath = '/', searchParams
       {data.hasPrevPage ? (
         <Link
           href={generatePageUrl(basePath, data.currentPage - 1, searchParams)}
-          className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
+          className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 bg-background border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           aria-label="Go to previous page"
         >
           <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 sm:mr-1" />
@@ -99,7 +99,7 @@ export function ServerPagination({ data, className, basePath = '/', searchParams
                 'px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium border rounded-md transition-colors min-w-[32px] sm:min-w-[36px] text-center',
                 isCurrentPage
                   ? 'bg-blue-600 text-white border-blue-600 cursor-default'
-                  : 'text-gray-700 bg-white border-gray-300 hover:bg-gray-50 hover:text-gray-900'
+                  : 'text-gray-700 dark:text-gray-300 bg-background border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100'
               )}
               aria-label={
                 isCurrentPage
@@ -118,7 +118,7 @@ export function ServerPagination({ data, className, basePath = '/', searchParams
       {data.hasNextPage ? (
         <Link
           href={generatePageUrl(basePath, data.currentPage + 1, searchParams)}
-          className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 hover:text-gray-700 transition-colors"
+          className="flex items-center px-2 sm:px-3 py-2 text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 bg-background border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           aria-label="Go to next page"
         >
           <span className="hidden sm:inline">Next</span>

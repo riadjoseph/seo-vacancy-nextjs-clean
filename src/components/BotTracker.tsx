@@ -214,6 +214,14 @@ export default function BotTracker({
         const img = new Image(1, 1)
         img.src = `${trackerUrl}?${params.toString()}`
 
+        // Debug logging (remove in production)
+        console.debug('🤖 Bot tracker:', {
+          url: pageUrl,
+          trackerUrl: `${trackerUrl}?${params.toString()}`,
+          isBot,
+          userAgent: navigator.userAgent
+        })
+
         // Set up error handling
         img.onerror = () => {
           console.warn('Bot tracker: Failed to load tracking pixel')
@@ -275,5 +283,26 @@ export default function BotTracker({
     }
   }, [pathname, trackerUrl])
 
-  return null // This component renders nothing visible
+  // Temporary debug indicator (remove in production)
+  if (process.env.NODE_ENV === 'development') {
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          bottom: '10px',
+          right: '10px',
+          background: 'green',
+          color: 'white',
+          padding: '5px',
+          fontSize: '12px',
+          zIndex: 9999,
+          borderRadius: '3px'
+        }}
+      >
+        🤖 Bot Tracker Active
+      </div>
+    )
+  }
+
+  return null // This component renders nothing visible in production
 }
