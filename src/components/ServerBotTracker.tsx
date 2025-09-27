@@ -1,9 +1,10 @@
 interface ServerBotTrackerProps {
   page?: string
   title?: string
+  userAgent?: string
 }
 
-export default function ServerBotTracker({ page, title }: ServerBotTrackerProps) {
+export default function ServerBotTracker({ page, title, userAgent }: ServerBotTrackerProps) {
   // Build basic tracking parameters for static generation
   const params = new URLSearchParams({
     url: page || 'https://seo-vacancy.eu',
@@ -23,7 +24,7 @@ export default function ServerBotTracker({ page, title }: ServerBotTrackerProps)
     netlify: 'true',
     platform: 'nextjs-ssr',
     pathname: page ? new URL(page).pathname : '/',
-    ua: 'server-side-render',
+    ua: userAgent || 'server-side-render',
     ts: new Date().toISOString()
   })
 

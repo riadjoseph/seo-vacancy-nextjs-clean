@@ -8,6 +8,7 @@ import { Toaster } from 'sonner';
 import { BuyMeACoffeeWidget } from '@/components/BuyMeACoffee';
 import ServerBotTracker from '@/components/ServerBotTracker';
 import { Suspense } from 'react';
+import { headers } from 'next/headers';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,17 +46,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const headersList = await headers();
+  const userAgent = headersList.get('user-agent') || undefined;
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ServerBotTracker />
+        <ServerBotTracker userAgent={userAgent} />
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Navigation />
