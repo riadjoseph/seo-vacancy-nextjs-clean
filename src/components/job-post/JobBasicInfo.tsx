@@ -99,8 +99,8 @@ const JobBasicInfo = ({ formData, handleChange, handleCityChange, errors = {} }:
 
       <div>
         <Label className="block text-sm font-medium mb-2">Location</Label>
-        <p className="text-sm text-gray-500 mb-2">Choose the city closest to the job location or select Remote when applicable.</p>
-        <p className="text-sm text-gray-500 mb-2">Available countries: {availableCountries.join(', ')}.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Choose the city closest to the job location or select Remote when applicable.</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Available countries: {availableCountries.join(', ')}.</p>
         
         <Select
           required
@@ -130,7 +130,7 @@ const JobBasicInfo = ({ formData, handleChange, handleCityChange, errors = {} }:
               </SelectGroup>
             ))}
             {Object.keys(filteredCities).length === 0 && (
-              <div className="px-3 py-2 text-sm text-gray-500">
+              <div className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
                 No cities found
               </div>
             )}

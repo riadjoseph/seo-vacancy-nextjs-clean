@@ -119,10 +119,10 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
           value={formData.category}
           onValueChange={(value) => onCategoryChange?.(value)}
         >
-          <SelectTrigger className={`w-full bg-white ${errors.category ? "border-red-500" : ""}`}>
+          <SelectTrigger className={errors.category ? "border-red-500" : ""}>
             <SelectValue placeholder="Select a category" />
           </SelectTrigger>
-          <SelectContent className="bg-white">
+          <SelectContent>
             {categories.map((category) => {
               const Icon = category.icon;
               return (

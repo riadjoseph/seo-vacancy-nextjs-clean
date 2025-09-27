@@ -20,7 +20,7 @@ const JobSalary = ({ formData, handleChange, handleCurrencyChange, onHideSalaryC
   return (
     <div>
       <Label className="block text-sm font-medium mb-4">Salary Information (Optional)</Label>
-      <p className="text-sm text-gray-500 mb-4">
+      <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
         Leave salary fields empty if you prefer not to disclose salary information. Empty salary fields will not be displayed on the job listing.
       </p>
       
