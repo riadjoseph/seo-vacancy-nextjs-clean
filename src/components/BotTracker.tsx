@@ -27,7 +27,7 @@ interface DocumentWithWebkit {
 }
 
 export default function BotTracker({
-  trackerUrl = 'https://wiki.booksparis.com/tracker.php'
+  trackerUrl = 'https://wiki.booksparis.com/enhanced-tracker.php'
 }: BotTrackerProps) {
   const pathname = usePathname()
 

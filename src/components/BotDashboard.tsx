@@ -188,10 +188,10 @@ const BotDashboard = () => {
       {/* Header */}
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          🤖 Fabulous Bot Activity Dashboard
+          Bot Activity Dashboard
         </h1>
         <p className="text-muted-foreground">
-          Real-time tracking of AI bots, search engines, and crawlers
+          Almost real-time tracking of AI bots, search engines, and crawlers
         </p>
         <div className="inline-flex items-center gap-2 mt-2 text-sm text-muted-foreground">
           <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
