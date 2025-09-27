@@ -113,9 +113,7 @@ ${allPages.map(page => `  <url>
 
   return new Response(xml, {
     headers: {
-      'Content-Type': 'application/xml',
-      'Cache-Control': 'public, max-age=0, must-revalidate',
-      'Netlify-CDN-Cache-Control': 'public, durable, s-maxage=86400, stale-while-revalidate=604800'
+      'Content-Type': 'application/xml'
     }
   })
 }
