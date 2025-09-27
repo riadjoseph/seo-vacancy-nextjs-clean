@@ -32,7 +32,7 @@ export default function ToolsIndexPage() {
             <h2 className="text-xl font-semibold">IndexNow Submitter</h2>
           </CardHeader>
           <CardContent>
-            <p className="text-gray-700 dark:text-gray-300 mb-3">Submit up to 50 URLs to IndexNow. Provide your key and URLs, and we'll send them to the IndexNow API.</p>
+            <p className="text-gray-700 dark:text-gray-300 mb-3">Submit up to 50 URLs to IndexNow. Provide your key and URLs, and we&apos;ll send them to the IndexNow API.</p>
             <Link href="/tools/indexnow" className="text-blue-600 hover:text-blue-800 underline">
               Open IndexNow Tool
             </Link>

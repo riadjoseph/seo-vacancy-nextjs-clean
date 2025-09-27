@@ -181,8 +181,6 @@ export default async function Home({ searchParams }: HomeProps) {
     redirect(`/api/cache-purge?redirect=${encodeURIComponent(redirectUrl)}`)
   }
 
-  const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
-
   const searchActionSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -209,7 +207,7 @@ export default async function Home({ searchParams }: HomeProps) {
       <div className="container mx-auto py-8 px-4">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
-            Europe's SEO, GEO & Martech Job Hub
+            Europe&apos;s SEO, GEO & Martech Job Hub
           </h1>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
 A handpicked selection of the latest SEO, Analytics, and Martech roles.        </p>
