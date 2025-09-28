@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge'
 import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 import { RelatedJobs } from '@/components/RelatedJobs'
 import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
+import { ApplyButton } from '@/components/ApplyButton'
 import { 
   MapPin, 
   Briefcase, 
@@ -303,17 +304,12 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                   <ExternalLink className="h-4 w-4" />
                 </Button>
               ) : (
-                <a
-                  href={job.job_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full"
-                >
-                  <Button size="lg" className="w-full gap-2">
-                    Apply Now
-                    <ExternalLink className="h-4 w-4" />
-                  </Button>
-                </a>
+                <ApplyButton
+                  jobId={job.id}
+                  jobTitle={job.title}
+                  companyName={job.company_name}
+                  jobUrl={job.job_url}
+                />
               )}
               
               {job.expires_at && (
