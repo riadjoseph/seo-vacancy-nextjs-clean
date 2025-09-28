@@ -7,6 +7,8 @@ interface BotTrackerProps {
   trackerUrl?: string
 }
 
+const defaultTrackerUrl = process.env.NEXT_PUBLIC_TRACKER_URL || 'https://wiki.booksparis.com/enhanced-tracker.php'
+
 interface NavigatorWithConnection extends Navigator {
   connection?: {
     effectiveType?: string
@@ -26,9 +28,7 @@ interface DocumentWithWebkit {
   webkitVisibilityState?: string
 }
 
-export default function BotTracker({
-  trackerUrl = 'https://wiki.booksparis.com/enhanced-tracker.php'
-}: BotTrackerProps) {
+export default function BotTracker({ trackerUrl = defaultTrackerUrl }: BotTrackerProps) {
   const pathname = usePathname()
 
   useEffect(() => {

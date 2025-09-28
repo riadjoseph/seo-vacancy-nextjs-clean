@@ -2,14 +2,43 @@ interface ServerBotTrackerProps {
   page?: string
   title?: string
   userAgent?: string
+  pathname?: string
+  referer?: string
+  trackerUrl?: string
 }
 
-export default function ServerBotTracker({ page, title, userAgent }: ServerBotTrackerProps) {
-  // Build basic tracking parameters for static generation
+function resolvePathname(page?: string, pathname?: string) {
+  if (pathname && pathname.trim() !== '') {
+    return pathname
+  }
+
+  if (!page) {
+    return '/'
+  }
+
+  try {
+    return new URL(page).pathname || '/'
+  } catch {
+    return page.startsWith('/') ? page : '/'
+  }
+}
+
+const trackerEndpoint = process.env.NEXT_PUBLIC_TRACKER_URL || 'https://wiki.booksparis.com/enhanced-tracker.php'
+
+export default function ServerBotTracker({
+  page,
+  title,
+  userAgent,
+  pathname,
+  referer,
+  trackerUrl
+}: ServerBotTrackerProps) {
+  const resolvedPathname = resolvePathname(page, pathname)
+
   const params = new URLSearchParams({
     url: page || 'https://seo-vacancy.eu',
     title: title || 'SEO Vacancy',
-    ref: 'direct',
+    ref: referer || 'direct',
     res: '1920x1080',
     rt: '0',
     size: '0',
@@ -23,12 +52,12 @@ export default function ServerBotTracker({ page, title, userAgent }: ServerBotTr
     status: '200',
     netlify: 'true',
     platform: 'nextjs-ssr',
-    pathname: page ? new URL(page).pathname : '/',
+    pathname: resolvedPathname,
     ua: userAgent || 'server-side-render',
     ts: new Date().toISOString()
   })
 
-  const trackingUrl = `https://wiki.booksparis.com/enhanced-tracker.php?${params.toString()}`
+  const trackingUrl = `${trackerUrl || trackerEndpoint}?${params.toString()}`
 
   return (
     <img
