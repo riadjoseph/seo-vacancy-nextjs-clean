@@ -129,7 +129,10 @@ export default function ContactPage() {
       {/* Fun Note */}
       <div className="mt-8 text-center bg-gradient-to-r from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-200">
         <p className="text-gray-700 mb-4">
-          <strong>Fun fact:</strong> We&apos;re real people, not bots! 🤖 Another Fun Fact is that I first built this site with VITE JS, 100% client-side (yes, an SEO / GEO nightmare) and Claude of Anthropic helped me localize it to Next JS with SSR and caching.  How cool is that! Credits to Claude where due ;)
+          <strong>Fun fact:</strong> We&apos;re real people, not bots! 🤖 Another Fun Fact is that I first built this site with VITE JS, 100% client-side (yes, an SEO / GEO nightmare) and now I've localized with NextJS. I used pre-rendering for bots with Vite JS, worked well for Google not so well for Bing.
+          Now under NextJS, it's doing well in Bing but not so in Google. Next test will have to be around: 
+          1/ continue adding unique content on the job detail pages and 
+          2/ bring back pre-rendering for bots. No, it is not cloacking, it's just serving pre-rendered content to bots only. I'll do a dedicated article soon.
         </p>
         <p className="text-gray-600 text-sm">
           Built by SEO professionals who understand the struggle of finding quality job opportunities. 
