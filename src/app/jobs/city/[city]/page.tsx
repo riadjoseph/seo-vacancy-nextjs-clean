@@ -7,6 +7,7 @@ import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
 import { ServerPagination, ServerPaginationSummary } from '@/components/ui/server-pagination'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { calculatePagination } from '@/utils/pagination'
+import { LocationInitializer } from '@/components/LocationInitializer'
 
 function capitalizeCity(city: string): string {
   return city
@@ -191,6 +192,7 @@ export default async function CityJobsPage({ params, searchParams }: CityJobsPag
   
   return (
     <div className="container mx-auto py-8 px-4">
+      <LocationInitializer city={decodedCity} />
       <div className="mb-6">
         <Link href="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
           <ArrowLeft className="h-4 w-4" />

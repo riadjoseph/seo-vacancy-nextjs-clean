@@ -8,6 +8,8 @@ import { SunshineIcon } from '@/components/ui/sunshine-icon'
 import { useAuth } from '@/lib/auth-context'
 import { createTagSlug } from '@/utils/tagUtils'
 import { ThemeToggle } from '@/components/theme-toggle'
+import { useCurrentLocation } from '@/lib/location-context'
+import { DEFAULT_POPULAR_CITIES, POPULAR_CITY_CLUSTERS, toCityPathSegment } from '@/data/cityClusters'
 
 export function Navigation() {
   const { user, loading, signOut } = useAuth()
@@ -172,6 +174,11 @@ export function Navigation() {
 }
 
 export function Footer() {
+  const { countryKey } = useCurrentLocation()
+  const cluster = countryKey ? POPULAR_CITY_CLUSTERS[countryKey] : undefined
+  const footerHeading = cluster ? `Popular Cities in ${cluster.country}` : 'Popular Cities'
+  const citiesToShow = cluster ? cluster.cities : Array.from(DEFAULT_POPULAR_CITIES)
+
   return (
     <footer className="bg-secondary text-secondary-foreground mt-16">
       <div className="container mx-auto px-4 py-12">
@@ -206,16 +213,18 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-secondary-foreground mb-4">Popular Cities</h3>
+            <h3 className="font-semibold text-secondary-foreground mb-4">{footerHeading}</h3>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/jobs/city/london" className="hover:text-secondary-foreground">London SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/berlin" className="hover:text-secondary-foreground">Berlin SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/amsterdam" className="hover:text-secondary-foreground">Amsterdam SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/paris" className="hover:text-secondary-foreground">Paris SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/barcelona" className="hover:text-secondary-foreground">Barcelona SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/madrid" className="hover:text-secondary-foreground">Madrid SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/munich" className="hover:text-secondary-foreground">Munich SEO Jobs</Link></li>
-              <li><Link href="/jobs/city/leeds" className="hover:text-secondary-foreground">Leeds SEO Jobs</Link></li>
+              {citiesToShow.map((cityName) => (
+                <li key={cityName}>
+                  <Link
+                    href={`/jobs/city/${toCityPathSegment(cityName)}`}
+                    className="hover:text-secondary-foreground"
+                  >
+                    {cityName} SEO Jobs
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
           

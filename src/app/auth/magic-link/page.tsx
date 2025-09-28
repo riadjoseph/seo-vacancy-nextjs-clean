@@ -9,6 +9,39 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { ArrowLeft } from 'lucide-react'
 
+const authAppearance = {
+  theme: ThemeSupa,
+  variables: {
+    default: {
+      colors: {
+        inputText: '#0f172a',
+        inputBackground: '#f8fafc',
+        inputBorder: '#cbd5f5',
+        inputLabelText: '#0f172a',
+        inputPlaceholderText: '#475569',
+      },
+    },
+    dark: {
+      colors: {
+        inputText: '#f8fafc',
+        inputBackground: '#1e293b',
+        inputBorder: '#334155',
+        inputLabelText: '#f8fafc',
+        inputPlaceholderText: '#cbd5f5',
+      },
+    },
+  },
+  style: {
+    input: {
+      borderRadius: '0.75rem',
+      padding: '0.75rem 1rem',
+    },
+    label: {
+      fontWeight: 600,
+    },
+  },
+} as const
+
 export default function SignInPage() {
   const [mounted, setMounted] = useState(false)
   const router = useRouter()
@@ -153,7 +186,7 @@ export default function SignInPage() {
             <p className="text-l mb-3">Login to add or remove Job Listings</p>
             <Auth
               supabaseClient={supabase}
-              appearance={{ theme: ThemeSupa }}
+              appearance={authAppearance}
               providers={["google", "linkedin_oidc"]}
               view="magic_link"
               redirectTo={`${window.location.origin}/auth/callback?next=/my-jobs`}
@@ -164,6 +197,14 @@ export default function SignInPage() {
           </CardContent>
         </Card>
       </div>
+      <style jsx global>{`
+        .supabase-auth-ui_ui-label {
+          color: #0f172a !important;
+        }
+        .dark .supabase-auth-ui_ui-label {
+          color: #f8fafc !important;
+        }
+      `}</style>
     </div>
   )
 }

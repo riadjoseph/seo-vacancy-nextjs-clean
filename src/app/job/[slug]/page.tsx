@@ -11,6 +11,7 @@ import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/co
 import { RelatedJobs } from '@/components/RelatedJobs'
 import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
 import { ApplyButton } from '@/components/ApplyButton'
+import { LocationInitializer } from '@/components/LocationInitializer'
 import { 
   MapPin, 
   Briefcase, 
@@ -122,6 +123,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
   
   return (
     <div className="container mx-auto py-8 px-4">
+      <LocationInitializer city={job.city} />
       <div className="mb-6">
         <Breadcrumbs items={breadcrumbItems} />
       </div>
