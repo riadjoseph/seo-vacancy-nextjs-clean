@@ -6,10 +6,8 @@ import { Navigation, Footer } from '@/components/Navigation';
 import { Analytics } from '@/lib/analytics';
 import { Toaster } from 'sonner';
 import { BuyMeACoffeeWidget } from '@/components/BuyMeACoffee';
-import ServerBotTracker from '@/components/ServerBotTracker';
-import BotTracker from '@/components/BotTracker';
+import TrackerPixel from '@/components/TrackerPixel';
 import { Suspense } from 'react';
-import { headers } from 'next/headers';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,38 +50,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const headersList = await headers();
-  const userAgent = headersList.get('user-agent') || undefined;
-  const forwardedProto = headersList.get('x-forwarded-proto');
-  const protocol = forwardedProto || (process.env.NODE_ENV === 'development' ? 'http' : 'https');
-  const host = headersList.get('x-forwarded-host') || headersList.get('host') || undefined;
-  const invokePath =
-    headersList.get('x-invoke-path') ||
-    headersList.get('x-forwarded-uri') ||
-    headersList.get('x-original-uri') ||
-    headersList.get('x-rewrite-path') ||
-    headersList.get('x-matched-path') ||
-    '/';
-  const invokeQuery = headersList.get('x-invoke-query');
-  const pathname = invokeQuery ? `${invokePath}?${invokeQuery}` : invokePath;
-  const referer = headersList.get('referer') || undefined;
-  const pageUrl = host ? `${protocol}://${host}${pathname}` : undefined;
-  const defaultTitle = typeof metadata.title === 'string' ? metadata.title : 'SEO Vacancy';
 
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ServerBotTracker
-          userAgent={userAgent}
-          page={pageUrl}
-          title={defaultTitle}
-          pathname={pathname}
-          referer={referer}
-        />
+        <TrackerPixel />
         <Providers>
-          <BotTracker />
           <div className="min-h-screen flex flex-col">
             <Navigation />
             <main className="flex-1">
