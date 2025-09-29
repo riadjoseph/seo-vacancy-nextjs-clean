@@ -1,32 +1,24 @@
-'use client'
+import React from "react";
 
-interface TrackerPixelProps {
-  trackerUrl?: string
-}
+/**
+ * TrackerPixel component
+ *
+ * Usage: <TrackerPixel /> inside your Next.js pages.
+ * This will fire a request to your PHP tracker just like a pixel,
+ * and it will include the full absolute page URL as a query parameter.
+ */
+export default function TrackerPixel() {
+  if (typeof window === "undefined") return null;
+  const fullUrl = encodeURIComponent(window.location.href);
+  const src = `https://wiki.booksparis.com/gpt/tracker.php?site=https%3A%2F%2Fseo-vacancy.eu&url=${fullUrl}`;
 
-const defaultTrackerUrl = 'https://wiki.booksparis.com/gpt/tracker.php'
-
-export default function TrackerPixel({ trackerUrl = defaultTrackerUrl }: TrackerPixelProps) {
   return (
     <img
-      alt=""
-      aria-hidden="true"
-      loading="lazy"
+      src={src}
       width="1"
       height="1"
-      decoding="async"
-      data-nimg="1"
-      src={trackerUrl}
-      style={{
-        color: 'transparent',
-        position: 'absolute',
-        width: '1px',
-        height: '1px',
-        opacity: 0,
-        pointerEvents: 'none',
-        left: '-9999px',
-        top: '-9999px'
-      }}
+      style={{ display: "none" }}
+      alt="tracker"
     />
-  )
+  );
 }
