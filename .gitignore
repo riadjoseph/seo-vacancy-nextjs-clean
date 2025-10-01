@@ -47,6 +47,7 @@ job-posting.md
 # local docs not needed in deploy artifacts
 docs/cdn-caching-plan.md
 doc/
+docs/
 docs/v4hreflang-poc-adjusted.md
 docs/WORKLOG.md
 doc/WORKLOG.md
