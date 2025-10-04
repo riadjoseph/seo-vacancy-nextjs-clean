@@ -73,6 +73,7 @@ export function BuyMeACoffeeWidget({
   return (
     <Script
       src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
+      strategy="lazyOnload"
       data-name="BMC-Widget"
       data-cfasync="false"
       data-id={username}

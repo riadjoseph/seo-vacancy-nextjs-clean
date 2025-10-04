@@ -3,20 +3,21 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from '@/lib/providers';
 import { Navigation, Footer } from '@/components/Navigation';
-import { Analytics } from '@/lib/analytics';
 import { Toaster } from 'sonner';
-import { BuyMeACoffeeWidget } from '@/components/BuyMeACoffee';
-import TrackerPixel from '@/components/TrackerPixel';
-import { Suspense } from 'react';
+import { LazyAnalytics, LazyTrackerPixel, LazyBuyMeACoffee } from '@/components/ClientWidgets';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: 'swap',
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: 'swap',
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -56,7 +57,6 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TrackerPixel />
         <Providers>
           <div className="min-h-screen flex flex-col">
             <Navigation />
@@ -65,15 +65,12 @@ export default async function RootLayout({
             </main>
             <Footer />
           </div>
-          <Suspense>
-            <Analytics />
-          </Suspense>
           <Toaster />
-          <BuyMeACoffeeWidget
-            description="Support WakeUpHappy - Keep it ad-free!"
-            message=""
-            color="#5F7FFF"
-          />
+          {/* Lazy load analytics to avoid blocking initial render */}
+          <LazyAnalytics />
+          {/* Defer non-critical widgets */}
+          <LazyTrackerPixel />
+          <LazyBuyMeACoffee />
         </Providers>
       </body>
     </html>

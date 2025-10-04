@@ -1,7 +1,7 @@
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import ReactMarkdown from 'react-markdown';
+import { LazyMarkdown } from '@/components/LazyMarkdown';
 import { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -57,7 +57,7 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
         
         {isPreview ? (
         <div className="rich-article border rounded-md p-4 min-h-[150px]">
-          <ReactMarkdown>{formData.description}</ReactMarkdown>
+          <LazyMarkdown>{formData.description}</LazyMarkdown>
         </div>
         ) : (
           <Textarea
@@ -174,7 +174,7 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
 
           {companyInfoPreview ? (
             <div className="rich-article border rounded-md p-4 min-h-[100px]">
-              <ReactMarkdown>{formData.company_info || 'No company information provided.'}</ReactMarkdown>
+              <LazyMarkdown>{formData.company_info || 'No company information provided.'}</LazyMarkdown>
             </div>
           ) : (
             <Textarea
@@ -211,7 +211,7 @@ const JobDescription = ({ formData, handleChange, onTagsChange, onCategoryChange
 
         {faqPreview ? (
           <div className="rich-article border rounded-md p-4 min-h-[100px]">
-            <ReactMarkdown>{formData.faq || 'No FAQ provided.'}</ReactMarkdown>
+            <LazyMarkdown>{formData.faq || 'No FAQ provided.'}</LazyMarkdown>
           </div>
         ) : (
           <Textarea

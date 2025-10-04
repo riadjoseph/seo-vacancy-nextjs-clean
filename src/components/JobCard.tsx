@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import ReactMarkdown from 'react-markdown'
+import { LazyMarkdown } from '@/components/LazyMarkdown'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -92,9 +92,9 @@ export function JobCard({ job, isFeatured = false }: JobCardProps) {
         </div>
 
         <div className="text-muted-foreground line-clamp-3 text-sm prose prose-sm max-w-none">
-          <ReactMarkdown>
+          <LazyMarkdown>
             {job.description?.substring(0, 150) + '...' || ''}
-          </ReactMarkdown>
+          </LazyMarkdown>
         </div>
 
         {job.tags && job.tags.length > 0 && (

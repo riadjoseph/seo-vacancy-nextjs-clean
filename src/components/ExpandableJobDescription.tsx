@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import ReactMarkdown from 'react-markdown'
+import { LazyMarkdown } from '@/components/LazyMarkdown'
 import { Button } from '@/components/ui/button'
 import { ChevronDown, ChevronUp } from 'lucide-react'
 
@@ -22,16 +22,16 @@ export function ExpandableJobDescription({
   if (!isLongContent) {
     return (
       <div className="rich-article ">
-        <ReactMarkdown>
+        <LazyMarkdown>
           {description}
-        </ReactMarkdown>
+        </LazyMarkdown>
       </div>
     )
   }
-  
+
   return (
     <div className="space-y-4">
-      <div 
+      <div
         className={`rich-article  relative ${
           !isExpanded ? 'overflow-hidden' : ''
         }`}
@@ -39,9 +39,9 @@ export function ExpandableJobDescription({
           maxHeight: !isExpanded ? previewHeight : 'none'
         }}
       >
-        <ReactMarkdown>
+        <LazyMarkdown>
           {description}
-        </ReactMarkdown>
+        </LazyMarkdown>
         
         {/* Gradient fade overlay when collapsed */}
         {!isExpanded && (
