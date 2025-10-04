@@ -78,13 +78,21 @@ export async function generateMetadata({ params, searchParams }: CityJobsPagePro
   if (totalCount === 0) {
     return {
       title: `No SEO Jobs in ${decodedCity} | SEO Jobs`,
-      description: `No SEO job opportunities found in ${decodedCity}. Check back later for new positions.`
+      description: `No SEO job opportunities found in ${decodedCity}. Check back later for new positions.`,
+      alternates: {
+        canonical: `/jobs/city/${city}`,
+      },
     }
   }
-  
+
+  const canonicalPath = currentPage > 1 ? `/jobs/city/${city}?page=${currentPage}` : `/jobs/city/${city}`
+
   return {
     title: `${totalCount} SEO Jobs in ${decodedCity}${pageTitle} | SEO Jobs`,
     description: `Discover ${totalCount} SEO and tech job opportunities in ${decodedCity}. Find your perfect career match today.`,
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title: `SEO Jobs in ${decodedCity}${pageTitle}`,
       description: `${totalCount} SEO job opportunities available in ${decodedCity}`,

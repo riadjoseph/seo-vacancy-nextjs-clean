@@ -21,6 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://seo-vacancy.eu'),
   title: "Wake Up Happy - Find Your Next SEO & Tech Career",
   description: "Wake up to new opportunities! Discover the latest SEO, marketing, and tech job opportunities across Europe",
   icons: {

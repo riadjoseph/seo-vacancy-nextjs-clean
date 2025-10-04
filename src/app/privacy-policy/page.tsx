@@ -6,6 +6,9 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 export const metadata: Metadata = {
   title: 'Privacy Policy | WakeUpHappy - SEO Job Board',
   description: 'Privacy Policy explaining how we collect, use, and protect your information when you visit WakeUpHappy.',
+  alternates: {
+    canonical: '/privacy-policy',
+  },
   openGraph: {
     title: 'Privacy Policy | WakeUpHappy',
     description: 'Learn how we handle your data and protect your privacy.',

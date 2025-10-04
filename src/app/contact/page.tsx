@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button'
 export const metadata: Metadata = {
   title: 'Contact Us | WakeUpHappy - SEO Job Board',
   description: 'Get in touch with us on X (Twitter) or LinkedIn. We\'d love to hear from you about job opportunities or feedback.',
+  alternates: {
+    canonical: '/contact',
+  },
   openGraph: {
     title: 'Contact Us | WakeUpHappy',
     description: 'Connect with us on social media for questions or feedback.',

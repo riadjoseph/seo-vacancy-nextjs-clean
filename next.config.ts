@@ -43,12 +43,16 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Cache sitemap and robots for 1 day
+        // Cache sitemap and robots for 1 hour (Google-friendly, no Vary headers)
         source: '/(sitemap\\.xml|robots\\.txt|sitemap\\.txt|feed\\.xml)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=86400, s-maxage=86400',
+            value: 'public, max-age=3600, s-maxage=3600',
+          },
+          {
+            key: 'Content-Type',
+            value: 'application/xml; charset=utf-8',
           },
         ],
       },

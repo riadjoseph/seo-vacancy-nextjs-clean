@@ -74,6 +74,9 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   return {
     title: seoTitle,
     description: metaDescription,
+    alternates: {
+      canonical: `/job/${slug}`,
+    },
     openGraph: {
       title: seoTitle,
       description: metaDescription,

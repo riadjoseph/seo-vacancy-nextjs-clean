@@ -6,6 +6,9 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 export const metadata: Metadata = {
   title: 'Terms of Service | WakeUpHappy - SEO Job Board',
   description: 'Terms of Service outlining the rules, responsibilities, and acceptable use of WakeUpHappy.',
+  alternates: {
+    canonical: '/terms',
+  },
   openGraph: {
     title: 'Terms of Service | WakeUpHappy',
     description: 'Read the terms that govern your use of WakeUpHappy.',

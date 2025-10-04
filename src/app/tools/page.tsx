@@ -5,6 +5,9 @@ import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/co
 export const metadata = {
   title: 'Tools',
   description: 'Utilities for SEO practitioners: submit URLs to IndexNow and more.',
+  alternates: {
+    canonical: '/tools',
+  },
 }
 
 export default function ToolsIndexPage() {

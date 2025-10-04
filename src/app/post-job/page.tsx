@@ -6,6 +6,9 @@ import { PostJobForm } from '@/components/PostJobForm'
 export const metadata: Metadata = {
   title: 'Post a Job - SEO Jobs in Europe',
   description: 'Post your SEO, marketing, and tech job opportunities on the leading European job board',
+  alternates: {
+    canonical: '/post-job',
+  },
 }
 
 export default async function PostJobPage() {

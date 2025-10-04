@@ -89,13 +89,21 @@ export async function generateMetadata({ params, searchParams }: TagJobsPageProp
   if (totalCount === 0) {
     return {
       title: `No ${tagName} Jobs | SEO Jobs`,
-      description: `No job opportunities found for ${tagName}. Check back later for new positions.`
+      description: `No job opportunities found for ${tagName}. Check back later for new positions.`,
+      alternates: {
+        canonical: `/jobs/tag/${tag}`,
+      },
     }
   }
-  
+
+  const canonicalPath = currentPage > 1 ? `/jobs/tag/${tag}?page=${currentPage}` : `/jobs/tag/${tag}`
+
   return {
     title: `${totalCount} ${tagName} Jobs${pageTitle} | SEO Jobs`,
     description: `Discover ${totalCount} ${tagName} job opportunities. Find your perfect career match in ${tagName}.`,
+    alternates: {
+      canonical: canonicalPath,
+    },
     openGraph: {
       title: `${tagName} Jobs${pageTitle}`,
       description: `${totalCount} job opportunities available for ${tagName}`,

@@ -6,6 +6,9 @@ import { MyJobsContent } from '@/components/MyJobsContent'
 export const metadata: Metadata = {
   title: 'My Jobs - SEO Vacancy',
   description: 'Manage your job postings and applications',
+  alternates: {
+    canonical: '/my-jobs',
+  },
 }
 
 export default async function MyJobsPage() {

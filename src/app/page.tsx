@@ -158,6 +158,30 @@ interface HomeProps {
   }>
 }
 
+export async function generateMetadata({ searchParams }: HomeProps) {
+  const params = await searchParams
+  const currentPage = Math.max(1, parseInt(params.page || '1', 10) || 1)
+
+  // Build canonical URL
+  const searchParamsObj = new URLSearchParams()
+  if (params.q) searchParamsObj.set('q', params.q)
+  if (params.category) searchParamsObj.set('category', params.category)
+  if (params.city) searchParamsObj.set('city', params.city)
+  if (params.tags) {
+    const tags = Array.isArray(params.tags) ? params.tags : [params.tags]
+    tags.forEach(tag => searchParamsObj.append('tags', tag))
+  }
+  if (currentPage > 1) searchParamsObj.set('page', currentPage.toString())
+
+  const canonicalPath = searchParamsObj.toString() ? `/?${searchParamsObj.toString()}` : '/'
+
+  return {
+    alternates: {
+      canonical: canonicalPath,
+    },
+  }
+}
+
 export default async function Home({ searchParams }: HomeProps) {
   const params = await searchParams
   

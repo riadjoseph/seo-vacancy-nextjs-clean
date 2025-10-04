@@ -61,16 +61,23 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
   if (!query.trim()) {
     return {
       title: 'Search SEO Jobs | Wake Up Happy',
-      description: 'Search for SEO, marketing, and tech job opportunities across Europe.'
+      description: 'Search for SEO, marketing, and tech job opportunities across Europe.',
+      alternates: {
+        canonical: '/search',
+      },
     }
   }
 
   const { totalCount } = await searchJobs(query, 1)
   const pageTitle = page > 1 ? ` - Page ${page}` : ''
+  const canonicalPath = page > 1 ? `/search?q=${encodeURIComponent(query)}&page=${page}` : `/search?q=${encodeURIComponent(query)}`
 
   return {
     title: `${totalCount} results for "${query}"${pageTitle} | SEO Jobs`,
-    description: `Found ${totalCount} job opportunities matching "${query}". Search SEO, marketing, and tech jobs across Europe.`
+    description: `Found ${totalCount} job opportunities matching "${query}". Search SEO, marketing, and tech jobs across Europe.`,
+    alternates: {
+      canonical: canonicalPath,
+    },
   }
 }
 

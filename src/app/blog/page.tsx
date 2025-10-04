@@ -6,6 +6,9 @@ import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/co
 export const metadata = {
   title: 'Blog',
   description: 'Articles, guides, and resources for SEO professionals.',
+  alternates: {
+    canonical: '/blog',
+  },
 }
 
 export default function BlogIndexPage() {

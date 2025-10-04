@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/button'
 export const metadata: Metadata = {
   title: 'About WakeUpHappy - No-BS Job Board for SEO Professionals | Europe',
   description: 'Seamless job posting without the clutter: no newsletters, no ads, no endless loops, just results. Support our mission by posting your SEO job here.',
+  alternates: {
+    canonical: '/about',
+  },
   openGraph: {
     title: 'About WakeUpHappy - No-BS Job Board for SEO Professionals',
     description: 'Eliminate the distractions, we focus on the job opportunities that matter to you, only.',
