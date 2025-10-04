@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next'
 import { createClient } from '@/lib/supabase/server'
+import { createTagSlug } from '@/utils/tagUtils'
+import { allPosts } from '@/content/blog'
 
 function createJobSlug(title: string, company: string, city: string | null): string {
   const slug = `${title}-${company}-${city || 'remote'}`
@@ -13,7 +15,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
 
-  // Static pages
+  // Important content pages only (removed non-essential: /auth, /terms, /privacy, /contact, /about)
   const staticPages: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
@@ -22,20 +24,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 1,
     },
     {
-      url: `${baseUrl}/auth/signin`,
+      url: `${baseUrl}/blog`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.3,
+      changeFrequency: 'weekly',
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/terms`,
+      url: `${baseUrl}/tools`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.3,
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/tools/indexnow`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
     },
   ]
 
-  let allPages = [...staticPages]
+  // Blog posts
+  const blogPages: MetadataRoute.Sitemap = allPosts.map(post => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }))
+
+  let allPages = [...staticPages, ...blogPages]
 
   try {
     // Get all jobs for individual job pages
@@ -77,13 +93,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const allTags = tagJobs?.flatMap(job => job.tags || []) || []
     const uniqueTags = [...new Set(allTags)]
     const tagPages: MetadataRoute.Sitemap = uniqueTags.map(tag => ({
-      url: `${baseUrl}/jobs/tag/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))}`,
+      url: `${baseUrl}/jobs/tag/${createTagSlug(tag)}`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
       priority: 0.5,
     }))
 
-    allPages = [...staticPages, ...jobPages, ...cityPages, ...tagPages]
+    allPages = [...staticPages, ...blogPages, ...jobPages, ...cityPages, ...tagPages]
   } catch (error) {
     console.error('Error generating sitemap:', error)
   }

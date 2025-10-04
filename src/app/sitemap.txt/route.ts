@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
+import { createTagSlug } from '@/utils/tagUtils'
+import { allPosts } from '@/content/blog'
 
 function createJobSlug(title: string, company: string, city: string | null): string {
   const slug = `${title}-${company}-${city || 'remote'}`
@@ -12,14 +14,18 @@ export async function GET() {
   const supabase = await createClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
 
-  // Static pages
+  // Important content pages only (removed non-essential: /auth, /terms, /privacy, /contact, /about)
   const staticUrls = [
     baseUrl,
-    `${baseUrl}/auth/signin`,
-    `${baseUrl}/terms`,
+    `${baseUrl}/blog`,
+    `${baseUrl}/tools`,
+    `${baseUrl}/tools/indexnow`,
   ]
 
-  let allUrls = [...staticUrls]
+  // Blog posts
+  const blogUrls = allPosts.map(post => `${baseUrl}/blog/${post.slug}`)
+
+  let allUrls = [...staticUrls, ...blogUrls]
 
   try {
     // Get all jobs for individual job pages
@@ -55,10 +61,10 @@ export async function GET() {
     const allTags = tagJobs?.flatMap(job => job.tags || []) || []
     const uniqueTags = [...new Set(allTags)]
     const tagUrls = uniqueTags.map(tag =>
-      `${baseUrl}/jobs/tag/${encodeURIComponent(tag.toLowerCase().replace(/\s+/g, '-'))}`
+      `${baseUrl}/jobs/tag/${createTagSlug(tag)}`
     )
 
-    allUrls = [...staticUrls, ...jobUrls, ...cityUrls, ...tagUrls]
+    allUrls = [...staticUrls, ...blogUrls, ...jobUrls, ...cityUrls, ...tagUrls]
   } catch (error) {
     console.error('Error generating sitemap:', error)
   }
