@@ -43,8 +43,8 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Cache sitemap and robots for 1 hour (Google-friendly, no Vary headers)
-        source: '/(sitemap\\.xml|robots\\.txt|sitemap\\.txt|feed\\.xml)',
+        // Cache XML files (sitemap.xml, feed.xml) for 1 hour
+        source: '/(sitemap\\.xml|feed\\.xml)',
         headers: [
           {
             key: 'Cache-Control',
@@ -53,6 +53,34 @@ const nextConfig: NextConfig = {
           {
             key: 'Content-Type',
             value: 'application/xml; charset=utf-8',
+          },
+        ],
+      },
+      {
+        // Cache sitemap.txt for 1 hour (plain text format)
+        source: '/sitemap.txt',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=3600',
+          },
+          {
+            key: 'Content-Type',
+            value: 'text/plain; charset=utf-8',
+          },
+        ],
+      },
+      {
+        // Cache robots.txt for 1 hour (text/plain, not XML)
+        source: '/robots.txt',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=3600, s-maxage=3600',
+          },
+          {
+            key: 'Content-Type',
+            value: 'text/plain; charset=utf-8',
           },
         ],
       },

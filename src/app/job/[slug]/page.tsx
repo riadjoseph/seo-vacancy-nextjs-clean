@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -25,6 +25,10 @@ import type { Tables } from '@/lib/supabase/types'
 
 type Job = Tables<'jobs'>
 
+// Cache this page for 30 days (matches job lifetime)
+// Next.js will regenerate it every 30 days or when you manually purge
+export const revalidate = 2592000 // 30 days in seconds
+
 interface JobPageProps {
   params: Promise<{
     slug: string
@@ -36,7 +40,7 @@ interface JobPageProps {
 
 
 async function getJobBySlug(slug: string): Promise<Job | null> {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   const { data: job, error } = await supabase
     .from('jobs')

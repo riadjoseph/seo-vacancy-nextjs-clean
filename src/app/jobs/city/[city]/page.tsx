@@ -1,13 +1,16 @@
 // import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 import { JobCard } from '@/components/JobCard'
 import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
 import { ServerPagination, ServerPaginationSummary } from '@/components/ui/server-pagination'
 import { ArrowLeft, MapPin } from 'lucide-react'
 import { calculatePagination } from '@/utils/pagination'
 import { LocationInitializer } from '@/components/LocationInitializer'
+
+// Cache this page for 1 hour (listing pages change more often than job detail pages)
+export const revalidate = 3600 // 1 hour in seconds
 
 function capitalizeCity(city: string): string {
   return city
@@ -27,7 +30,7 @@ interface CityJobsPageProps {
 }
 
 async function getCityJobs(city: string, page: number = 1) {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const decodedCity = decodeURIComponent(city).toLowerCase()
   const itemsPerPage = 25
   const offset = (page - 1) * itemsPerPage

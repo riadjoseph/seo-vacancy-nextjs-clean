@@ -1,4 +1,5 @@
 import { createPublicClient } from '@/lib/supabase/public'
+import { notFound } from 'next/navigation'
 
 function createJobSlug(title: string, company: string, city: string | null): string {
   const slug = `${title}-${company}-${city || 'remote'}`
@@ -26,22 +27,41 @@ function truncateDescription(description: string, maxLength: number = 300): stri
   return description.substring(0, maxLength).trim() + '...'
 }
 
-export async function GET() {
+function capitalizeCity(city: string): string {
+  return city
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+}
+
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ city: string }> }
+) {
+  const { city } = await params
   const supabase = createPublicClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
+  const decodedCity = decodeURIComponent(city).toLowerCase()
+  const displayCity = capitalizeCity(decodedCity)
 
   try {
-    // Get recent jobs (last 15 days, limit to 50 most recent)
-    const fifteenDaysAgo = new Date()
-    fifteenDaysAgo.setDate(fifteenDaysAgo.getDate() - 15)
+    // Filter out expired jobs
+    const currentDate = new Date().toISOString()
+    const expiredFilter = `expires_at.is.null,expires_at.gte.${currentDate}`
 
-    const { data: jobs } = await supabase
+    // Get jobs for this city
+    const { data: jobs, count } = await supabase
       .from('jobs')
-      .select('title, company_name, city, description, created_at, expires_at, salary_min, salary_max, tags')
-      .gt('expires_at', new Date().toISOString()) // Only non-expired jobs
-      .gte('created_at', fifteenDaysAgo.toISOString()) // Only recent jobs
+      .select('title, company_name, city, description, created_at, expires_at, salary_min, salary_max, tags', { count: 'exact' })
+      .ilike('city', decodedCity)
+      .or(expiredFilter)
       .order('created_at', { ascending: false })
       .limit(50)
+
+    // Return 404 if less than 3 jobs
+    if (!jobs || (count !== null && count < 3)) {
+      notFound()
+    }
 
     const buildDate = new Date().toUTCString()
     const lastBuildDate = jobs && jobs.length > 0 && jobs[0].created_at
@@ -84,18 +104,18 @@ export async function GET() {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>SEO Vacancy - Latest SEO Job Opportunities in Europe</title>
-    <description>The latest SEO job opportunities in Europe, digital marketing, and related fields</description>
-    <link>${baseUrl}</link>
-    <atom:link href="${baseUrl}/feed.xml" rel="self" type="application/rss+xml"/>
+    <title>SEO Vacancy - ${escapeXml(displayCity)} - Latest SEO Jobs</title>
+    <description>Latest SEO job opportunities in ${escapeXml(displayCity)}</description>
+    <link>${baseUrl}/jobs/city/${city}</link>
+    <atom:link href="${baseUrl}/feed/city/${city}" rel="self" type="application/rss+xml"/>
     <language>en</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <pubDate>${buildDate}</pubDate>
     <ttl>1440</ttl>
     <image>
       <url>${baseUrl}/favicon.ico</url>
-      <title>SEO Vacancy</title>
-      <link>${baseUrl}</link>
+      <title>SEO Vacancy - ${escapeXml(displayCity)}</title>
+      <link>${baseUrl}/jobs/city/${city}</link>
     </image>
 ${rssItems}
   </channel>
@@ -108,24 +128,7 @@ ${rssItems}
       }
     })
   } catch (error) {
-    console.error('Error generating RSS feed:', error)
-
-    // Return minimal RSS feed on error
-    const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-  <channel>
-    <title>SEO Vacancy - Latest Job Opportunities</title>
-    <description>The latest job opportunities in SEO, digital marketing, and related fields across Europe</description>
-    <link>${baseUrl}</link>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
-  </channel>
-</rss>`
-
-    return new Response(xml, {
-      headers: {
-        'Content-Type': 'application/rss+xml',
-        'Cache-Control': 'public, max-age=3600, stale-while-revalidate=600'
-      }
-    })
+    console.error(`Error generating RSS feed for city ${city}:`, error)
+    notFound()
   }
 }

@@ -213,8 +213,8 @@ export function Footer() {
           </div>
           
           <div>
-            <h3 className="font-semibold text-secondary-foreground mb-4">{footerHeading}</h3>
-            <ul className="space-y-2 text-sm">
+            <h3 className="font-semibold text-secondary-foreground mb-4" suppressHydrationWarning>{footerHeading}</h3>
+            <ul className="space-y-2 text-sm" suppressHydrationWarning>
               {citiesToShow.map((cityName) => (
                 <li key={cityName}>
                   <Link
@@ -238,6 +238,7 @@ export function Footer() {
               <li><Link href="/contact" className="hover:text-secondary-foreground">Contact</Link></li>
               <li><Link href="/privacy-policy" className="hover:text-secondary-foreground">Privacy Policy</Link></li>
               <li><Link href="/terms" className="hover:text-secondary-foreground">Terms of Service</Link></li>
+              <li><Link href="/llms.txt" className="hover:text-secondary-foreground">LLMs Policy</Link></li>
               <li><a href="https://buymeacoffee.com/riadjoseph" target="_blank" rel="noopener noreferrer" className="hover:text-secondary-foreground">☕ Buy Me a Coffee</a></li>
             </ul>
           </div>

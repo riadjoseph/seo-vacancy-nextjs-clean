@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 import { createTagSlug } from '@/utils/tagUtils'
 import { allPosts } from '@/content/blog'
 
@@ -12,7 +12,7 @@ function createJobSlug(title: string, company: string, city: string | null): str
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
 
   // Important content pages only (removed non-essential: /auth, /terms, /privacy, /contact, /about)

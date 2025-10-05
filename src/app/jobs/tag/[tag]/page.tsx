@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 import { JobCard } from '@/components/JobCard'
 import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
 import { Badge } from '@/components/ui/badge'
@@ -10,6 +10,8 @@ import { ArrowLeft, Tag } from 'lucide-react'
 import { parseTagFromSlug } from '@/utils/tagUtils'
 import { calculatePagination } from '@/utils/pagination'
 
+// Cache this page for 1 hour (listing pages change more often than job detail pages)
+export const revalidate = 3600 // 1 hour in seconds
 
 interface TagJobsPageProps {
   params: Promise<{
@@ -23,7 +25,7 @@ interface TagJobsPageProps {
 
 
 async function getTagJobs(tag: string, page: number = 1) {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const targetTag = parseTagFromSlug(tag)
   const itemsPerPage = 25
   const offset = (page - 1) * itemsPerPage
