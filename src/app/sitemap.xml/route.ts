@@ -110,19 +110,21 @@ export async function GET() {
     console.error('Error generating sitemap:', error)
   }
 
-  // Generate XML with proper XSD schema location
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-${allPages.map(page => `  <url>
-    <loc>${escapeXml(page.url)}</loc>
-    <lastmod>${page.lastModified.toISOString()}</lastmod>
-    <changefreq>${page.changeFrequency}</changefreq>
-    <priority>${page.priority}</priority>
-  </url>`).join('\n')}
-</urlset>`
+  // Generate XML with proper XSD schema location (no leading whitespace)
+  const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"\n' +
+    '        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n' +
+    '        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9\n' +
+    '                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">\n' +
+    allPages.map(page =>
+      `  <url>\n` +
+      `    <loc>${escapeXml(page.url)}</loc>\n` +
+      `    <lastmod>${page.lastModified.toISOString()}</lastmod>\n` +
+      `    <changefreq>${page.changeFrequency}</changefreq>\n` +
+      `    <priority>${page.priority}</priority>\n` +
+      `  </url>`
+    ).join('\n') + '\n' +
+    '</urlset>'
 
   return new Response(xml, {
     headers: {
