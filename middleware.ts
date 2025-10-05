@@ -5,17 +5,29 @@ import { NextRequest, NextResponse } from 'next/server'
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Skip APIs, Next internals, and static assets
+  // Skip APIs, Next internals, and static assets (but NOT .txt or .xml files)
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
-    /\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|txt|xml|json|woff2?)$/i.test(pathname)
+    /\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|json|woff2?)$/i.test(pathname)
   ) {
     return NextResponse.next()
   }
 
   const res = NextResponse.next()
+
+  // For sitemaps, robots, and feeds: use simple Vary header only
+  if (
+    pathname === '/sitemap.xml' ||
+    pathname === '/sitemap.txt' ||
+    pathname === '/robots.txt' ||
+    pathname === '/feed.xml' ||
+    pathname.startsWith('/feed/')
+  ) {
+    res.headers.set('Vary', 'Accept-Encoding')
+    return res
+  }
 
   // Route-specific caching (same TTL for browsers and CDN for simplicity)
   if (
@@ -52,6 +64,11 @@ export const config = {
     '/',
     '/job/:path*',
     '/jobs/:path*',
+    '/sitemap.xml',
+    '/sitemap.txt',
+    '/robots.txt',
+    '/feed.xml',
+    '/feed/:path*',
   ],
 }
 

@@ -1,4 +1,3 @@
-import { MetadataRoute } from 'next'
 import { createPublicClient } from '@/lib/supabase/public'
 import { createTagSlug } from '@/utils/tagUtils'
 import { allPosts } from '@/content/blog'
@@ -11,12 +10,19 @@ function createJobSlug(title: string, company: string, city: string | null): str
   return slug
 }
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+interface SitemapEntry {
+  url: string
+  lastModified: Date
+  changeFrequency: 'always' | 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly' | 'never'
+  priority: number
+}
+
+export async function GET() {
   const supabase = createPublicClient()
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
 
-  // Important content pages only (removed non-essential: /auth, /terms, /privacy, /contact, /about)
-  const staticPages: MetadataRoute.Sitemap = [
+  // Important content pages only
+  const staticPages: SitemapEntry[] = [
     {
       url: baseUrl,
       lastModified: new Date(),
@@ -44,7 +50,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]
 
   // Blog posts
-  const blogPages: MetadataRoute.Sitemap = allPosts.map(post => ({
+  const blogPages: SitemapEntry[] = allPosts.map(post => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),
     changeFrequency: 'monthly' as const,
@@ -58,10 +64,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const { data: jobs } = await supabase
       .from('jobs')
       .select('title, company_name, city, created_at, expires_at')
-      .gt('expires_at', new Date().toISOString()) // Only non-expired jobs
+      .gt('expires_at', new Date().toISOString())
       .order('created_at', { ascending: false })
 
-    const jobPages: MetadataRoute.Sitemap = jobs?.map(job => ({
+    const jobPages: SitemapEntry[] = jobs?.map(job => ({
       url: `${baseUrl}/job/${createJobSlug(job.title, job.company_name, job.city)}`,
       lastModified: new Date(job.created_at || new Date()),
       changeFrequency: 'weekly' as const,
@@ -76,7 +82,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .gt('expires_at', new Date().toISOString())
 
     const uniqueCities = [...new Set(cityJobs?.map(job => job.city).filter(Boolean))] as string[]
-    const cityPages: MetadataRoute.Sitemap = uniqueCities.map(city => ({
+    const cityPages: SitemapEntry[] = uniqueCities.map(city => ({
       url: `${baseUrl}/jobs/city/${encodeURIComponent(city.toLowerCase())}`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
@@ -92,7 +98,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     const allTags = tagJobs?.flatMap(job => job.tags || []) || []
     const uniqueTags = [...new Set(allTags)]
-    const tagPages: MetadataRoute.Sitemap = uniqueTags.map(tag => ({
+    const tagPages: SitemapEntry[] = uniqueTags.map(tag => ({
       url: `${baseUrl}/jobs/tag/${createTagSlug(tag)}`,
       lastModified: new Date(),
       changeFrequency: 'daily' as const,
@@ -104,5 +110,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Error generating sitemap:', error)
   }
 
-  return allPages
+  // Generate XML with proper XSD schema location
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+${allPages.map(page => `  <url>
+    <loc>${escapeXml(page.url)}</loc>
+    <lastmod>${page.lastModified.toISOString()}</lastmod>
+    <changefreq>${page.changeFrequency}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`
+
+  return new Response(xml, {
+    headers: {
+      'Content-Type': 'application/xml; charset=utf-8',
+      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=600'
+    }
+  })
+}
+
+function escapeXml(unsafe: string): string {
+  return unsafe.replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case '<': return '&lt;'
+      case '>': return '&gt;'
+      case '&': return '&amp;'
+      case "'": return '&apos;'
+      case '"': return '&quot;'
+      default: return c
+    }
+  })
 }
