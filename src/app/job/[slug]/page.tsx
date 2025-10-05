@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   if (!job) {
     return {
       title: 'Job Not Found - Permanently Removed',
-      description: 'The job you are looking for has been permanently removed and is no longer available.'
+      description: 'The job you are looking for has been removed and is no longer available.'
     }
   }
   
