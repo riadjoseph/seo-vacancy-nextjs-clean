@@ -8,11 +8,6 @@ export const LazyAnalytics = dynamic(
   { ssr: false }
 )
 
-export const LazyTrackerPixel = dynamic(
-  () => import('@/components/TrackerPixel'),
-  { ssr: false }
-)
-
 export const LazyBuyMeACoffee = dynamic(
   () => import('@/components/BuyMeACoffee').then(mod => ({
     default: () => mod.BuyMeACoffeeWidget({

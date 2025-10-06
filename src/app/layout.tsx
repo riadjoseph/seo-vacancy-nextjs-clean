@@ -4,20 +4,20 @@ import "./globals.css";
 import { Providers } from '@/lib/providers';
 import { Navigation, Footer } from '@/components/Navigation';
 import { Toaster } from 'sonner';
-import { LazyAnalytics, LazyTrackerPixel, LazyBuyMeACoffee } from '@/components/ClientWidgets';
+import { LazyAnalytics, LazyBuyMeACoffee } from '@/components/ClientWidgets';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -70,7 +70,6 @@ export default async function RootLayout({
           {/* Lazy load analytics to avoid blocking initial render */}
           <LazyAnalytics />
           {/* Defer non-critical widgets */}
-          <LazyTrackerPixel />
           <LazyBuyMeACoffee />
         </Providers>
       </body>
