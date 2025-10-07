@@ -4,6 +4,7 @@ import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
 import { GeneralSearchBox } from '@/components/GeneralSearchBox'
 import { ServerPagination, ServerPaginationSummary } from '@/components/ui/server-pagination'
 import { calculatePagination } from '@/utils/pagination'
+import { ProductHuntBadge } from '@/components/ProductHuntBadge'
 
 
 interface JobsListProps {
@@ -106,7 +107,10 @@ async function JobsList({ searchParams }: JobsListProps) {
       {/* Featured Jobs (only show on first page for clean pagination) */}
       {featuredJobs.length > 0 && currentPage === 1 && (
         <div className="mb-12">
-          <h2 className="text-2xl font-bold mb-6">Featured Jobs</h2>
+          <div className="flex items-center gap-4 mb-6 flex-wrap">
+            <h2 className="text-2xl font-bold">Featured Jobs</h2>
+            <ProductHuntBadge />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {featuredJobs.map((job) => (
               <JobCard key={job.id} job={job} isFeatured={true} />
@@ -230,11 +234,15 @@ export default async function Home({ searchParams }: HomeProps) {
 
       <div className="container mx-auto py-8 px-4">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+          <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">
             Europe&apos;s SEO & GEO Jobs
           </h1>
-          <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-Handpicked SEO, GEO, Data & Martech roles for people who love what they do.</p>
+          <p className="text-l text-muted-foreground max-w-4xl mx-auto mb-4">
+Handpicked SEO, GEO/AEO, Data & Martech Roles For People Who Love What They Do
+</p>
+          <div className="flex justify-center">
+            <ProductHuntBadge />
+          </div>
         </div>
 
         <GeneralSearchBox />

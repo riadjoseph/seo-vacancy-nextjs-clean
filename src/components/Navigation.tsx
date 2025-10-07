@@ -10,6 +10,7 @@ import { createTagSlug } from '@/utils/tagUtils'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { useCurrentLocation } from '@/lib/location-context'
 import { DEFAULT_POPULAR_CITIES, POPULAR_CITY_CLUSTERS, toCityPathSegment } from '@/data/cityClusters'
+import { ProductHuntBadge } from '@/components/ProductHuntBadge'
 
 export function Navigation() {
   const { user, loading, signOut } = useAuth()
@@ -38,8 +39,8 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
-            <SunshineIcon className="h-6 w-6 text-yellow-500" />
-            <span className="bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">Wake Up Happy</span>
+            <SunshineIcon className="h-6 w-6 text-orange-500" />
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Wake Up Happy</span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -188,9 +189,10 @@ export function Footer() {
               <SunshineIcon className="h-6 w-6 text-yellow-400" />
               <span>Wake Up Happy</span>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-4">
               Find your next SEO and tech career opportunity across Europe.
             </p>
+            <ProductHuntBadge />
           </div>
           
           <div>
