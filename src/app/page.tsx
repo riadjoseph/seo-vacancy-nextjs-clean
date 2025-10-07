@@ -234,7 +234,7 @@ export default async function Home({ searchParams }: HomeProps) {
             Europe&apos;s SEO & GEO Jobs
           </h1>
           <p className="text-xl text-muted-foreground max-w-4xl mx-auto">
-A handpicked selection of the latest SEO, Analytics, and Martech roles.        </p>
+Handpicked SEO, GEO, Data & Martech roles for people who love what they do.</p>
         </div>
 
         <GeneralSearchBox />
