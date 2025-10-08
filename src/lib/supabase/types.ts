@@ -53,6 +53,7 @@ export type Database = {
           salary_currency: string | null
           salary_max: number | null
           salary_min: number | null
+          slug: string | null
           start_date: string | null
           tags: Database["public"]["Enums"]["seo_specialization"][] | null
           teaser: string | null
@@ -81,6 +82,7 @@ export type Database = {
           salary_currency?: string | null
           salary_max?: number | null
           salary_min?: number | null
+          slug?: string | null
           start_date?: string | null
           tags?: Database["public"]["Enums"]["seo_specialization"][] | null
           teaser?: string | null
@@ -109,6 +111,7 @@ export type Database = {
           salary_currency?: string | null
           salary_max?: number | null
           salary_min?: number | null
+          slug?: string | null
           start_date?: string | null
           tags?: Database["public"]["Enums"]["seo_specialization"][] | null
           teaser?: string | null
