@@ -32,6 +32,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   // Build sitemaps array
   const sitemaps = [
     `${baseUrl}/sitemap.xml`,
+    `${baseUrl}/sitemap.txt`,
     `${baseUrl}/feed.xml`,
     `${baseUrl}/llms.txt`,
     ...eligibleCities.map(city => `${baseUrl}/feed/city/${encodeURIComponent(city)}`)
@@ -40,9 +41,8 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
       disallow: [
-        '?q=*',          // Search query parameters
+        '*/search?q=*',          // Search query parameters
         '*?_rsc=*',      // Next.js RSC cache-busting parameters
       ],
     },
