@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 interface ServerBotTrackerProps {
   page?: string
   title?: string
@@ -60,15 +62,15 @@ export default function ServerBotTracker({
   const trackingUrl = `${trackerUrl || trackerEndpoint}?${params.toString()}`
 
   return (
-    <img
+    <Image
       alt=""
       aria-hidden="true"
       loading="lazy"
-      width="1"
-      height="1"
-      decoding="async"
-      data-nimg="1"
+      width={1}
+      height={1}
       src={trackingUrl}
+      unoptimized
+      decoding="async"
       style={{
         color: 'transparent',
         position: 'absolute',

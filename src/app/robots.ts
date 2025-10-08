@@ -25,7 +25,7 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
 
   // Get cities with 3+ jobs
   const eligibleCities = Array.from(cityJobCounts.entries())
-    .filter(([_, count]) => count >= 3)
+    .filter(([, count]) => count >= 3)
     .map(([city]) => city)
     .sort()
 

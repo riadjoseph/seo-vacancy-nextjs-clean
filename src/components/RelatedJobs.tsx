@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { createClient } from '@/lib/supabase/server'
+import { createPublicClient } from '@/lib/supabase/public'
 import { JobCard } from '@/components/JobCard'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { MapPin } from 'lucide-react'
@@ -25,7 +25,7 @@ async function getRelatedJobs(currentJobId: string, city: string | null): Promis
     return []
   }
 
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const currentDate = new Date().toISOString()
 
   const { data: jobs, error } = await supabase

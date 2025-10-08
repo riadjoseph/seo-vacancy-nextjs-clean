@@ -58,6 +58,7 @@ async function getJobBySlug(slug: string): Promise<Job | null> {
 export async function generateMetadata({ params }: JobPageProps): Promise<Metadata> {
   const { slug } = await params
   const job = await getJobBySlug(slug)
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
   
   if (!job) {
     return {
@@ -74,18 +75,37 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   const skillsText = job.tags && job.tags.length > 0 ? `${job.tags.join(', ')} skills` : 'SEO skills'
   const cityText = job.city ? ` in ${job.city}` : ''
   const metaDescription = `${skillsText} required at ${job.company_name} for an SEO Job${cityText} -> Apply now: ${job.title}.`
+  const canonicalUrl = `${baseUrl}/job/${slug}`
+  const logoCandidate = job.company_logo?.trim()
+  const ogImage = logoCandidate && logoCandidate !== "'" ? logoCandidate : `${baseUrl}/apple-touch-icon.png`
+  const ogImageAlt = `${job.title} at ${job.company_name}`
   
   return {
     title: seoTitle,
     description: metaDescription,
     alternates: {
-      canonical: `/job/${slug}`,
+      canonical: canonicalUrl,
     },
     openGraph: {
       title: seoTitle,
       description: metaDescription,
       type: 'article',
       publishedTime: job.created_at || undefined,
+      url: canonicalUrl,
+      images: [
+        {
+          url: ogImage,
+          width: 1200,
+          height: 630,
+          alt: ogImageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoTitle,
+      description: metaDescription,
+      images: [ogImage],
     },
   }
 }

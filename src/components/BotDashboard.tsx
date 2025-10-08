@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 interface BotVisit {
@@ -57,28 +57,7 @@ const BotDashboard = () => {
   const [selectedPriority, setSelectedPriority] = useState<string>('all')
   const [selectedType, setSelectedType] = useState<string>('all')
 
-  const fetchBotData = async () => {
-    try {
-      const response = await fetch('/api/bot-dashboard')
-      if (!response.ok) throw new Error('Failed to fetch bot data')
-
-      const data = await response.json()
-      setVisits(data.visits || [])
-      calculateStats(data.visits || [])
-      setLoading(false)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error')
-      setLoading(false)
-    }
-  }
-
-  useEffect(() => {
-    fetchBotData()
-    const interval = setInterval(fetchBotData, 30000) // Refresh every 30 seconds
-    return () => clearInterval(interval)
-  }, [])  // fetchBotData is defined inside useEffect, so this is fine
-
-  const calculateStats = (visitsData: BotVisit[]) => {
+  const calculateStats = useCallback((visitsData: BotVisit[]) => {
     const today = new Date().toDateString()
     const todayVisits = visitsData.filter(v =>
       new Date(v.timestamp).toDateString() === today
@@ -109,7 +88,28 @@ const BotDashboard = () => {
       topVendor,
       topCountry
     })
-  }
+  }, [])
+
+  const fetchBotData = useCallback(async () => {
+    try {
+      const response = await fetch('/api/bot-dashboard')
+      if (!response.ok) throw new Error('Failed to fetch bot data')
+
+      const data = await response.json()
+      setVisits(data.visits || [])
+      calculateStats(data.visits || [])
+      setLoading(false)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Unknown error')
+      setLoading(false)
+    }
+  }, [calculateStats])
+
+  useEffect(() => {
+    fetchBotData()
+    const interval = setInterval(fetchBotData, 30000) // Refresh every 30 seconds
+    return () => clearInterval(interval)
+  }, [fetchBotData])
 
   const filteredVisits = visits.filter(visit => {
     if (selectedPriority !== 'all' && visit.priority !== selectedPriority) return false
