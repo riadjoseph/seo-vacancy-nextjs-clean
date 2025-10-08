@@ -1,4 +1,4 @@
-import Image from 'next/image'
+/* eslint-disable @next/next/no-img-element */
 
 interface ServerBotTrackerProps {
   page?: string
@@ -62,15 +62,15 @@ export default function ServerBotTracker({
   const trackingUrl = `${trackerUrl || trackerEndpoint}?${params.toString()}`
 
   return (
-    <Image
+    <img
       alt=""
       aria-hidden="true"
       loading="lazy"
-      width={1}
-      height={1}
-      src={trackingUrl}
-      unoptimized
+      width="1"
+      height="1"
       decoding="async"
+      data-nimg="1"
+      src={trackingUrl}
       style={{
         color: 'transparent',
         position: 'absolute',
