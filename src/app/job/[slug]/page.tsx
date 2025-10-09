@@ -37,8 +37,6 @@ interface JobPageProps {
     cache?: string
   }>
 }
-
-
 async function getJobBySlug(slug: string): Promise<Job | null> {
   const supabase = createPublicClient()
 
