@@ -12,6 +12,7 @@ import { JobSalary } from '@/components/job-post/JobSalary'
 import { JobDates } from '@/components/job-post/JobDates'
 import { JobFeatured } from '@/components/job-post/JobFeatured'
 import { validateJobForm } from '@/utils/jobValidation'
+import { createJobSlug } from '@/utils/jobUtils'
 import type { SeoSpecialization } from '@/data/types'
 import { addDays, format } from 'date-fns'
 import type { Tables } from '@/lib/supabase/types'
@@ -182,6 +183,9 @@ export function EditJobForm({ job }: EditJobFormProps) {
       // Calculate expiry date
       const expiresAt = addDays(new Date(formData.start_date), parseInt(formData.duration))
 
+      // Generate slug for the job (regenerate in case title, company, or city changed)
+      const slug = createJobSlug(formData.title.trim(), formData.company_name.trim(), formData.city || 'remote')
+
       const jobData = {
         title: formData.title.trim(),
         company_name: formData.company_name.trim(),
@@ -199,6 +203,7 @@ export function EditJobForm({ job }: EditJobFormProps) {
         expires_at: expiresAt.toISOString(),
         featured: formData.featured,
         hide_salary: formData.hide_salary,
+        slug: slug,
       }
 
       const { error } = await supabase
