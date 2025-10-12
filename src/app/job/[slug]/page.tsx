@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown'
 import { createPublicClient } from '@/lib/supabase/public'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 import { RelatedJobs } from '@/components/RelatedJobs'
 import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
@@ -15,7 +16,8 @@ import {
   MapPin,
   Briefcase,
   Calendar,
-  Building2
+  Building2,
+  ArrowLeft
 } from 'lucide-react'
 import { createTagSlug } from '@/utils/tagUtils'
 import type { Tables } from '@/lib/supabase/types'
@@ -55,18 +57,35 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   const { slug } = await params
   const job = await getJobBySlug(slug)
   const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
-  
+
   if (!job) {
+    // For 404 pages, Next.js automatically adds noindex when notFound() is called
+    // So we don't need to explicitly set robots metadata here to avoid duplicate meta tags
     return {
       title: 'Job Not Found - Permanently Removed',
-      description: 'The job you are looking for has been removed and is no longer available.'
+      description: 'The job you are looking for has been removed and is no longer available.',
     }
   }
-  
+
+  // Check if job is expired
+  const isExpired = job.expires_at && new Date(job.expires_at) < new Date()
+
+  if (isExpired) {
+    // For expired jobs, don't include canonical tag and don't index
+    return {
+      title: `${job.title} - Job Expired`,
+      description: 'This job posting has expired and is no longer accepting applications.',
+      robots: {
+        index: false,
+        follow: true,
+      },
+    }
+  }
+
   // Title: {job title} in {city} at {company name}
   const cityPart = job.city ? ` in ${job.city}` : ''
   const seoTitle = `${job.title}${cityPart} at ${job.company_name}`
-  
+
   // Meta Description: {tag specializations} skills required at {company name} for an SEO Job in {city} -> Apply now: {job title}.
   const skillsText = job.tags && job.tags.length > 0 ? `${job.tags.join(', ')} skills` : 'SEO skills'
   const cityText = job.city ? ` in ${job.city}` : ''
@@ -75,7 +94,7 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
   const logoCandidate = job.company_logo?.trim()
   const ogImage = logoCandidate && logoCandidate !== "'" ? logoCandidate : `${baseUrl}/apple-touch-icon.png`
   const ogImageAlt = `${job.title} at ${job.company_name}`
-  
+
   return {
     title: seoTitle,
     description: metaDescription,
@@ -123,9 +142,39 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
     notFound()
   }
 
-  // Check if job is expired - return 404 for expired jobs
-  if (job.expires_at && new Date(job.expires_at) < new Date()) {
-    notFound()
+  // Check if job is expired - show not-found component without calling notFound()
+  // This prevents Next.js from adding the noindex meta tag automatically
+  const isExpired = job.expires_at && new Date(job.expires_at) < new Date()
+
+  if (isExpired) {
+    const { NotFoundRelatedJobs } = await import('@/components/NotFoundRelatedJobs')
+    return (
+      <div className="container mx-auto py-8 px-4">
+        <div className="mb-6">
+          <Link href="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Jobs
+          </Link>
+        </div>
+
+        <Card className="border-gray-200 bg-gray-50">
+          <CardContent className="p-8 text-center">
+            <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-gray-800 mb-2">This Job Has Expired</h1>
+            <p className="text-gray-600 mb-6">
+              The job you&apos;re looking for has expired and is no longer accepting applications.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link href="/">
+                <Button>Browse Other SEO Jobs</Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        <NotFoundRelatedJobs />
+      </div>
+    )
   }
 
   // Generate breadcrumbs
