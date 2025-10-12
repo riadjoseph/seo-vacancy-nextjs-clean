@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Search, ArrowLeft } from 'lucide-react'
+import { NotFoundRelatedJobs } from '@/components/NotFoundRelatedJobs'
 
 export default function NotFound() {
   return (
@@ -12,11 +13,11 @@ export default function NotFound() {
           Back to Jobs
         </Link>
       </div>
-      
+
       <Card className="border-gray-200 bg-gray-50">
         <CardContent className="p-8 text-center">
           <Search className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Job Not Found</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-2">Sorry This Job is Gone: Check Out More Below</h1>
           <p className="text-gray-600 mb-6">
             The job you&apos;re looking for has been removed and is no longer available.
           </p>
@@ -24,10 +25,11 @@ export default function NotFound() {
             <Link href="/">
               <Button>Browse Other SEO Jobs</Button>
             </Link>
-
           </div>
         </CardContent>
       </Card>
+
+      <NotFoundRelatedJobs />
     </div>
   )
 }
