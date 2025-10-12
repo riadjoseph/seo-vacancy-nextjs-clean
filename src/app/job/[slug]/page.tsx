@@ -5,18 +5,16 @@ import Image from 'next/image'
 import ReactMarkdown from 'react-markdown'
 import { createPublicClient } from '@/lib/supabase/public'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
 import { RelatedJobs } from '@/components/RelatedJobs'
 import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
 import { ApplyButton } from '@/components/ApplyButton'
 import { LocationInitializer } from '@/components/LocationInitializer'
-import { 
-  MapPin, 
-  Briefcase, 
-  Calendar, 
-  ExternalLink, 
+import {
+  MapPin,
+  Briefcase,
+  Calendar,
   Building2
 } from 'lucide-react'
 import { createTagSlug } from '@/utils/tagUtils'
@@ -111,22 +109,24 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
 export default async function JobPage({ params, searchParams }: JobPageProps) {
   const { slug } = await params
   const searchParamsResolved = searchParams ? await searchParams : {}
-  
+
   // Check for cache purge parameter
   if (searchParamsResolved.cache === 'purge') {
     // Redirect to cache purge API with redirect URL
     const { redirect } = await import('next/navigation')
     redirect(`/api/cache-purge/job/${slug}?redirect=${encodeURIComponent(`/job/${slug}`)}`)
   }
-  
+
   const job = await getJobBySlug(slug)
-  
+
   if (!job) {
     notFound()
   }
-  
-  // Check if job is expired - keep serving content but show as closed
-  const isExpired = job.expires_at && new Date(job.expires_at) < new Date()
+
+  // Check if job is expired - return 404 for expired jobs
+  if (job.expires_at && new Date(job.expires_at) < new Date()) {
+    notFound()
+  }
 
   // Generate breadcrumbs
   const breadcrumbItems: BreadcrumbItem[] = [
@@ -152,31 +152,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
       <div className="mb-6">
         <Breadcrumbs items={breadcrumbItems} />
       </div>
-      
-      {/* Expired Job Banner */}
-      {isExpired && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-          <div className="flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-lg font-semibold text-red-800 mb-2">
-                No Longer Accepting Applications
-              </h2>
-              <p className="text-red-600">
-                This job listing expired on{' '}
-                <span className="font-medium" suppressHydrationWarning>
-                  {new Date(job.expires_at!).toLocaleDateString('en-GB', { 
-                    day: '2-digit', 
-                    month: '2-digit', 
-                    year: 'numeric' 
-                  })}
-                </span>
-                {' '}and is no longer accepting new applications.
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-6">
           <Card>
@@ -316,28 +292,15 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
         <div className="space-y-6">
           <Card className="sticky top-6">
             <CardHeader>
-              <h3 className="text-lg font-semibold">
-                {isExpired ? 'Application Closed' : 'Apply for this position'}
-              </h3>
+              <h3 className="text-lg font-semibold">Apply for this position</h3>
             </CardHeader>
             <CardContent className="space-y-4">
-              {isExpired ? (
-                <Button 
-                  size="lg" 
-                  className="w-full gap-2 bg-muted text-muted-foreground cursor-not-allowed" 
-                  disabled
-                >
-                  No Longer Available
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              ) : (
-                <ApplyButton
-                  jobId={job.id}
-                  jobTitle={job.title}
-                  companyName={job.company_name}
-                  jobUrl={job.job_url}
-                />
-              )}
+              <ApplyButton
+                jobId={job.id}
+                jobTitle={job.title}
+                companyName={job.company_name}
+                jobUrl={job.job_url}
+              />
               
               {job.expires_at && (
                 <p className="text-sm text-muted-foreground text-center">
