@@ -2,14 +2,112 @@
 
 **Repository**: https://github.com/riadjoseph/seo-vacancy-nextjs-clean
 **Project**: Next.js 15.4 SEO Job Board
-**Last Updated**: October 12, 2025
+**Last Updated**: October 15, 2025
 
 ---
 
 ## Table of Contents
+- [October 2025 - Security & Architecture Improvements](#october-2025---security--architecture-improvements)
 - [January 2025 - Initial Migration](#january-2025---initial-migration)
 - [September 2025 - Core Features & Optimizations](#september-2025---core-features--optimizations)
 - [October 2025 - SEO & Performance Enhancements](#october-2025---seo--performance-enhancements)
+
+---
+
+## October 2025 - Security & Architecture Improvements
+
+### Major Security Fix & API Cleanup
+**Date**: October 15, 2025
+
+#### Critical Security Vulnerability Fixed
+**Issue Discovered**: Public API endpoint `/api/jobs/by-tag` was exposing sensitive database fields including `user_id`, allowing anyone to:
+- Track which user posted which jobs
+- Scrape entire jobs database with internal metadata
+- Access potentially draft/unpublished content
+- View internal fields (`company_info`, `faq`, `teaser`, `location`)
+- Google had indexed this endpoint, making the vulnerability publicly discoverable
+
+**Root Cause**:
+- API used `.select('*')` exposing ALL database columns
+- No field filtering or access control
+- Client-side architecture requiring public API endpoints
+- Not blocked in robots.txt
+
+#### Security Fixes Implemented
+
+**1. API Endpoints Removed**
+- ❌ Deleted `/api/jobs/by-tag` - Exposed `user_id` and sensitive data
+- ❌ Deleted `/api/bot-dashboard` - Unnecessary public endpoint
+- ❌ Deleted `/api/cache-purge` - Unnecessary public endpoint
+
+**2. Architecture Refactoring**
+- ✅ Converted `/tools/indexnow` from Client Component to Server Component
+- ✅ Created new `IndexNowForm.tsx` client component for interactive form
+- ✅ Jobs now fetched directly from Supabase on server (no API needed)
+- ✅ Applied explicit field selection (no more `SELECT *`)
+- ✅ Improved performance with server-side rendering
+
+**3. Remaining APIs (Legitimate Use Cases)**
+Only 2 API endpoints remain:
+- `/api/tools/indexnow` - Form submission endpoint (requires server-side logic for external API calls)
+- `/api/revalidate` - Supabase webhook (protected by `REVALIDATION_SECRET` token)
+
+**4. robots.txt Protection**
+- ✅ Kept `/api/*` in disallow list to prevent search engine indexing
+- ✅ Blocks future crawling of all API endpoints
+
+#### Files Modified
+**Deleted:**
+- `src/app/api/jobs/by-tag/route.ts`
+- `src/app/api/bot-dashboard/route.ts`
+- `src/app/api/cache-purge/route.ts`
+- `src/app/api/cache-purge/[...path]/route.ts`
+
+**Created:**
+- `src/components/IndexNowForm.tsx` - Client component for IndexNow tool form
+
+**Modified:**
+- `src/app/tools/indexnow/page.tsx` - Converted to Server Component
+- `src/app/robots.ts` - Already had `/api/*` block (kept as is)
+
+#### Security Impact
+
+**Before:**
+- 5 public API endpoints
+- `user_id` exposed in API responses
+- Google indexing API endpoints
+- Client-side data fetching pattern
+- HIGH security risk
+
+**After:**
+- 2 legitimate API endpoints only
+- No `user_id` or sensitive data exposure
+- APIs blocked from search engine indexing
+- Server Component architecture (modern Next.js pattern)
+- LOW security risk
+
+#### Recommended Follow-up Actions
+1. **Google Search Console**: Request removal of indexed API URLs
+   - URL pattern: `https://seo-vacancy.eu/api/jobs/by-tag*`
+   - Path: Removals → New Request → Remove all URLs with this prefix
+
+2. **Monitor**: Check for de-indexing in 1-2 weeks
+   - Search: `site:seo-vacancy.eu/api/`
+
+3. **Verify deployment**:
+   ```bash
+   # Check robots.txt blocks API
+   curl https://seo-vacancy.eu/robots.txt | grep api
+
+   # Verify IndexNow page works
+   curl https://seo-vacancy.eu/tools/indexnow
+   ```
+
+#### Technical Notes
+- Zero user-facing impact (everything works identically)
+- Performance may be improved due to Server Components
+- Modern Next.js App Router patterns (Server Components > API Routes for data fetching)
+- Follows security best practices (principle of least privilege)
 
 ---
 
