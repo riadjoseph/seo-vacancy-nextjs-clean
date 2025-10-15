@@ -9,7 +9,28 @@ export async function GET(req: NextRequest) {
 
   const supabase = await createClient()
 
-  let query = supabase.from('jobs').select('*').order('created_at', { ascending: false }).limit(limit)
+  // SECURITY: Only select public-safe fields, never expose user_id or internal metadata
+  const safeFields = [
+    'id',
+    'title',
+    'company_name',
+    'company_logo',
+    'description',
+    'tags',
+    'category',
+    'featured',
+    'city',
+    'salary_min',
+    'salary_max',
+    'salary_currency',
+    'hide_salary',
+    'created_at',
+    'expires_at',
+    'slug',
+    'job_url'
+  ].join(',')
+
+  let query = supabase.from('jobs').select(safeFields).order('created_at', { ascending: false }).limit(limit)
 
   // Exclude expired jobs (null expiry or in the future)
   const currentDate = new Date().toISOString()

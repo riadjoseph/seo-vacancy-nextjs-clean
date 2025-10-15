@@ -44,9 +44,10 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
       disallow: [
         '*/search?q=*',          // Search query parameters
         '*?_rsc=*',      // Next.js RSC cache-busting parameters
-        '/post-job', 
+        '/post-job',
         '/my-jobs',
         '*/auth/*',     // Share link parameters
+        '/api/*',       // All API endpoints (security)
       ],
     },
     sitemap: sitemaps,
