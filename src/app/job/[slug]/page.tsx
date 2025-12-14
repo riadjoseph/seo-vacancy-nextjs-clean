@@ -6,18 +6,16 @@ import ReactMarkdown from 'react-markdown'
 import { createPublicClient } from '@/lib/supabase/public'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Breadcrumbs, generateBreadcrumbSchema, type BreadcrumbItem } from '@/components/ui/breadcrumbs'
-import { RelatedJobs } from '@/components/RelatedJobs'
 import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
 import { ApplyButton } from '@/components/ApplyButton'
 import { LocationInitializer } from '@/components/LocationInitializer'
+import { RelatedJobs } from '@/components/RelatedJobs'
 import {
   MapPin,
   Briefcase,
   Calendar,
-  Building2,
-  ArrowLeft
+  Building2
 } from 'lucide-react'
 import { createTagSlug } from '@/utils/tagUtils'
 import type { Tables } from '@/lib/supabase/types'
@@ -142,39 +140,11 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
     notFound()
   }
 
-  // Check if job is expired - show not-found component without calling notFound()
-  // This prevents Next.js from adding the noindex meta tag automatically
+  // Expired jobs should return 404 so search engines drop them quickly
   const isExpired = job.expires_at && new Date(job.expires_at) < new Date()
 
   if (isExpired) {
-    const { NotFoundRelatedJobs } = await import('@/components/NotFoundRelatedJobs')
-    return (
-      <div className="container mx-auto py-8 px-4">
-        <div className="mb-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
-            <ArrowLeft className="h-4 w-4" />
-            Back to Jobs
-          </Link>
-        </div>
-
-        <Card className="border-gray-200 bg-gray-50">
-          <CardContent className="p-8 text-center">
-            <Calendar className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-gray-800 mb-2">This Job Has Expired</h1>
-            <p className="text-gray-600 mb-6">
-              The job you&apos;re looking for has expired and is no longer accepting applications.
-            </p>
-            <div className="flex gap-4 justify-center">
-              <Link href="/">
-                <Button>Browse Other SEO Jobs</Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-
-        <NotFoundRelatedJobs />
-      </div>
-    )
+    notFound()
   }
 
   // Generate breadcrumbs
