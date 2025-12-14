@@ -91,7 +91,10 @@ export function JobCard({ job, isFeatured = false }: JobCardProps) {
           )}
         </div>
 
-        <div className="text-muted-foreground line-clamp-3 text-sm prose prose-sm max-w-none">
+        <div
+          className="text-muted-foreground line-clamp-3 text-sm prose prose-sm max-w-none"
+          data-nosnippet
+        >
           <LazyMarkdown>
             {job.description?.substring(0, 150) + '...' || ''}
           </LazyMarkdown>

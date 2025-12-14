@@ -21,7 +21,7 @@ export function ExpandableJobDescription({
   
   if (!isLongContent) {
     return (
-      <div className="rich-article ">
+      <div className="rich-article " data-nosnippet>
         <LazyMarkdown>
           {description}
         </LazyMarkdown>
@@ -38,6 +38,7 @@ export function ExpandableJobDescription({
         style={{
           maxHeight: !isExpanded ? previewHeight : 'none'
         }}
+        data-nosnippet
       >
         <LazyMarkdown>
           {description}
