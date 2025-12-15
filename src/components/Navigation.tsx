@@ -190,7 +190,7 @@ export function Footer() {
       slug: toCityPathSegment(cityName),
     }))
 
-  let cityLinks = filteredCities
+  let cityLinks: Array<{ label: string; slug: string }> = filteredCities
 
   if (!loading && cityLinks.length === 0) {
     cityLinks = activeCityStats.slice(0, fallbackLimit).map((stat) => ({
