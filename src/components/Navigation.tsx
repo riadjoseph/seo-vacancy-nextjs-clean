@@ -11,6 +11,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import { useCurrentLocation } from '@/lib/location-context'
 import { DEFAULT_POPULAR_CITIES, POPULAR_CITY_CLUSTERS, toCityPathSegment } from '@/data/cityClusters'
 import { ProductHuntBadge } from '@/components/ProductHuntBadge'
+import { useActiveCities } from '@/hooks/useActiveCities'
 
 export function Navigation() {
   const { user, loading, signOut } = useAuth()
@@ -178,7 +179,25 @@ export function Footer() {
   const { countryKey } = useCurrentLocation()
   const cluster = countryKey ? POPULAR_CITY_CLUSTERS[countryKey] : undefined
   const footerHeading = cluster ? `Popular Cities in ${cluster.country}` : 'Popular Cities'
-  const citiesToShow = cluster ? cluster.cities : Array.from(DEFAULT_POPULAR_CITIES)
+  const { stats: activeCityStats, loading, activeSet } = useActiveCities()
+  const candidateCities = cluster ? cluster.cities : Array.from(DEFAULT_POPULAR_CITIES)
+  const fallbackLimit = candidateCities.length || DEFAULT_POPULAR_CITIES.length
+
+  const filteredCities = candidateCities
+    .filter((cityName) => activeSet.has(toCityPathSegment(cityName)))
+    .map((cityName) => ({
+      label: cityName,
+      slug: toCityPathSegment(cityName),
+    }))
+
+  let cityLinks = filteredCities
+
+  if (!loading && cityLinks.length === 0) {
+    cityLinks = activeCityStats.slice(0, fallbackLimit).map((stat) => ({
+      label: stat.label,
+      slug: stat.normalized,
+    }))
+  }
 
   return (
     <footer className="bg-secondary text-secondary-foreground mt-16">
@@ -216,18 +235,26 @@ export function Footer() {
           
           <div>
             <h3 className="font-semibold text-secondary-foreground mb-4" suppressHydrationWarning>{footerHeading}</h3>
-            <ul className="space-y-2 text-sm" suppressHydrationWarning>
-              {citiesToShow.map((cityName) => (
-                <li key={cityName}>
-                  <Link
-                    href={`/jobs/city/${toCityPathSegment(cityName)}`}
-                    className="hover:text-secondary-foreground"
-                  >
-                    {cityName} SEO Jobs
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {loading && (
+              <p className="text-sm text-muted-foreground">Loading available cities…</p>
+            )}
+            {!loading && cityLinks.length === 0 && (
+              <p className="text-sm text-muted-foreground">New cities coming soon.</p>
+            )}
+            {!loading && cityLinks.length > 0 && (
+              <ul className="space-y-2 text-sm" suppressHydrationWarning>
+                {cityLinks.map((city) => (
+                  <li key={city.slug}>
+                    <Link
+                      href={`/jobs/city/${city.slug}`}
+                      className="hover:text-secondary-foreground"
+                    >
+                      {city.label} SEO Jobs
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           
           <div>
