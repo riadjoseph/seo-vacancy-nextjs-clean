@@ -5,6 +5,7 @@ import { Providers } from '@/lib/providers';
 import { Navigation, Footer } from '@/components/Navigation';
 import { Toaster } from 'sonner';
 import { LazyAnalytics, LazyBuyMeACoffee } from '@/components/ClientWidgets';
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,6 +70,7 @@ export default async function RootLayout({
           <Toaster />
           {/* Lazy load analytics to avoid blocking initial render */}
           <LazyAnalytics />
+          <Analytics />
           {/* Defer non-critical widgets */}
           <LazyBuyMeACoffee />
         </Providers>
