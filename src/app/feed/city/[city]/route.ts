@@ -58,8 +58,8 @@ export async function GET(
       .order('created_at', { ascending: false })
       .limit(50)
 
-    // Return 404 if less than 3 jobs
-    if (!jobs || (count !== null && count < 3)) {
+    // Return 404 if no jobs
+    if (!jobs || (count !== null && count < 1)) {
       notFound()
     }
 
