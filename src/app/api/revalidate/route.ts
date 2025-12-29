@@ -3,6 +3,10 @@ import { revalidatePath } from 'next/cache'
 
 import { createJobSlug } from '@/utils/jobUtils'
 import { createTagSlug } from '@/utils/tagUtils'
+import { submitToGoogleIndexing } from '@/lib/indexing/google'
+import { submitToIndexNow } from '@/lib/indexing/indexnow'
+import { buildJobUrl, getBaseUrl } from '@/lib/indexing/urls'
+import type { IndexingNotificationType } from '@/lib/indexing/types'
 
 type JobRecord = {
   slug?: string | null
@@ -59,6 +63,12 @@ export async function POST(request: NextRequest) {
         }
       })
     )
+
+    // After revalidation completes, submit to search engines
+    // Non-blocking: errors don't fail the webhook
+    submitToSearchEngines(payload).catch(error => {
+      console.error('Indexing submission failed:', error)
+    })
 
     return NextResponse.json({
       revalidated: true,
@@ -142,4 +152,43 @@ function resolveJobSlug(record: JobRecord): string | null {
   }
 
   return createJobSlug(record.title, record.company_name, record.city ?? 'remote')
+}
+
+/**
+ * Submit URLs to search engines (Google Indexing API + IndexNow)
+ */
+async function submitToSearchEngines(payload: SupabaseWebhookPayload): Promise<void> {
+  const urls = collectUrlsForIndexing(payload)
+  if (urls.length === 0) return
+
+  const notificationType: IndexingNotificationType = payload.type === 'DELETE' ? 'URL_DELETED' : 'URL_UPDATED'
+
+  // Submit to both services in parallel
+  await Promise.allSettled([
+    submitToGoogleIndexing(urls, notificationType),
+    submitToIndexNow(urls, {
+      key: process.env.INDEXNOW_KEY || '',
+      host: new URL(getBaseUrl()).hostname
+    })
+  ])
+
+  console.log('Indexing submission:', {
+    event: payload.type,
+    urls,
+    type: notificationType,
+    timestamp: new Date().toISOString()
+  })
+}
+
+/**
+ * Collect URLs that need to be submitted for indexing
+ */
+function collectUrlsForIndexing(payload: SupabaseWebhookPayload): string[] {
+  const record = payload.record || payload.old_record
+  if (!record) return []
+
+  const slug = resolveJobSlug(record)
+  if (!slug) return []
+
+  return [buildJobUrl(slug)]
 }

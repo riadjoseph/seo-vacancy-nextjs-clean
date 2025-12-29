@@ -49,6 +49,7 @@ export type Database = {
           location: string | null
           posted_date: string | null
           rating: number | null
+          removal_notified: boolean | null
           reviews: number | null
           salary_currency: string | null
           salary_max: number | null
@@ -78,6 +79,7 @@ export type Database = {
           location?: string | null
           posted_date?: string | null
           rating?: number | null
+          removal_notified?: boolean | null
           reviews?: number | null
           salary_currency?: string | null
           salary_max?: number | null
@@ -107,6 +109,7 @@ export type Database = {
           location?: string | null
           posted_date?: string | null
           rating?: number | null
+          removal_notified?: boolean | null
           reviews?: number | null
           salary_currency?: string | null
           salary_max?: number | null
