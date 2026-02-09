@@ -2,8 +2,8 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Wake Up Happy - SEO & Tech Jobs',
-    short_name: 'Wake Up Happy',
+    name: 'SEO & GEO Jobs Europe',
+    short_name: 'SEO & GEO Jobs Europe',
     description: 'Find your next SEO and tech career opportunity across Europe',
     start_url: '/',
     display: 'standalone',

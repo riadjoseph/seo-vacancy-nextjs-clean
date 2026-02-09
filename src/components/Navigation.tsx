@@ -6,12 +6,7 @@ import { Button } from '@/components/ui/button'
 import { User, LogOut, Menu, X } from 'lucide-react'
 import { SunshineIcon } from '@/components/ui/sunshine-icon'
 import { useAuth } from '@/lib/auth-context'
-import { createTagSlug } from '@/utils/tagUtils'
 import { ThemeToggle } from '@/components/theme-toggle'
-import { useCurrentLocation } from '@/lib/location-context'
-import { DEFAULT_POPULAR_CITIES, POPULAR_CITY_CLUSTERS, toCityPathSegment } from '@/data/cityClusters'
-import { ProductHuntBadge } from '@/components/ProductHuntBadge'
-import { useActiveCities } from '@/hooks/useActiveCities'
 
 export function Navigation() {
   const { user, loading, signOut } = useAuth()
@@ -41,7 +36,7 @@ export function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-xl">
             <SunshineIcon className="h-6 w-6 text-orange-500" />
-            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">Wake Up Happy</span>
+            <span className="bg-gradient-to-r from-orange-500 to-red-500 bg-clip-text text-transparent">SEO & GEO Jobs Europe</span>
           </Link>
           
           {/* Desktop Navigation */}
@@ -172,111 +167,5 @@ export function Navigation() {
         )}
       </div>
     </nav>
-  )
-}
-
-export function Footer() {
-  const { countryKey } = useCurrentLocation()
-  const cluster = countryKey ? POPULAR_CITY_CLUSTERS[countryKey] : undefined
-  const footerHeading = cluster ? `Popular Cities in ${cluster.country}` : 'Popular Cities'
-  const { stats: activeCityStats, loading, activeSet } = useActiveCities()
-  const candidateCities = cluster ? cluster.cities : Array.from(DEFAULT_POPULAR_CITIES)
-  const fallbackLimit = candidateCities.length || DEFAULT_POPULAR_CITIES.length
-
-  const filteredCities = candidateCities
-    .filter((cityName) => activeSet.has(toCityPathSegment(cityName)))
-    .map((cityName) => ({
-      label: cityName,
-      slug: toCityPathSegment(cityName),
-    }))
-
-  let cityLinks: Array<{ label: string; slug: string }> = filteredCities
-
-  if (!loading && cityLinks.length === 0) {
-    cityLinks = activeCityStats.slice(0, fallbackLimit).map((stat) => ({
-      label: stat.label,
-      slug: stat.normalized,
-    }))
-  }
-
-  return (
-    <footer className="bg-secondary text-secondary-foreground mt-16">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <div className="flex items-center gap-2 font-bold text-xl text-secondary-foreground mb-4">
-              <SunshineIcon className="h-6 w-6 text-yellow-400" />
-              <span>Wake Up Happy</span>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              Find your next SEO and tech career opportunity across Europe.
-            </p>
-            <ProductHuntBadge />
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-secondary-foreground mb-4">Specializations</h3>
-            <ul className="space-y-2 text-sm">
-              {[
-                'SEO Strategy & Management',
-                'Technical SEO',
-                'Enterprise SEO',
-                'Analytics & Data SEO',
-                'Local SEO',
-              ].map((label) => (
-                <li key={label}>
-                  <Link href={`/tag/${createTagSlug(label)}`} className="hover:text-secondary-foreground">
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-secondary-foreground mb-4" suppressHydrationWarning>{footerHeading}</h3>
-            {loading && (
-              <p className="text-sm text-muted-foreground">Loading available cities…</p>
-            )}
-            {!loading && cityLinks.length === 0 && (
-              <p className="text-sm text-muted-foreground">New cities coming soon.</p>
-            )}
-            {!loading && cityLinks.length > 0 && (
-              <ul className="space-y-2 text-sm" suppressHydrationWarning>
-                {cityLinks.map((city) => (
-                  <li key={city.slug}>
-                    <Link
-                      href={`/jobs/city/${city.slug}`}
-                      className="hover:text-secondary-foreground"
-                    >
-                      {city.label} SEO Jobs
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-          
-          <div>
-            <h3 className="font-semibold text-secondary-foreground mb-4">Service</h3>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="/blog" className="hover:text-secondary-foreground">Blog</Link></li>
-              <li><Link href="/tools" className="hover:text-secondary-foreground">Tools</Link></li>
-              <li><Link href="/auth/magic-link" className="hover:text-secondary-foreground">Post a Job</Link></li>
-              <li><Link href="/about" className="hover:text-secondary-foreground">About</Link></li>
-              <li><Link href="/contact" className="hover:text-secondary-foreground">Contact</Link></li>
-              <li><Link href="/privacy-policy" className="hover:text-secondary-foreground">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-secondary-foreground">Terms of Service</Link></li>
-              <li><Link href="/llms.txt" className="hover:text-secondary-foreground">LLMs Policy</Link></li>
-              <li><a href="https://buymeacoffee.com/riadjoseph" target="_blank" rel="noopener noreferrer" className="hover:text-secondary-foreground">☕ Buy Me a Coffee</a></li>
-            </ul>
-          </div>
-        </div>
-        
-        <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2025 Wake Up Happy. All rights reserved.</p>
-        </div>
-      </div>
-    </footer>
   )
 }

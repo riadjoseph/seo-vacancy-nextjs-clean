@@ -10,12 +10,15 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
-    /\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|json|woff2?)$/i.test(pathname)
+    /\.(?:md|png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|json|woff2?)$/i.test(pathname)
   ) {
     return NextResponse.next()
   }
 
-  const res = NextResponse.next()
+  // Pass pathname to server components (used by Footer for context-aware city links)
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set('x-pathname', pathname)
+  const res = NextResponse.next({ request: { headers: requestHeaders } })
 
   // For sitemaps, robots, and feeds: use simple Vary header only
   if (

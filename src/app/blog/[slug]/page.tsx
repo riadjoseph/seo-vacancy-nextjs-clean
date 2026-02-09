@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             author,
             publisher: {
               '@type': 'Organization',
-              name: 'Wake Up Happy',
+              name: 'SEO & GEO Jobs Europe',
             },
           }),
         }}

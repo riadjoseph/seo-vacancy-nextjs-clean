@@ -159,7 +159,7 @@ async function TagJobsList({ tag, page }: { tag: string; page: number }) {
       {featuredJobs.length > 0 && page === 1 && (
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Featured {tagName} Jobs</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" itemScope itemType="https://schema.org/ItemList">
             {featuredJobs.map((job) => (
               <JobCard key={job.id} job={job} isFeatured={true} />
             ))}
@@ -172,7 +172,7 @@ async function TagJobsList({ tag, page }: { tag: string; page: number }) {
         <h2 className="text-2xl font-bold mb-6">
           {page === 1 && featuredJobs.length > 0 ? `All ${tagName} Jobs` : `${tagName} Jobs`}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" itemScope itemType="https://schema.org/ItemList">
           {(page === 1 ? regularJobs : jobs).map((job) => (
             <JobCard key={job.id} job={job} />
           ))}

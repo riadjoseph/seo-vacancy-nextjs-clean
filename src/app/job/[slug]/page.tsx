@@ -11,6 +11,7 @@ import { ExpandableJobDescription } from '@/components/ExpandableJobDescription'
 import { ApplyButton } from '@/components/ApplyButton'
 import { LocationInitializer } from '@/components/LocationInitializer'
 import { RelatedJobs } from '@/components/RelatedJobs'
+import { JobPageActions } from '@/components/JobPageActions'
 import {
   MapPin,
   Briefcase,
@@ -18,6 +19,9 @@ import {
   Building2
 } from 'lucide-react'
 import { createTagSlug } from '@/utils/tagUtils'
+import { SHOW_JOB_DESCRIPTION } from '@/config/features'
+import { getPageContext } from '@/lib/page-context'
+import { CITY_LOOKUP } from '@/data/cityClusters'
 import type { Tables } from '@/lib/supabase/types'
 
 
@@ -98,6 +102,9 @@ export async function generateMetadata({ params }: JobPageProps): Promise<Metada
     description: metaDescription,
     alternates: {
       canonical: canonicalUrl,
+      types: {
+        'text/markdown': `${baseUrl}/job/${slug}/job.md`,
+      },
     },
     openGraph: {
       title: seoTitle,
@@ -147,6 +154,14 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
     notFound()
   }
 
+  // Set page context so the Footer can show country-relevant cities
+  if (job.city) {
+    const entry = CITY_LOOKUP[job.city.toLowerCase()]
+    if (entry) getPageContext().countryKey = entry.countryKey
+  }
+
+  const baseUrl = process.env.NEXTAUTH_URL || 'https://seo-vacancy.eu'
+
   // Generate breadcrumbs
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: 'SEO Jobs', href: '/' }
@@ -166,7 +181,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
   const breadcrumbSchema = generateBreadcrumbSchema(breadcrumbItems, 'https://seo-vacancy.eu')
   
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto py-8 px-4" itemScope itemType="https://schema.org/JobPosting">
       <LocationInitializer city={job.city} />
       <div className="mb-6">
         <Breadcrumbs items={breadcrumbItems} />
@@ -186,13 +201,14 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                       height={64}
                       className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
                       unoptimized
+                      itemProp="image"
                     />
                   )}
                   <div className="flex-1 min-w-0">
-                    <h1 className="text-3xl font-bold mb-2">{job.title}{job.city ? ` ${job.city}` : ''}</h1>
-                    <div className="flex items-center gap-2 text-xl text-muted-foreground">
+                    <h1 className="text-3xl font-bold mb-2" itemProp="title">{job.title}{job.city ? ` ${job.city}` : ''}</h1>
+                    <div className="flex items-center gap-2 text-xl text-muted-foreground" itemProp="hiringOrganization" itemScope itemType="https://schema.org/Organization">
                       <Building2 className="h-5 w-5" />
-                      <span>{job.company_name}</span>
+                      <span itemProp="name">{job.company_name}</span>
                     </div>
                   </div>
                 </div>
@@ -205,29 +221,36 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground pt-4">
                 {job.city && (
-                  <div className="flex items-center gap-1">
+                  <address className="flex items-center gap-1 not-italic" itemProp="jobLocation" itemScope itemType="https://schema.org/Place">
                     <MapPin className="h-4 w-4" />
                     <Link href={`/jobs/city/${job.city.toLowerCase()}`} className="text-primary hover:text-primary/80 hover:underline transition-colors">
-                      {job.city}
+                      <span itemProp="address">{job.city}</span>
                     </Link>
-                  </div>
+                  </address>
                 )}
                 {job.category && job.category !== 'FULL_TIME' && (
                   <div className="flex items-center gap-1">
                     <Briefcase className="h-4 w-4" />
-                    <span>{job.category}</span>
+                    <span itemProp="employmentType">{job.category}</span>
                   </div>
                 )}
                 {job.created_at && (
                   <div className="flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
-                    <span suppressHydrationWarning>Posted {new Date(job.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+                    <time dateTime={job.created_at} itemProp="datePosted" suppressHydrationWarning>Posted {new Date(job.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</time>
                   </div>
                 )}
               </div>
             </CardHeader>
           </Card>
-          
+
+          <JobPageActions
+            markdownUrl={`/job/${slug}/job.md`}
+            pageUrl={`${baseUrl}/job/${slug}`}
+            jobTitle={job.title}
+            companyName={job.company_name}
+          />
+
           {job.teaser && job.teaser.trim() && (
             <Card className="bg-primary/5 border-primary/20">
               <CardHeader>
@@ -243,16 +266,18 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
             </Card>
           )}
           
-          <Card>
-            <CardHeader>
-              <h2 className="text-xl font-semibold">Job Description</h2>
-            </CardHeader>
-            <CardContent>
-              <ExpandableJobDescription
-                description={job.description || 'No description available.'}
-              />
-            </CardContent>
-          </Card>
+          {SHOW_JOB_DESCRIPTION && (
+            <Card>
+              <CardHeader>
+                <h2 className="text-xl font-semibold">Job Description</h2>
+              </CardHeader>
+              <CardContent itemProp="description">
+                <ExpandableJobDescription
+                  description={job.description || 'No description available.'}
+                />
+              </CardContent>
+            </Card>
+          )}
 
           {job.company_info && job.company_info.trim() && job.city && job.city !== 'Remote' && (
             <Card>
@@ -297,7 +322,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
                 <div className="flex flex-wrap gap-2">
                   {job.tags.map((tag, index) => (
                     <Link key={index} href={`/jobs/tag/${createTagSlug(tag)}`}>
-                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary cursor-pointer transition-colors border-0">
+                      <Badge className="bg-primary/10 text-primary hover:bg-primary/20 hover:text-primary cursor-pointer transition-colors border-0" itemProp="skills">
                         {tag}
                       </Badge>
                     </Link>
@@ -308,7 +333,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
           )}
         </div>
         
-        <div className="space-y-6">
+        <div className="space-y-6" role="complementary" aria-label="Job details">
           <Card className="sticky top-6">
             <CardHeader>
               <h3 className="text-lg font-semibold">Apply for this position</h3>
@@ -323,7 +348,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               
               {job.expires_at && (
                 <p className="text-sm text-muted-foreground text-center">
-                  <span suppressHydrationWarning>Application deadline: {new Date(job.expires_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</span>
+                  <time dateTime={job.expires_at} itemProp="validThrough" suppressHydrationWarning>Application deadline: {new Date(job.expires_at).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })}</time>
                 </p>
               )}
             </CardContent>
@@ -336,9 +361,13 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
             <CardContent className="space-y-3">
               {/* Salary (shown only when not hidden and values exist) */}
               {job.hide_salary !== true && (job.salary_min !== null || job.salary_max !== null) && (
-                <div className="flex justify-between">
+                <div className="flex justify-between" itemProp="baseSalary" itemScope itemType="https://schema.org/MonetaryAmount">
                   <span className="text-muted-foreground">Salary:</span>
-                  <span className="font-medium">
+                  {job.salary_currency && <meta itemProp="currency" content={job.salary_currency} />}
+                  <span className="font-medium" itemProp="value" itemScope itemType="https://schema.org/QuantitativeValue">
+                    {job.salary_min !== null && <meta itemProp="minValue" content={String(job.salary_min)} />}
+                    {job.salary_max !== null && <meta itemProp="maxValue" content={String(job.salary_max)} />}
+                    <meta itemProp="unitText" content="YEAR" />
                     {(() => {
                       const currency = job.salary_currency || ''
                       const fmt = (n: number) => new Intl.NumberFormat('en-US').format(n)
@@ -374,9 +403,10 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               )}
             </CardContent>
           </Card>
+
         </div>
       </div>
-      
+
       {/* Related Jobs Section */}
       {job.city && (
         <div className="mt-12">
@@ -384,8 +414,8 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
         </div>
       )}
       
-      {/* JSON-LD Structured Data */}
-      {(() => {
+      {/* JSON-LD Structured Data — only render when description is visible */}
+      {SHOW_JOB_DESCRIPTION && (() => {
         // Build JobPosting schema, optionally adding baseSalary if shown on page
         const hasSalary = job.hide_salary !== true && (job.salary_min !== null || job.salary_max !== null)
         const schema: Record<string, unknown> = {

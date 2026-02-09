@@ -60,7 +60,7 @@ export async function generateMetadata({ searchParams }: SearchPageProps): Promi
 
   if (!query.trim()) {
     return {
-      title: 'Search SEO Jobs | Wake Up Happy',
+      title: 'Search SEO Jobs | SEO & GEO Jobs Europe',
       description: 'Search for SEO, marketing, and tech job opportunities across Europe.',
       alternates: {
         canonical: '/search',

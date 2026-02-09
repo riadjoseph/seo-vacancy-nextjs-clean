@@ -4,7 +4,6 @@ import { MobileAdvancedSearch } from '@/components/MobileAdvancedSearch'
 import { GeneralSearchBox } from '@/components/GeneralSearchBox'
 import { ServerPagination, ServerPaginationSummary } from '@/components/ui/server-pagination'
 import { calculatePagination } from '@/utils/pagination'
-import { ProductHuntBadge } from '@/components/ProductHuntBadge'
 
 
 interface JobsListProps {
@@ -109,9 +108,8 @@ async function JobsList({ searchParams }: JobsListProps) {
         <div className="mb-12">
           <div className="flex items-center gap-4 mb-6 flex-wrap">
             <h2 className="text-2xl font-bold">Featured Jobs</h2>
-            <ProductHuntBadge />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" itemScope itemType="https://schema.org/ItemList">
             {featuredJobs.map((job) => (
               <JobCard key={job.id} job={job} isFeatured={true} />
             ))}
@@ -124,7 +122,7 @@ async function JobsList({ searchParams }: JobsListProps) {
         <h2 className="text-2xl font-bold mb-6">
           {currentPage === 1 && featuredJobs.length > 0 ? 'All Jobs' : 'Jobs'}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" itemScope itemType="https://schema.org/ItemList">
           {(currentPage === 1 ? regularJobs : jobs).map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
@@ -241,7 +239,6 @@ export default async function Home({ searchParams }: HomeProps) {
 Handpicked SEO, GEO/AEO, Data & Martech Roles For People Who Love What They Do
 </p>
           <div className="flex justify-center">
-            <ProductHuntBadge />
           </div>
         </div>
 

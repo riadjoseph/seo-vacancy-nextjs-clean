@@ -149,7 +149,7 @@ async function CityJobsList({ city, page }: { city: string; page: number }) {
       {featuredJobs.length > 0 && page === 1 && (
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Featured SEO Jobs in {decodedCity}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6" itemScope itemType="https://schema.org/ItemList">
             {featuredJobs.map((job) => (
               <JobCard key={job.id} job={job} isFeatured={true} />
             ))}
@@ -162,7 +162,7 @@ async function CityJobsList({ city, page }: { city: string; page: number }) {
         <h2 className="text-2xl font-bold mb-6">
           {featuredJobs.length > 0 ? `All SEO Jobs in ${decodedCity}` : `SEO Jobs in ${decodedCity}`}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" itemScope itemType="https://schema.org/ItemList">
           {regularJobs.map((job) => (
             <JobCard key={job.id} job={job} />
           ))}
