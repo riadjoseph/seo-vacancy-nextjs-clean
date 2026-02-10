@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Apply CDN caching headers for SSR HTML responses on Netlify.
-// netlify.toml headers do not affect SSR responses, so we set them here.
+// Lightweight bot detection regex — covers major bots without being exhaustive.
+// Full classification (name, vendor, priority) happens server-side in log.php.
+const BOT_UA_REGEX =
+  /bot\b|crawler|spider|crawl|slurp|googlebot|bingbot|yandex|baidu|duckduck|applebot|facebookexternalhit|linkedinbot|twitterbot|discordbot|telegrambot|whatsapp|gptbot|oai-searchbot|chatgpt|claudebot|anthropic|perplexitybot|ccbot|diffbot|bytespider|ahrefsbot|semrushbot|mj12bot|dotbot|screaming.frog|blexbot|rogerbot|sistrix|dataforseo|seobility|serpstatbot|contentking|uptimerobot|pingdom|gtmetrix|pagespeed|lighthouse|feedly|feedfetcher|slackbot|curl\b|wget\b|python-requests|headlesschrome|phantomjs|selenium|puppeteer|deepseekbot|meta-external/i
+
+const BOT_LOG_URL = process.env.BOT_LOG_URL || ''
+const BOT_LOG_KEY = process.env.BOT_LOG_KEY || ''
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
@@ -19,6 +25,33 @@ export function middleware(req: NextRequest) {
   const requestHeaders = new Headers(req.headers)
   requestHeaders.set('x-pathname', pathname)
   const res = NextResponse.next({ request: { headers: requestHeaders } })
+
+  // --- Bot logging (fire-and-forget) ---
+  const ua = req.headers.get('user-agent') || ''
+  if (BOT_LOG_URL && BOT_UA_REGEX.test(ua)) {
+    const payload = {
+      user_agent: ua,
+      ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '',
+      pathname,
+      host: req.headers.get('host') || '',
+      referer: req.headers.get('referer') || '',
+      country: req.headers.get('x-vercel-ip-country') || '',
+      method: req.method,
+      timestamp: new Date().toISOString(),
+    }
+
+    // Fire-and-forget: do NOT await — response is not blocked
+    fetch(BOT_LOG_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Log-Key': BOT_LOG_KEY,
+      },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      // Silently ignore logging failures — never block the response
+    })
+  }
 
   // For sitemaps, robots, and feeds: use simple Vary header only
   if (
@@ -64,14 +97,7 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
-    '/job/:path*',
-    '/jobs/:path*',
-    '/sitemap.xml',
-    '/sitemap.txt',
-    '/robots.txt',
-    '/feed.xml',
-    '/feed/:path*',
+    // Catch all page routes; exclude api, _next, favicon, and static assets
+    '/((?!api|_next|favicon).*)',
   ],
 }
-
