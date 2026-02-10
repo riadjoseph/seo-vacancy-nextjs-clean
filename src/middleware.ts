@@ -1,9 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-// Lightweight bot detection regex — covers major bots without being exhaustive.
+// Bot detection regex — comprehensive list from OpenAI docs, SEJ, Cloudflare, Momentic.
 // Full classification (name, vendor, priority) happens server-side in log.php.
-const BOT_UA_REGEX =
-  /bot\b|crawler|spider|crawl|slurp|googlebot|bingbot|yandex|baidu|duckduck|applebot|facebookexternalhit|linkedinbot|twitterbot|discordbot|telegrambot|whatsapp|gptbot|oai-searchbot|chatgpt|claudebot|anthropic|perplexitybot|ccbot|diffbot|bytespider|ahrefsbot|semrushbot|mj12bot|dotbot|screaming.frog|blexbot|rogerbot|sistrix|dataforseo|seobility|serpstatbot|contentking|uptimerobot|pingdom|gtmetrix|pagespeed|lighthouse|feedly|feedfetcher|slackbot|curl\b|wget\b|python-requests|headlesschrome|phantomjs|selenium|puppeteer|deepseekbot|meta-external/i
+const BOT_UA_REGEX = new RegExp([
+  // AI / LLM bots
+  'gptbot', 'oai-searchbot', 'chatgpt-user', 'chatgpt',
+  'claudebot', 'claude-user', 'claude-searchbot', 'anthropic',
+  'perplexitybot', 'perplexity-user',
+  'google-extended', 'google-cloudvertexbot', 'gemini-deep-research', 'googleagent-mariner',
+  'meta-externalagent', 'meta-webindexer',
+  'bytespider', 'deepseekbot', 'ccbot', 'diffbot',
+  'mistralai-user', 'cohere-ai', 'ai2bot',
+  'youbot', 'duckassistbot', 'phindbot', 'exabot', 'andibot',
+  'amazonbot', 'applebot-extended',
+  'webzio', 'icc-crawler', 'timpibot', 'omgili', 'firecrawl',
+  // Search engines
+  'googlebot', 'bingbot', 'bingpreview', 'adidxbot', 'msnbot',
+  'applebot', 'yandex', 'baidu', 'duckduckbot', 'slurp',
+  'naverbot', 'qwantify', 'mojeekbot',
+  // Social media
+  'facebookexternalhit', 'linkedinbot', 'twitterbot', 'pinterestbot',
+  'discordbot', 'telegrambot', 'whatsapp', 'slackbot',
+  // SEO tools
+  'ahrefsbot', 'semrushbot', 'mj12bot', 'dotbot', 'rogerbot',
+  'screaming.frog', 'blexbot', 'sistrix', 'dataforseo',
+  'seobility', 'serpstatbot', 'contentking', 'botify',
+  // Monitoring & testing
+  'uptimerobot', 'pingdom', 'gtmetrix', 'pagespeed', 'lighthouse',
+  'headlesschrome', 'phantomjs', 'selenium', 'puppeteer',
+  // Feed readers
+  'feedly', 'feedfetcher', 'inoreader', 'newsblur',
+  // Dev tools
+  'curl\\b', 'wget\\b', 'python-requests',
+  // Generic catch-all (must be last)
+  'bot\\b', 'crawler', 'spider', 'crawl',
+].join('|'), 'i')
 
 const BOT_LOG_URL = process.env.BOT_LOG_URL || ''
 const BOT_LOG_KEY = process.env.BOT_LOG_KEY || ''
