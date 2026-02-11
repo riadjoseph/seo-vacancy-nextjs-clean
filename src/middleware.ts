@@ -24,7 +24,7 @@ const BOT_UA_REGEX = new RegExp([
   // SEO tools
   'ahrefsbot', 'semrushbot', 'mj12bot', 'dotbot', 'rogerbot',
   'screaming.frog', 'blexbot', 'sistrix', 'dataforseo',
-  'seobility', 'serpstatbot', 'contentking', 'botify',
+  'seobility', 'serpstatbot', 'contentking', 'botify', 'barkrowler',
   // Monitoring & testing
   'uptimerobot', 'pingdom', 'gtmetrix', 'pagespeed', 'lighthouse',
   'headlesschrome', 'phantomjs', 'selenium', 'puppeteer',
