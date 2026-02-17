@@ -47,7 +47,7 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
-    /\.(?:md|png|jpg|jpeg|gif|svg|ico|webp|avif|css|js|map|json|woff2?)$/i.test(pathname)
+    /\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|woff2?)$/i.test(pathname)
   ) {
     return NextResponse.next()
   }
