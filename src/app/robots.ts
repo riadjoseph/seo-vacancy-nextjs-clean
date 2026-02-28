@@ -39,17 +39,27 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
   ]
 
   return {
-    rules: {
-      userAgent: '*',
-      disallow: [
-        '*/search?q=*',          // Search query parameters
-        '*?_rsc=*',      // Next.js RSC cache-busting parameters
-        '/post-job',
-        '/my-jobs',
-        '*/auth/*',     // Share link parameters
-        '/api/*',       // All API endpoints (security)
-      ],
-    },
+    rules: [
+      {
+        userAgent: '*',
+        disallow: [
+          '*/search?q=*',          // Search query parameters
+          '*?_rsc=*',      // Next.js RSC cache-busting parameters
+          '/post-job',
+          '/my-jobs',
+          '*/auth/*',     // Share link parameters
+          '/api/*',       // All API endpoints (security)
+        ],
+      },
+      {
+        userAgent: 'barkrowler',
+        disallow: ['/'],
+      },
+      {
+        userAgent: 'MJ12bot',
+        disallow: ['/'],
+      },
+    ],
     sitemap: sitemaps,
   }
 }
