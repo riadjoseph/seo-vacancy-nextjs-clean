@@ -59,6 +59,14 @@ export default async function robots(): Promise<MetadataRoute.Robots> {
         userAgent: 'MJ12bot',
         disallow: ['/'],
       },
+      {
+        userAgent: 'SERankingBacklinksBot',
+        disallow: ['/'],
+      },
+      {
+        userAgent: 'SEBot-WA',
+        disallow: ['/'],
+      },
     ],
     sitemap: sitemaps,
   }
