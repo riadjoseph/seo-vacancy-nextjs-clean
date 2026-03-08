@@ -8,6 +8,7 @@ const BOT_UA_REGEX = new RegExp([
   'claudebot', 'claude-user', 'claude-searchbot', 'anthropic',
   'perplexitybot', 'perplexity-user',
   'google-extended', 'google-cloudvertexbot', 'gemini-deep-research', 'googleagent-mariner',
+  'google-notebooklm', 'google-shopping-ai',
   'meta-externalagent', 'meta-webindexer',
   'bytespider', 'deepseekbot', 'ccbot', 'diffbot',
   'mistralai-user', 'cohere-ai', 'ai2bot',
@@ -15,18 +16,20 @@ const BOT_UA_REGEX = new RegExp([
   'amazonbot', 'applebot-extended',
   'webzio', 'icc-crawler', 'timpibot', 'omgili', 'firecrawl',
   // Search engines
-  'googlebot', 'bingbot', 'bingpreview', 'adidxbot', 'msnbot',
+  'googlebot', 'storebot-google', 'duplexweb-google', 'googleother',
+  'adsbot-google', 'google-safety', 'google-read-aloud', 'google favicon',
+  'bingbot', 'bingpreview', 'adidxbot', 'msnbot',
   'applebot', 'yandex', 'baidu', 'duckduckbot', 'slurp',
-  'naverbot', 'qwantify', 'mojeekbot',
+  'naverbot', 'qwantify', 'qwantbot', 'seznambot', 'mojeekbot',
   // Social media
   'facebookexternalhit', 'linkedinbot', 'twitterbot', 'pinterestbot',
-  'discordbot', 'telegrambot', 'whatsapp', 'slackbot',
+  'discordbot', 'telegrambot', 'whatsapp', 'slackbot', 'tiktokspider',
   // SEO tools
   'ahrefsbot', 'semrushbot', 'mj12bot', 'dotbot', 'rogerbot',
   'screaming.frog', 'blexbot', 'sistrix', 'dataforseo',
-  'seobility', 'serpstatbot', 'contentking', 'botify', 'barkrowler', 'seranking',
+  'seobility', 'serpstatbot', 'contentking', 'botify', 'barkrowler', 'seranking', 'sebot-wa', 'mbcrawler',
   // Monitoring & testing
-  'uptimerobot', 'pingdom', 'gtmetrix', 'pagespeed', 'lighthouse',
+  'uptimerobot', 'pingdom', 'gtmetrix', 'pagespeed', 'lighthouse', 'aliyunsecbot', 'apis-google',
   'headlesschrome', 'phantomjs', 'selenium', 'puppeteer',
   // Feed readers
   'feedly', 'feedfetcher', 'inoreader', 'newsblur',
