@@ -63,6 +63,14 @@ export function middleware(req: NextRequest) {
   // --- Bot logging (fire-and-forget) ---
   const ua = req.headers.get('user-agent') || ''
   if (BOT_LOG_URL && BOT_UA_REGEX.test(ua)) {
+    // Classify content type for response size estimation
+    let content_type = 'html'
+    if (pathname.endsWith('.md')) content_type = 'markdown'
+    else if (pathname === '/llms.txt' || pathname === '/llms.md') content_type = 'llms_txt'
+    else if (pathname === '/robots.txt') content_type = 'robots_txt'
+    else if (pathname === '/sitemap.txt') content_type = 'sitemap_txt'
+    else if (pathname.endsWith('.xml') || pathname.startsWith('/feed')) content_type = 'xml_feed'
+
     const payload = {
       user_agent: ua,
       ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '',
@@ -72,6 +80,7 @@ export function middleware(req: NextRequest) {
       country: req.headers.get('x-vercel-ip-country') || '',
       method: req.method,
       timestamp: new Date().toISOString(),
+      content_type,
     }
 
     // Fire-and-forget: do NOT await — response is not blocked
