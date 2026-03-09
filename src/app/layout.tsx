@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer';
 import { Toaster } from 'sonner';
 import { LazyAnalytics, LazyBuyMeACoffee } from '@/components/ClientWidgets';
 import { Analytics } from "@vercel/analytics/next";
+import { PostHogProvider } from './posthog-provider';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -61,19 +62,21 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Providers>
-          <div className="min-h-screen flex flex-col">
-            <Navigation />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
-          <Toaster />
-          {/* Lazy load analytics to avoid blocking initial render */}
-          <LazyAnalytics />
-          <Analytics />
-          {/* Defer non-critical widgets */}
-          <LazyBuyMeACoffee />
+          <PostHogProvider>
+            <div className="min-h-screen flex flex-col">
+              <Navigation />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
+            <Toaster />
+            {/* Lazy load analytics to avoid blocking initial render */}
+            <LazyAnalytics />
+            <Analytics />
+            {/* Defer non-critical widgets */}
+            <LazyBuyMeACoffee />
+          </PostHogProvider>
         </Providers>
       </body>
     </html>
