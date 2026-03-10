@@ -42,16 +42,65 @@ const BOT_UA_REGEX = new RegExp([
 const BOT_LOG_URL = process.env.BOT_LOG_URL || ''
 const BOT_LOG_KEY = process.env.BOT_LOG_KEY || ''
 
+/** Fire-and-forget bot hit log to PHP backend */
+function logBotHit(req: NextRequest, content_type: string) {
+  const ua = req.headers.get('user-agent') || ''
+  const payload = {
+    user_agent: ua,
+    ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '',
+    pathname: req.nextUrl.pathname,
+    host: req.headers.get('host') || '',
+    referer: req.headers.get('referer') || '',
+    country: req.headers.get('x-vercel-ip-country') || '',
+    method: req.method,
+    timestamp: new Date().toISOString(),
+    content_type,
+    // Client Hints for bot fingerprinting
+    sec_ch_ua: req.headers.get('sec-ch-ua') || '',
+    sec_ch_ua_mobile: req.headers.get('sec-ch-ua-mobile') || '',
+    sec_ch_ua_platform: req.headers.get('sec-ch-ua-platform') || '',
+    accept: req.headers.get('accept') || '',
+    accept_language: req.headers.get('accept-language') || '',
+    accept_encoding: req.headers.get('accept-encoding') || '',
+  }
+
+  fetch(BOT_LOG_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Log-Key': BOT_LOG_KEY,
+    },
+    body: JSON.stringify(payload),
+  }).catch(() => {
+    // Silently ignore logging failures — never block the response
+  })
+}
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
 
-  // Skip APIs, Next internals, and static assets (but NOT .txt or .xml files)
+  // Skip APIs, Next internals, and favicon — always bypass
   if (
     pathname.startsWith('/api') ||
     pathname.startsWith('/_next') ||
-    pathname.startsWith('/favicon') ||
-    /\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|woff2?)$/i.test(pathname)
+    pathname.startsWith('/favicon')
   ) {
+    return NextResponse.next()
+  }
+
+  // Static assets: log bot hits on images (including viewport probes), then skip
+  const isStaticAsset = /\.(?:png|jpg|jpeg|gif|svg|ico|webp|avif|woff2?)$/i.test(pathname)
+  if (isStaticAsset) {
+    if (BOT_LOG_URL) {
+      const ua = req.headers.get('user-agent') || ''
+      if (BOT_UA_REGEX.test(ua)) {
+        // Classify probe vs regular image
+        let content_type = 'image'
+        if (pathname === '/img/t/m.gif') content_type = 'probe_mobile'
+        else if (pathname === '/img/t/d.gif') content_type = 'probe_desktop'
+        logBotHit(req, content_type)
+      }
+    }
     return NextResponse.next()
   }
 
@@ -71,29 +120,7 @@ export function middleware(req: NextRequest) {
     else if (pathname === '/sitemap.txt') content_type = 'sitemap_txt'
     else if (pathname.endsWith('.xml') || pathname.startsWith('/feed')) content_type = 'xml_feed'
 
-    const payload = {
-      user_agent: ua,
-      ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || req.headers.get('x-real-ip') || '',
-      pathname,
-      host: req.headers.get('host') || '',
-      referer: req.headers.get('referer') || '',
-      country: req.headers.get('x-vercel-ip-country') || '',
-      method: req.method,
-      timestamp: new Date().toISOString(),
-      content_type,
-    }
-
-    // Fire-and-forget: do NOT await — response is not blocked
-    fetch(BOT_LOG_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Log-Key': BOT_LOG_KEY,
-      },
-      body: JSON.stringify(payload),
-    }).catch(() => {
-      // Silently ignore logging failures — never block the response
-    })
+    logBotHit(req, content_type)
   }
 
   // For sitemaps, robots, and feeds: use simple Vary header only

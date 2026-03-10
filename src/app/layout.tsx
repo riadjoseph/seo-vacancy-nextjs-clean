@@ -74,6 +74,13 @@ export default async function RootLayout({
             {/* Lazy load analytics to avoid blocking initial render */}
             <LazyAnalytics />
             <Analytics />
+            {/* Viewport pixel probes — invisible 1x1 GIFs for bot render detection */}
+            <picture>
+              <source media="(max-width:768px)" srcSet="/img/t/m.gif" width={1} height={1} />
+              <source media="(min-width:769px)" srcSet="/img/t/d.gif" width={1} height={1} />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/img/t/d.gif" width={1} height={1} alt="" style={{position:'absolute',opacity:0,pointerEvents:'none'}} />
+            </picture>
             {/* Defer non-critical widgets */}
             <LazyBuyMeACoffee />
           </PostHogProvider>
