@@ -2,15 +2,50 @@
 
 **Repository**: https://github.com/riadjoseph/seo-vacancy-nextjs-clean
 **Project**: Next.js 15.4 SEO Job Board
-**Last Updated**: October 15, 2025
+**Last Updated**: April 12, 2026
 
 ---
 
 ## Table of Contents
+- [April 2026 - Teaser Field on Job Cards + Microdata Description](#april-2026---teaser-field-on-job-cards--microdata-description)
 - [October 2025 - Security & Architecture Improvements](#october-2025---security--architecture-improvements)
 - [January 2025 - Initial Migration](#january-2025---initial-migration)
 - [September 2025 - Core Features & Optimizations](#september-2025---core-features--optimizations)
 - [October 2025 - SEO & Performance Enhancements](#october-2025---seo--performance-enhancements)
+
+---
+
+## April 2026 - Teaser Field on Job Cards + Microdata Description
+
+### Surface "What Makes This Opportunity Special" on Listing Cards
+**Date**: April 12, 2026
+
+#### Context
+The raw job description field (`description`) had been disabled site-wide via the `SHOW_JOB_DESCRIPTION = false` feature flag, because its content was copied word-for-word from LinkedIn (duplicate content / copyright risk). When the description was disabled, the JSON-LD JobPosting block and the card-level description preview were both removed with it.
+
+The `teaser` field ("What Makes This Opportunity Special") was already being written by job posters and rendered on individual job detail pages, but was not shown on any listing surface (homepage, city pages, tag pages) and had no microdata annotation.
+
+#### Changes Made
+
+**`src/components/JobCard.tsx`**
+- Replaced the `SHOW_JOB_DESCRIPTION`-gated `description` preview block with an always-on teaser snippet
+- Teaser is shown when `job.teaser` is non-empty; strips basic markdown characters (`#`, `*`, `` ` ``, `[`, `]`, `>`) and truncates to 200 characters with `line-clamp-3` for uniform card height
+- Added `itemProp="description"` to the teaser element — this was the missing field in the microdata `JobPosting` schema
+- Removed the now-unused `SHOW_JOB_DESCRIPTION` import and `LazyMarkdown` import
+
+**`src/app/job/[slug]/page.tsx`**
+- Added `itemProp="description"` to the teaser `<CardContent>` on the job detail page, completing the microdata annotation there as well
+
+#### Affected Surfaces
+All three listing surfaces now show the teaser snippet, as they all render `<JobCard />`:
+- Homepage (`/`)
+- City pages (`/jobs/city/[city]`)
+- Tag pages (`/jobs/tag/[tag]`)
+
+#### What Did NOT Change
+- `SHOW_JOB_DESCRIPTION` remains `false` — the raw `description` field is still not displayed
+- JSON-LD `JobPosting` block remains gated behind `SHOW_JOB_DESCRIPTION` (separate concern)
+- No Supabase schema changes — `teaser` was already fetched via `.select('*')` on all listing pages
 
 ---
 

@@ -2,13 +2,11 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { LazyMarkdown } from '@/components/LazyMarkdown'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MapPin, Briefcase, Calendar } from 'lucide-react'
 import { createTagSlug } from '@/utils/tagUtils'
-import { SHOW_JOB_DESCRIPTION } from '@/config/features'
 import type { Tables } from '@/lib/supabase/types'
 
 type Job = Tables<'jobs'>
@@ -93,16 +91,13 @@ export function JobCard({ job, isFeatured = false }: JobCardProps) {
           )}
         </div>
 
-        {SHOW_JOB_DESCRIPTION && (
-          <div
-            className="text-muted-foreground line-clamp-3 text-sm prose prose-sm max-w-none"
-            data-nosnippet
+        {job.teaser && job.teaser.trim() && (
+          <p
+            className="text-muted-foreground text-sm"
             itemProp="description"
           >
-            <LazyMarkdown>
-              {job.description?.substring(0, 150) + '...' || ''}
-            </LazyMarkdown>
-          </div>
+            {job.teaser.replace(/[#*_`[\]>]/g, '')}
+          </p>
         )}
 
         {job.tags && job.tags.length > 0 && (

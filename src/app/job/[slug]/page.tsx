@@ -256,7 +256,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               <CardHeader>
                 <h2 className="text-xl font-semibold">What Makes This Opportunity Special</h2>
               </CardHeader>
-              <CardContent>
+              <CardContent itemProp="description">
                 <div className="rich-article">
                   <ReactMarkdown>
                     {job.teaser}
@@ -265,7 +265,7 @@ export default async function JobPage({ params, searchParams }: JobPageProps) {
               </CardContent>
             </Card>
           )}
-          
+
           {SHOW_JOB_DESCRIPTION && (
             <Card>
               <CardHeader>
