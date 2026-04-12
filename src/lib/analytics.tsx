@@ -16,7 +16,7 @@ declare global {
 // Google Analytics GA4 Measurement ID
 const GA_MEASUREMENT_ID = 'G-4S7FY23V18'
 
-// Initialize Google Analytics (cookieless tracking)
+// Initialize Google Analytics — respects Consent Mode v2 defaults set in layout.tsx
 const initGA = (measurementId: string) => {
   if (typeof window !== 'undefined' && !window.gtag) {
     window.dataLayer = window.dataLayer || []
@@ -25,14 +25,13 @@ const initGA = (measurementId: string) => {
     }
     window.gtag('js', new Date())
 
-    // Configure GA4 for cookieless tracking
+    // GA4 config — no ad signals, no cross-site tracking.
+    // Cookie storage is controlled by Consent Mode v2 (set in layout.tsx before this script loads).
     window.gtag('config', measurementId, {
       page_title: document.title,
       page_location: window.location.href,
-      client_storage: 'none',
-      anonymize_ip: true,
       allow_google_signals: false,
-      allow_ad_personalization_signals: false
+      allow_ad_personalization_signals: false,
     })
   }
 }
@@ -42,7 +41,6 @@ const trackPageView = (url: string) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('config', GA_MEASUREMENT_ID, {
       page_location: url,
-      client_storage: 'none'
     })
   }
 }
@@ -67,7 +65,7 @@ export function Analytics() {
 
   return (
     <>
-      {/* Google Analytics Script - lazy loaded */}
+      {/* Google Analytics Script — consent default is set in layout.tsx before this loads */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
         strategy="lazyOnload"
@@ -78,8 +76,6 @@ export function Analytics() {
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
           gtag('config', '${GA_MEASUREMENT_ID}', {
-            client_storage: 'none',
-            anonymize_ip: true,
             allow_google_signals: false,
             allow_ad_personalization_signals: false
           });
@@ -98,10 +94,7 @@ export const trackEvent = (eventName: string, properties?: Record<string, unknow
 
   // Track with Google Analytics
   if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', eventName, {
-      ...properties,
-      client_storage: 'none'
-    })
+    window.gtag('event', eventName, { ...properties })
   }
 }
 

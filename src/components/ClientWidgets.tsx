@@ -8,6 +8,11 @@ export const LazyAnalytics = dynamic(
   { ssr: false }
 )
 
+export const LazyCookieConsent = dynamic(
+  () => import('@/components/CookieConsent'),
+  { ssr: false }
+)
+
 export const LazyBuyMeACoffee = dynamic(
   () => import('@/components/BuyMeACoffee').then(mod => ({
     default: () => mod.BuyMeACoffeeWidget({

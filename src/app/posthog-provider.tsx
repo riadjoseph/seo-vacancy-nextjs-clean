@@ -23,17 +23,9 @@ function PostHogPageView() {
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    if (process.env.NEXT_PUBLIC_POSTHOG_KEY) {
-      posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY, {
-        api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://eu.i.posthog.com',
-        defaults: '2026-01-30',
-        capture_pageview: false, // We handle this manually above
-        capture_pageleave: true,
-        persistence: 'memory', // No cookies — GDPR friendly
-      })
-    }
-  }, [])
+  // PostHog is initialised by CookieConsent after the user accepts/declines analytics.
+  // This keeps the provider wrapper in place (so posthog.capture calls elsewhere still work)
+  // without eagerly setting persistent storage before consent is given.
 
   return (
     <PHProvider client={posthog}>

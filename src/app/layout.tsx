@@ -5,9 +5,10 @@ import { Providers } from '@/lib/providers';
 import { Navigation } from '@/components/Navigation';
 import { Footer } from '@/components/Footer';
 import { Toaster } from 'sonner';
-import { LazyAnalytics, LazyBuyMeACoffee } from '@/components/ClientWidgets';
+import { LazyAnalytics, LazyBuyMeACoffee, LazyCookieConsent } from '@/components/ClientWidgets';
 import { Analytics } from "@vercel/analytics/next";
 import { PostHogProvider } from './posthog-provider';
+import Script from 'next/script';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +59,20 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        {/* Consent Mode v2 — must run before the GA script loads */}
+        <Script id="consent-default" strategy="beforeInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('consent', 'default', {
+              analytics_storage: 'denied',
+              ad_storage: 'denied',
+              wait_for_update: 2000
+            });
+          `}
+        </Script>
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -81,6 +96,8 @@ export default async function RootLayout({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/img/t/d.gif" width={1} height={1} alt="" style={{position:'absolute',opacity:0,pointerEvents:'none'}} />
             </picture>
+            {/* Cookie consent banner */}
+            <LazyCookieConsent />
             {/* Defer non-critical widgets */}
             <LazyBuyMeACoffee />
           </PostHogProvider>
