@@ -8,19 +8,8 @@ import type { IndexNowConfig, IndexNowResult } from './types'
  * @param config IndexNow configuration (key and host)
  * @returns Submission result
  */
-export async function submitToIndexNow(
-  urls: string[],
-  config: IndexNowConfig
-): Promise<IndexNowResult> {
+async function submitChunk(urls: string[], config: IndexNowConfig): Promise<IndexNowResult> {
   try {
-    if (urls.length === 0) {
-      return { success: false, submitted: 0, error: 'No URLs provided' }
-    }
-
-    if (urls.length > 50) {
-      return { success: false, submitted: 0, error: 'Maximum 50 URLs per request' }
-    }
-
     const payload = {
       host: config.host,
       key: config.key,
@@ -42,26 +31,47 @@ export async function submitToIndexNow(
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => '')
-      return {
-        success: false,
-        submitted: 0,
-        error: `IndexNow API returned ${response.status}: ${errorText}`
-      }
+      return { success: false, submitted: 0, error: `IndexNow API returned ${response.status}: ${errorText}` }
     }
 
-    return {
-      success: true,
-      submitted: urls.length
-    }
+    return { success: true, submitted: urls.length }
   } catch (error) {
     const err = error as { name?: string; message?: string }
     const isTimeout = err?.name === 'AbortError'
-    return {
-      success: false,
-      submitted: 0,
-      error: isTimeout ? 'Request timed out' : (err?.message || 'Network error')
+    return { success: false, submitted: 0, error: isTimeout ? 'Request timed out' : (err?.message || 'Network error') }
+  }
+}
+
+export async function submitToIndexNow(
+  urls: string[],
+  config: IndexNowConfig
+): Promise<IndexNowResult> {
+  if (urls.length === 0) {
+    return { success: false, submitted: 0, error: 'No URLs provided' }
+  }
+
+  const chunks: string[][] = []
+  for (let i = 0; i < urls.length; i += 50) {
+    chunks.push(urls.slice(i, i + 50))
+  }
+
+  let totalSubmitted = 0
+  const errors: string[] = []
+
+  for (const chunk of chunks) {
+    const result = await submitChunk(chunk, config)
+    if (result.success) {
+      totalSubmitted += result.submitted
+    } else {
+      errors.push(result.error ?? 'Unknown error')
     }
   }
+
+  if (totalSubmitted === 0 && errors.length > 0) {
+    return { success: false, submitted: 0, error: errors.join('; ') }
+  }
+
+  return { success: true, submitted: totalSubmitted }
 }
 
 /**
